@@ -1,0 +1,16 @@
+uuid: b9232abc-d245-42de-82dd-3cc53e7e2886
+langcode: en
+status: true
+dependencies: {  }
+id: tpydb
+label: TPYDB
+type: external
+driver: server
+server_name: localhost
+name: tpydb
+host: localhost
+port: ''
+username: root
+password: Slo0821!
+allowed_schemas: ''
+style: ''

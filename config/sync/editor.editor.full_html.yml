@@ -1,0 +1,149 @@
+uuid: 335f83ae-df4f-47f9-b6c9-013fce39ecff
+langcode: en
+status: true
+dependencies:
+  config:
+    - filter.format.full_html
+  module:
+    - ckeditor
+    - editor_file
+third_party_settings:
+  editor_file:
+    status: true
+    scheme: private
+    directory: inline-files
+    extensions: 'bat cbl cmd csv dat dll doc docx ear epub html gz ics ini jacl jar java jcl js jsp lic lwp mp3 odp ods odt pdf ppt pptx properties ps1 py rar rtf savf sh sql src svg swf tar tgz txt xls xlsx xml xsd xsl zip'
+    max_size: '10'
+_core:
+  default_config_hash: 967ijj7p6i7rwrYl7r08WQFeCY_c23YAh0h8u-w_CXM
+format: full_html
+editor: ckeditor
+settings:
+  toolbar:
+    rows:
+      -
+        -
+          name: Formatting
+          items:
+            - Font
+            - FontSize
+            - TextColor
+            - BGColor
+            - Bold
+            - Italic
+            - Underline
+            - Strike
+            - Superscript
+            - Subscript
+            - '-'
+            - RemoveFormat
+            - SpecialChar
+            - CodeSnippet
+        -
+          name: Table
+          items:
+            - tableinsert
+            - tabledelete
+            - tableproperties
+            - tablerowinsertbefore
+            - tablerowinsertafter
+            - tablerowdelete
+            - tablecolumninsertbefore
+            - tablecolumninsertafter
+            - tablecolumndelete
+            - tablecellinsertbefore
+            - tablecellinsertafter
+            - tablecelldelete
+            - tablecellproperties
+            - tablecellsmerge
+            - tablecellmergeright
+            - tablecellmergedown
+            - tablecellsplithorizontal
+            - tablecellsplitvertical
+            - moverow_up
+            - moverow_down
+        -
+          name: Linking
+          items:
+            - DrupalLink
+            - DrupalUnlink
+            - Anchor
+        -
+          name: Media
+          items:
+            - Blockquote
+            - DrupalFile
+            - DrupalImage
+            - HorizontalRule
+        -
+          name: Lists
+          items:
+            - BulletedList
+            - NumberedList
+        -
+          name: 'Block Formatting'
+          items:
+            - JustifyLeft
+            - JustifyCenter
+            - JustifyRight
+            - JustifyBlock
+            - Outdent
+            - Indent
+        -
+          name: Tools
+          items:
+            - Cut
+            - Copy
+            - Undo
+            - Redo
+            - Paste
+            - PasteText
+            - PasteFromWord
+            - ShowBlocks
+            - Source
+  plugins:
+    language:
+      language_list: un
+    stylescombo:
+      styles: ''
+    font:
+      font_names: ''
+      font_sizes: ''
+    codesnippet:
+      highlight_style: arta
+      highlight_languages:
+        apache: apache
+        bash: bash
+        cs: cs
+        cpp: cpp
+        coffeescript: coffeescript
+        css: css
+        diff: diff
+        html: html
+        http: http
+        ini: ini
+        java: java
+        javascript: javascript
+        json: json
+        makefile: makefile
+        markdown: markdown
+        nginx: nginx
+        objectivec: objectivec
+        perl: perl
+        php: php
+        python: python
+        ruby: ruby
+        sql: sql
+        vbscript: vbscript
+        xhtml: xhtml
+        xml: xml
+    colorbutton:
+      colors: ''
+image_upload:
+  status: true
+  scheme: private
+  directory: inline-images
+  max_size: '10 MB'
+  max_dimensions:
+    width: null
+    height: null

@@ -1,0 +1,7 @@
+width: '100'
+width_unit: '%'
+height: '800'
+height_unit: px
+title: 'Data Access'
+_core:
+  default_config_hash: oOnQ0Mg7ry3ri2RbdDkAQvnxYYphogqQXjIu2KAditw
