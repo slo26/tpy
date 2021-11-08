@@ -1,0 +1,43 @@
+<?php
+use \Drupal\Core\Form\FormStateInterface;
+
+function customer_content_type_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
+	if ( $form_id === 'node_customer_form' ) {
+		$node = $form_state->getFormObject()->getEntity();
+		if ( $node->isNew() ) {
+			$customer_id = "";
+			while (true) {
+				$customer_id = gen_cu_id();
+				$check = \Drupal::entityQuery("node")
+                    					->condition('type', 'customer')
+                    					->condition('field_customer_id', $customer_id)
+                    					->execute();
+				if ( sizeof($check) == 0 ) {
+					break;
+				}
+			
+			}
+			$form ['field_customer_id']['widget'][0]['value']['#default_value'] = $customer_id;
+
+		}
+	}
+}
+
+function customer_content_type_node_presave(Drupal\Core\Entity\EntityInterface $node){
+}
+
+function customer_content_type_entity_view_mode_alter(&$view_mode, Drupal\Core\Entity\EntityInterface $entity, $context) {
+}
+
+function customer_content_type_node_load($nodes) {
+}
+
+function gen_cu_id($length = 6) {
+    $characters = '0123456789';
+    $charactersLength = strlen($characters);
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, $charactersLength - 1)];
+    }
+    return "CU" . $randomString;
+}

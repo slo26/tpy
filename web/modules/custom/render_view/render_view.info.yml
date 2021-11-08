@@ -1,0 +1,5 @@
+name: Render View
+type: module
+description: This module is to do render custom for view
+core_version_requirement: ^8 || ^9
+package: tpy 

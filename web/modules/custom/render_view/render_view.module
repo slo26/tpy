@@ -1,0 +1,96 @@
+<?php
+use Drupal\file\Entity\File;
+use Drupal\field\Entity\FieldConfig;
+
+function render_view_node_presave(Drupal\Core\Entity\EntityInterface $node){
+}
+
+function render_view_entity_view_mode_alter(&$view_mode, Drupal\Core\Entity\EntityInterface $entity, $context) {
+	//begin
+	//this if condiition is to change view mode to teaser display if the current user is anonymous when loading product page"
+	if ( $entity->getEntityTypeId() == 'node' && $entity->bundle() == 'product' ) {
+			$current_user = \Drupal::currentUser();
+			$roles = $current_user->getRoles();
+			if ( in_array("anonymous", $roles) ) {
+					$view_mode = "teaser";
+			}
+	}
+	//end
+}
+
+function render_view_node_load($nodes) {
+	$body = "";
+	foreach ($nodes as $nid=>$page) {
+		if ($page->bundle() == "page" && !empty($page->field_product_category->value) ) {
+			$product_category = $page->field_product_category->value;
+			$nids = \Drupal::entityQuery("node")
+					->condition("type", "product")
+					->condition("field_product_category", $product_category)
+					->condition("status", 1)
+					->execute();
+			if ( count($nids) != 0 ) {
+				foreach($nids as $nid) {
+					$node = \Drupal\node\Entity\Node::load($nid);
+					$file = File::load($node->field_product_image->target_id);
+					$image_uri = str_replace("private://", "/system/files/", $file->getFileUri());
+					$product = '<div class="services"><div class="service">';
+					$product .= '<h3><a href="/node/' . $nid . '">' . $node->title->value . "</a></h3>";
+					$product .= '<img alt="' . $node->field_product_image->alt . '" data-align="center" data-entity-type="file" src="' . $image_uri . '" height="297" width="494"/>';
+					$product .= '<table border="1" cellpadding="1" cellspacing="1" style="margin: 0px auto;width: 500px"> <tbody>';
+					if ( !empty($node->field_model->value) ) {
+							$product .= '<tr align="left"> <td><strong>型號</strong></td><td>';
+							$product .= $node->field_model->value;
+							$product .= '</td></tr>';
+					}
+					if ( !empty($node->field_specification->value) ) {
+							$product .= '<tr align="left"> <td><strong>規格</strong></td><td>';
+							$product .= $node->field_specification->value;
+							$product .= '</td></tr>';
+															}
+					if ( !empty($node->field_directions->value) ) {
+							$product .= '<tr align="left"> <td><strong>説明</strong></td><td>';
+							$product .= $node->field_directions->value;
+							$product .= '</td></tr>';
+					}
+					if ( !empty($node->field_size->value) ) {
+							$product .= '<tr align="left"> <td><strong>尺寸</strong></td><td>';
+							$product .= $node->field_size->value;
+							$product .= '</td></tr>';
+					}
+					if ( !empty($node->field_weight->value) ) {
+							$product .= '<tr align="left"> <td><strong>重量</strong></td><td>';
+							$product .= $node->field_weight->value;
+							$product .= '</td></tr>';
+					}
+					$color = "";
+					$color_keys = explode(",", $node->field_color->getString());
+					for ($i=0; $i < count($color_keys); $i++) {
+							$allowed_values = FieldConfig::load('node.product.field_color')->getFieldStorageDefinition()->getSettings()['allowed_values'];
+							if ( empty($color) ) {
+									$color = $allowed_values[trim($color_keys[$i])];
+							} else {
+									$color = $color . "," . $allowed_values[trim($color_keys[$i])];
+							}
+					}
+					if ( !empty($color) ) {
+							$product .= '<tr align="left"> <td><strong>顏色</strong></td><td>';
+							$product .= $color;
+							$product .= '</td></tr>';
+					}
+					if ( !empty($node->field_comment->value) ) {
+							$product .= '<tr align="left"> <td><strong>備註</strong></td><td>';
+							$product .= $node->field_comment->value;
+							$product .= '</td></tr>';
+					}
+					$product .= '</tbody></table></div></div>';
+					$body = $body . $product;
+				}
+				$page->set("body", $body);
+				$page->body->format = "full_html";
+			}
+		}
+	}
+	//\Drupal::messenger()->addMessage(ge($node->id());
+	//\Drupal::messenger()->addMessage($view_mode);
+}
+
