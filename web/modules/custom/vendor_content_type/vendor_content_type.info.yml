@@ -1,0 +1,6 @@
+name: vendor content type 
+type: module
+description: This module is to handle all vendor related activities
+core_version_requirement: ^8 || ^9
+package: tpy
+

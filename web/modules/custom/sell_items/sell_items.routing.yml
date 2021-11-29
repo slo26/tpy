@@ -1,0 +1,12 @@
+sell_items.has_packed:
+  path: '/sell_items/{taxonomy_term}/has_packed'
+  defaults:
+    _controller: '\Drupal\sell_items\Controller\SellItemsController::hasPacked'
+    _title: '以包裝'
+  requirements:
+    _permission: 'access content'
+  options:
+    _admin_route: TRUE
+    parameters:
+      taxonomy_term:
+        type: 'entity:taxonomy_term'

@@ -1,0 +1,6 @@
+name: Custom Toolbar
+type: module
+description: Custom workbench toolbar
+package: TPY
+version: 1.0
+core_version_requirement: ^8 || ^9

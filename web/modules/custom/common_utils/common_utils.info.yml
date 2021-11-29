@@ -3,3 +3,5 @@ type: module
 description: This module contains all common API
 core_version_requirement: ^8 || ^9
 package: tpy 
+configure: common_utils.settings
+

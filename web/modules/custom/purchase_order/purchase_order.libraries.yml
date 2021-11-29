@@ -1,0 +1,9 @@
+purchase_order:
+  version: VERSION
+  css:
+    theme:
+      css/purchase_order.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupal.dropbutton

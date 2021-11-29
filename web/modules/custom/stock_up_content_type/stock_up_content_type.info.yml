@@ -1,0 +1,6 @@
+name: Stock Up content type 
+type: module
+description: This module is to handle all product stock up related activities
+core_version_requirement: ^8 || ^9
+package: tpy
+

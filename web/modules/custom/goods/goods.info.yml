@@ -1,0 +1,6 @@
+name: Goods
+type: module
+description: This module is to handle all parts and goods activies
+core_version_requirement: ^8 || ^9
+package: tpy 
+

@@ -5,19 +5,24 @@ function customer_content_type_form_alter(&$form, FormStateInterface &$form_stat
 	if ( $form_id === 'node_customer_form' ) {
 		$node = $form_state->getFormObject()->getEntity();
 		if ( $node->isNew() ) {
-			$customer_id = "";
+			$customer_id = "CU-" . date("Ymd");
 			while (true) {
-				$customer_id = gen_cu_id();
+				$query = \Drupal::entityQuery("node")
+                    					->condition('type', 'customer')
+										->condition('title', '$customer_id', "CONTAINS")
+                    					->execute();
+
+				$customer_id .=  "-" . (count($query)+ 1);
 				$check = \Drupal::entityQuery("node")
                     					->condition('type', 'customer')
-                    					->condition('field_customer_id', $customer_id)
+                    					->condition('title', $customer_id)
                     					->execute();
 				if ( sizeof($check) == 0 ) {
 					break;
 				}
 			
 			}
-			$form ['field_customer_id']['widget'][0]['value']['#default_value'] = $customer_id;
+			$form ['title']['widget'][0]['value']['#default_value'] = $customer_id;
 
 		}
 	}
@@ -41,3 +46,4 @@ function gen_cu_id($length = 6) {
     }
     return "CU" . $randomString;
 }
+

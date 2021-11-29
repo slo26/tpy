@@ -1,0 +1,48 @@
+custom_toolbar.sell:
+  path: '/admin/custom-toolbar/sell'
+  defaults:
+    _controller: '\Drupal\custom_toolbar\Controller\CustomToolbarController::sell'
+    _title: '銷貨'
+  requirements:
+    _role: 'authenticated'
+
+custom_toolbar.company:
+  path: '/admin/custom-toolbar/company'
+  defaults:
+    _controller: '\Drupal\custom_toolbar\Controller\CustomToolbarController::company'
+    _title: '客戶/廠商'
+  requirements:
+    _role: 'authenticated'
+
+custom_toolbar.product:
+  path: '/admin/custom-toolbar/product'
+  defaults:
+    _controller: '\Drupal\custom_toolbar\Controller\CustomToolbarController::product'
+    _title: '產品'
+  requirements:
+    _role: 'authenticated'
+
+custom_toolbar.web_teamroom_other:
+  path: '/admin/custom-toolbar/web-teamroom-other'
+  defaults:
+    _controller: '\Drupal\custom_toolbar\Controller\CustomToolbarController::web_teamroom_other'
+    _title: '網頁/文件/其他'
+  requirements:
+    _role: 'authenticated'
+
+custom_toolbar.storage:
+  path: '/admin/custom-toolbar/storage'
+  defaults:
+    _controller: '\Drupal\custom_toolbar\Controller\CustomToolbarController::storage'
+    _title: '庫存'
+  requirements:
+    _role: 'authenticated'
+
+
+custom_toolbar.main:
+  path: '/admin/main'
+  defaults:
+    _controller: '\Drupal\custom_toolbar\Controller\CustomToolbarController::mainPanel'
+    _title: '主畫面'
+  requirements:
+    _role: 'authenticated'

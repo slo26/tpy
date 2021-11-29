@@ -1,0 +1,30 @@
+<?php
+use \Drupal\Core\Form\FormStateInterface;
+
+function goods_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
+    if ( $form_id == "node_goods_form" || $form_id == "node_goods_edit_form" ) {
+        $node = $form_state->getFormObject()->getEntity();
+        if ( $node->isNew() ) {
+            $unique_id = generate_unique_id_for_goods();
+            $form ['title']['widget'][0]['value']['#default_value'] = $unique_id;
+        }
+        $form ['title']['#disabled'] = true;
+    }
+}
+
+function generate_unique_id_for_goods() {
+    $query = \Drupal::entityQuery("node")->condition('type', 'goods')->execute();
+    $index = count($query);
+    while (true) {
+        $index = $index + 1;
+        $unique_id = "G-" . str_pad($index, 5,"0",STR_PAD_LEFT);
+        $query = \Drupal::entityQuery("node")
+                                ->condition('type', 'goods')
+                                ->condition('title', $unique_id)
+                                ->execute();
+        if ( count($query) == 0 ) {
+            break;
+        }
+    }
+    return $unique_id;
+} 

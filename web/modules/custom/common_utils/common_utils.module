@@ -1,0 +1,97 @@
+<?php
+
+/**
+ * Implements hook_page_preprocess_html().
+ */
+function common_utils_preprocess_html(&$variables) {
+    //Add JS and CSS library
+    $variables['#attached']['library'][] = 'common_utils/common_utils';
+}
+
+function get_entity_storage_key($entity, $field_name, $value) {
+    if ( $entity->$field_name != null ) {
+        $allowed_values = $entity->$field_name->getSetting('allowed_values');
+        foreach ($allowed_values as $key => $label) {
+            if ( $value == $label ) {
+                return $key;
+            }
+        }
+    }
+    return null;
+}
+
+function get_entity_storage_label($entity, $field_name, $value) {
+    if ( $entity->$field_name != null ) {
+        $allowed_values = $entity->$field_name->getSetting('allowed_values');
+        foreach ($allowed_values as $key => $label) {
+            if ( $value == $key ) {
+                return $label;
+            }
+        }
+    }
+    return null;
+}
+
+function get_product_name_by_nid($product_nid) {
+    $product = \Drupal\node\Entity\Node::load($product_nid);
+    return $product->field_product_name->value;
+}
+
+function get_storage_name_by_nid($storage_nid) {
+    $storage = \Drupal\node\Entity\Node::load($storage_nid);
+    return $storage->field_storage_name->value;
+}
+
+function get_sell_order_number_by_nid($order_nid) {
+    $order = \Drupal\node\Entity\Node::load($order_nid);
+    return $order->title->value;
+}
+
+function get_storage_name($storage_id) {
+    $connection = \Drupal::database();
+    $storage_nids = \Drupal::entityQuery("node")
+                        ->condition('type', 'storage')
+                        ->condition('title', $storage_id)
+                        ->execute();
+
+    if ( count($storage_nids) == 0 ) return null;
+
+    foreach($storage_nids as $storage_nid) {
+        $storage = $connection->query("SELECT field_storage_name_value FROM {node__field_storage_name} Where 
+                                                                                entity_id = :nid", 
+                                                                                [':nid' => $storage_nid])->fetchAll();
+        return $storage[0]->field_storage_name_value;
+    }
+}
+
+function find_product_nid_where_storage_at($product_nid) {
+    $storage_nids = array();
+    
+    $stock_up_nids = \Drupal::entityQuery("node")
+                        ->condition('type', 'stock_up')
+                        ->condition('field_product_model', $product_nid)
+                        ->execute();
+    foreach ($stock_up_nids as $stock_up_nid) {
+        $stock_up = \Drupal\node\Entity\Node::load($stock_up_nid);
+        $storage_nids[] = $stock_up->field_storage_id->target_id;
+    }
+    return $storage_nids;
+}
+
+function get_hostname() {
+    $config = \Drupal::config ( 'common_utils.settings' );
+    $hostname = $config->get('hostname');
+
+    return $hostname;
+}
+
+function get_product_or_goods_name_by_nid($nid) {
+    $node = \Drupal\node\Entity\Node::load($nid);
+    if ( $node != null && $node->getType() == "goods" ) {
+        return $node->field_goods_name->value;
+    } else if ( $node != null && $node->getType() == "product" ) {
+        return $node->field_product_name->value;
+    }
+    
+    return "";
+}

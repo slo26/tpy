@@ -1,0 +1,50 @@
+.add-single-item-into-order {
+    /*float: left;
+    margin-right: 0.4em;*/
+    margin-right: 0.5em;
+    overflow: auto;
+    display: inline-block;
+}
+
+#edit-storage-select{
+    margin-right: 0.5em;
+    margin-bottom:0.5em;
+    overflow: auto;
+    display: inline-block;
+}
+
+.add-quantity {
+    /*float: left;
+    margin-right: 0.4em;
+    max-width: 6em;*/
+    margin-right: 0.5em;
+    overflow: auto;
+    display: inline-block;
+    /*max-width: 6em;*/
+}
+
+.add-single-item-into-order-button {
+    /*float: left;
+    margin-top: 2.5em;*/
+    margin-bottom: 1em;
+    overflow: auto;
+    display: inline-block;
+}
+
+.add-item-status-label {
+    float: left;
+    padding-top: 0.1em;
+    margin-top: 0.1em;
+}
+
+.add-item-status-message {
+    padding-top: 0.1em;
+    margin-top: 0.1em;
+    display: list-item;
+}
+
+.to-sell-item-list {
+    float: left;
+    /*margin-top: 0.5em;*/
+    margin-left: 1em;
+}

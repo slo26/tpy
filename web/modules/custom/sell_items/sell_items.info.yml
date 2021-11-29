@@ -1,0 +1,6 @@
+name: Sell Items 
+type: module
+description: This module is to handle all items in sell orders
+core_version_requirement: ^8 || ^9
+package: tpy
+

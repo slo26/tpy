@@ -34,12 +34,12 @@ function render_view_node_load($nodes) {
 					$file = File::load($node->field_product_image->target_id);
 					$image_uri = str_replace("private://", "/system/files/", $file->getFileUri());
 					$product = '<div class="services"><div class="service">';
-					$product .= '<h3><a href="/node/' . $nid . '">' . $node->title->value . "</a></h3>";
+					$product .= '<h3><a href="/node/' . $nid . '">' . $node->field_product_name->value . "</a></h3>";
 					$product .= '<img alt="' . $node->field_product_image->alt . '" data-align="center" data-entity-type="file" src="' . $image_uri . '" height="297" width="494"/>';
 					$product .= '<table border="1" cellpadding="1" cellspacing="1" style="margin: 0px auto;width: 500px"> <tbody>';
-					if ( !empty($node->field_model->value) ) {
+					if ( !empty($node->title->value) ) {
 							$product .= '<tr align="left"> <td><strong>型號</strong></td><td>';
-							$product .= $node->field_model->value;
+							$product .= $node->title->value;
 							$product .= '</td></tr>';
 					}
 					if ( !empty($node->field_specification->value) ) {

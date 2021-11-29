@@ -1,0 +1,6 @@
+name: Purchase order
+type: module
+description: This module is to handle all Purchase order activies
+core_version_requirement: ^8 || ^9
+package: tpy 
+

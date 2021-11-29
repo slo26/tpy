@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bebb7254423513900f47a3df0089b80c",
+    "content-hash": "3ec95e825dc2c7ab6f6d3aef8c2690ae",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1781,6 +1781,61 @@
             }
         },
         {
+            "name": "drupal/content_access",
+            "version": "1.0.0-alpha3",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/content_access.git",
+                "reference": "8.x-1.0-alpha3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/content_access-8.x-1.0-alpha3.zip",
+                "reference": "8.x-1.0-alpha3",
+                "shasum": "38715d271d166cbf7ed801acd6cee6010962bc79"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "require-dev": {
+                "drupal/acl": "~1.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.0-alpha3",
+                    "datestamp": "1600327861",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "fago",
+                    "homepage": "https://www.drupal.org/user/16747"
+                },
+                {
+                    "name": "gisle",
+                    "homepage": "https://www.drupal.org/user/409554"
+                },
+                {
+                    "name": "good_man",
+                    "homepage": "https://www.drupal.org/user/265439"
+                }
+            ],
+            "description": "Provides flexible content access control.",
+            "homepage": "https://drupal.org/project/content_access",
+            "support": {
+                "source": "https://git.drupalcode.org/project/content_access"
+            }
+        },
+        {
             "name": "drupal/core",
             "version": "9.2.7",
             "source": {
@@ -2709,6 +2764,63 @@
             "homepage": "https://www.drupal.org/project/ultimate_cron",
             "support": {
                 "source": "https://git.drupalcode.org/project/ultimate_cron"
+            }
+        },
+        {
+            "name": "drupal/view_unpublished",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/view_unpublished.git",
+                "reference": "8.x-1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/view_unpublished-8.x-1.0.zip",
+                "reference": "8.x-1.0",
+                "shasum": "74ebdf1b4f6963f7bb63192bc314014c0132d03c"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.0",
+                    "datestamp": "1597688978",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Agnes Chisholm",
+                    "homepage": "https://www.drupal.org/user/66428",
+                    "email": "amaria@chisholmtech.com"
+                },
+                {
+                    "name": "beeradb",
+                    "homepage": "https://www.drupal.org/user/120651"
+                },
+                {
+                    "name": "elevins",
+                    "homepage": "https://www.drupal.org/user/781882"
+                },
+                {
+                    "name": "entendu",
+                    "homepage": "https://www.drupal.org/user/173461"
+                }
+            ],
+            "description": "Select which roles should be able to see unpublished nodes.",
+            "homepage": "https://www.drupal.org/project/view_unpublished",
+            "support": {
+                "source": "https://git.drupalcode.org/project/view_unpublished"
             }
         },
         {
@@ -7455,6 +7567,7 @@
                 }
             ],
             "description": "A robust cross-platform utility for normalizing, comparing and modifying file paths.",
+            "abandoned": "symfony/filesystem",
             "time": "2015-12-17T08:42:14+00:00"
         }
     ],
@@ -10871,6 +10984,7 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "drupal/bef_select": 10,
+        "drupal/content_access": 15,
         "drupal/ultimate_cron": 15
     },
     "prefer-stable": true,

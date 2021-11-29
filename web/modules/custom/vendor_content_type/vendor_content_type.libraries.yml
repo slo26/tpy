@@ -1,0 +1,8 @@
+vendor_content_type:
+  version: VERSION
+  css:
+    theme:
+      css/vendor_content_type.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupal

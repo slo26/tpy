@@ -1,0 +1,26 @@
+.add-purchase-item-status-label {
+    float: left;
+    padding-top: 0.1em;
+    margin-top: 0.1em;
+}
+
+.add-purchase-item-status-message {
+    padding-top: 0.1em;
+    margin-top: 0.1em;
+    display: list-item;
+}
+
+.edit-merchandise-category, .edit-list-merchandise, .edit-merchandise-name, .add-purchase-item-quantity, .add-purchase-item-price, .add-purchase-item-total-amount, .add-single-item-into-purchase-button{
+    margin-right: 0.4em;
+    overflow: auto;
+    display: inline-block;
+}
+
+.add-single-item-into-purchase-button {
+    margin-bottom: 0.9em;
+}
+
+.to-purchase-item-list {
+    float: left;
+    margin-left: 1em;
+}

@@ -1,0 +1,478 @@
+<?php
+use \Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Url;
+use Drupal\Core\Ajax;
+use Drupal\Core\Ajax\ReplaceCommand;
+
+function purchase_order_node_presave(Drupal\Core\Entity\EntityInterface $node) {
+	if ( $node->type->target_id == "purchase_order" ) {
+		$label = get_entity_storage_label($node, "field_purchase_status", $node->field_purchase_status->value);
+		$node->set('revision_log', "$label 狀態儲存.");
+	}
+}
+
+/**
+ * Implements hook_page_preprocess_html().
+ */
+function purchase_order_preprocess_html(&$variables) {
+    //Add JS and CSS library
+    $variables['#attached']['library'][] = 'purchase_order/purchase_order';
+}
+
+
+function purchase_order_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
+	if ( $form_id === 'node_purchase_order_form' || $form_id == 'node_purchase_order_edit_form' ) {
+		/*-----------------採購資訊---------------------*/
+		$node = $form_state->getFormObject()->getEntity();
+
+		$form['purchase_info'] = array(
+						'#type' => 'details',
+						'#title' => t('採購資訊'),
+						'#weight' => -1,
+							'#open' => true,
+        );
+		$form['title']['#group'] = 'purchase_info';
+		$form['field_purchase_status']['#group'] = 'purchase_info';
+
+		$form['purchase_info']['purchase_order_status_message'] = array(
+			'#type' => 'markup',
+			'#markup' => '<div class="purchase-order-status-message"></div>',
+            '#weight' => 3,
+        );
+
+		if ( $node->isNew() ) {
+			$purchase_order_id = "PO-" . date("Ymd");
+			while (true) {
+                $query = \Drupal::entityQuery("node")
+                    					->condition('type', 'purchase_order')
+										->condition('title', $purchase_order_id, "CONTAINS")
+                    					->execute();
+				if ( sizeof($query) == 0 ) {
+					$purchase_order_id = "$purchase_order_id-1";
+				} else {
+					$purchase_order_id =  $purchase_order_id . "-" . (count($query)+ 1);
+				}
+
+				$check = \Drupal::entityQuery("node")
+                    					->condition('type', 'purchase_order')
+                                        ->condition('title', $purchase_order_id)
+                    					->execute();
+
+				if ( sizeof($check) == 0 ) {
+					break;
+				}
+			
+			}
+			$form ['title']['widget'][0]['value']['#default_value'] = $purchase_order_id;
+			$form ['title']['#disabled'] = true;
+		} else {
+			$vendor_id = $node->field_vendor_entity->target_id;
+		}
+
+		$form['field_purchase_status']['widget']['#ajax'] = [
+			'callback' => 'ajax_vendor_order_status_changed_validation',
+			'event' => 'change',
+			'wrapper' => 'ajax-change',
+		];
+		/*-----------------廠商資訊---------------------*/
+		$form['vendor_info'] = array(
+						'#type' => 'details',
+						'#title' => t('廠商資訊'),
+						'#weight' => -1,
+							'#open' => true,
+        );
+
+		$form['field_vendor_entity']['widget'][0]['target_id']['#ajax'] = array(
+                'callback' => 'ajax_vendor_info_loading',
+                'wrapper' => 'ajax-wrapper',
+                'event' => 'autocompleteclose change',
+        );
+
+		$form['field_vendor_entity']['#group'] = 'vendor_info';
+		$form['vendor_title'] = array(
+            '#title' => '廠商名稱',
+            '#type' => 'textfield',
+            '#size' => 60,
+			'#weight' => 4,
+			'#disabled' => true,
+			'#group' => 'vendor_info',
+        );
+		$form['vendor_contact_window'] = array(
+            '#title' => '聯絡人',
+            '#type' => 'textfield',
+            '#size' => 60,
+			'#weight' => 4,
+			'#disabled' => true,
+			'#group' => 'vendor_info',
+        );
+		$form['vendor_cell'] = array(
+            '#title' => '聯絡人電話',
+            '#type' => 'textfield',
+            '#size' => 60,
+			'#weight' => 4,
+			'#disabled' => true,
+			'#group' => 'vendor_info',
+        );
+
+		if ( !$node->isNew() ) {
+			$vendor_nid = $node->field_vendor_entity->target_id;
+			$vendor = \Drupal\node\Entity\Node::load($vendor_nid);
+			$form['vendor_title']['#default_value'] = $vendor->field_vendor_name->value;
+			$form['vendor_contact_window']['#default_value'] = $vendor->field_contact_person->value;
+			$form['vendor_cell']['#default_value'] = $vendor->field_mobile->value;
+		}
+		/*-----------------送貨資訊---------------------*/
+		$form['delivery_info'] = array(
+						'#type' => 'details',
+						'#title' => t('送貨資訊'),
+						'#weight' => -1,
+							'#open' => true,
+        );
+
+		$form['field_logistics']['#group'] = 'delivery_info';
+		$form['field_shipping_number']['#group'] = 'delivery_info';
+
+		/*-----------------新增採購項目---------------------*/
+		$form['item_section'] = array(
+			'#type' => 'markup',
+			'#markup' => '<div class="seven-details__summary">' . t('採購項目') . '</div>',
+			'#weight' => 20,
+        );
+
+		$form['add_item_status_label'] = array(
+            '#prefix' => '<div class="add-purchase-item-status-label">訊息 : ',
+			'#suffix' => '</div>',
+            '#weight' => $form['item_section']['#weight'] + 1,
+        );
+
+		$form['add_item_status_message'] = array(
+            '#markup' => '<div class="add-purchase-item-status-message"></div>',
+            '#weight' => $form['add_item_status_label']['#weight'] + 1,
+        );
+
+        /*$form['merchandise_category'] = [
+            '#type' => 'select',
+          	'#title' => t('採購類別'),
+            '#weight' => $form['add_item_status_message']['#weight'] + 1,
+            '#options' => array('product' => '產品', 'goods' => '零件/物品'),
+            '#default_value' => array('product'),
+            '#ajax' => array(
+				'callback' => 'ajax_merchandise_category',
+				'event' => 'change',
+			),
+            '#prefix' => '<div class="edit-merchandise-category">',
+			'#suffix' => '</div>',  
+        ];*/
+
+		$form['list_merchandise'] = [
+			'#type' => 'entity_autocomplete',
+			'#target_type' => 'node',
+			'#title' => '產品/零件/物品編號',
+			'#selection_settings' => array(
+				'target_bundles' =>array('product', 'goods'),
+			),
+			'#ajax' => [
+				'callback' => 'ajax_merchandise_category',
+				'event' => 'autocompleteclose change',
+			],
+			'#weight' => $form['add_item_status_message']['#weight'] + 1,
+			'#size' => 23,
+			'#prefix' => '<div class="edit-list-merchandise">',
+			'#suffix' => '</div>',
+		];
+
+		$form['merchandise_name'] = array(
+            '#title' => '產品/零件/物品名稱',
+            '#type' => 'textfield',
+			'#weight' => $form['list_merchandise']['#weight'] + 1,
+            '#size' => 23,
+			'#disabled' => true,
+			'#prefix' => '<div class="edit-merchandise-name">',
+			'#suffix' => '</div>',
+        );
+
+        $form['merchandise_category'] = [
+          	'#title' => t('採購類別'),
+            '#type' => 'textfield',
+            '#weight' => $form['merchandise_name']['#weight'] + 1,
+            '#size' => 8,
+            '#disabled' => true,
+            '#prefix' => '<div class="edit-merchandise-category">',
+			'#suffix' => '</div>',  
+        ];
+
+		$form['quantity'] = array(
+            '#title' => '數量',
+            '#type' => 'textfield',
+			'#ajax' => array(
+				'callback' => 'ajax_purchase_order_calculate_price',
+				'event' => 'change',
+			),
+			'#attributes' => array(
+				'min' => '0',
+                'max' => '99999',
+        		' type' => 'number',
+    		),
+			'#weight' => $form['merchandise_name']['#weight'] + 1,
+			'#prefix' => '<div class="add-purchase-item-quantity">',
+			'#suffix' => '</div>',
+        );
+
+		$form['price'] = array(
+            '#title' => '單價',
+            '#type' => 'textfield',
+			'#ajax' => array(
+				'callback' => 'ajax_purchase_order_calculate_price',
+				'event' => 'change',
+			),
+            '#size' => 4,
+			'#weight' => $form['quantity']['#weight'] + 1,
+			'#prefix' => '<div class="add-purchase-item-price">',
+			'#suffix' => '</div>',
+        );
+
+
+		$form['total_amount'] = array(
+            '#title' => '金額',
+            '#type' => 'textfield',
+            '#size' => 8,
+			'#weight' => $form['price']['#weight'] + 1,
+			'#prefix' => '<div class="add-purchase-item-total-amount">',
+			'#suffix' => '</div>',
+        );
+
+		$form['create_single_item'] = array(
+			'#type' => 'submit',
+			'#value' => t('新增'),
+			'#weight' => 30,
+			'#attributes' => [
+				'class' => [
+					'use-ajax',
+				],
+			],
+			'#ajax' => [
+				'callback' => 'add_purchase_item_callback',
+				'event' => 'click',
+			],
+			'#prefix' => '<div class="add-single-item-into-purchase-button">',
+			'#suffix' => '</div>',
+        );
+
+		$form['purchase_item_table'] = array(
+              '#title' => t('採購項目管理'),
+              '#weight' => 31,
+			  '#prefix' => '<div id="purchase-item-table"></div>',
+        );
+
+		if ( !$node->isNew() ) {
+			$form['purchase_item_table']['#prefix'] = items_table_generate($node->id());
+		}
+
+		$form['regenerate_table'] = array(
+			'#type' => 'submit',
+			'#value' => t('整理訂單項目'),
+			'#weight' => 31,
+			'#attributes' => [
+				'class' => [
+					'use-ajax',
+				],
+			],
+			'#ajax' => [
+				'callback' => 'table_regenerate_callback',
+				'event' => 'click',
+			],
+			'#prefix' => '<div class="to-purchase-item-list">',
+			'#suffix' => '</div>',
+        );
+
+		if ( !$node->isNew() ) {
+			$form['to_purchase_item_list'] = array(
+				'#prefix' => '<div class="to-purchase-item-list"><a href="/admin/purchase-items?title=' . $node->title->value .'" target="_blank">連結到此採購項目列表</a>',
+				'#suffix' => '</div>',
+				'#weight' => 32,
+			);
+		}
+	}
+}
+
+function ajax_vendor_info_loading(array $form, FormStateInterface $form_state) {
+        $ajax_response = new AjaxResponse();
+        $vendor_nid = $form_state->getValue('field_vendor_entity')[0]['target_id'];
+        $vendor = \Drupal\node\Entity\Node::load($vendor_nid);
+        $ajax_response->addCommand(new InvokeCommand('#edit-vendor-title', 'val', [$vendor->field_vendor_name->value]));
+        $ajax_response->addCommand(new InvokeCommand('#edit-vendor-contact-window', 'val', [$vendor->field_contact_person->value]));
+		$ajax_response->addCommand(new InvokeCommand('#edit-vendor-cell', 'val', [$vendor->field_mobile->value]));
+        return $ajax_response;
+}
+
+function ajax_merchandise_category(array $form, FormStateInterface $form_state) {
+    $ajax_response = new AjaxResponse();
+    $node_nid = $form_state->getValue('list_merchandise');
+
+    $connection = \Drupal::database();
+    $query = $connection->query("SELECT type FROM {node_field_data} Where 
+                                                        nid = :nid", [':nid' => $node_nid])->fetchAll();
+    $merchandise_category = $query[0]->type;
+    $entity = \Drupal\node\Entity\Node::load($node_nid);
+
+    if ( $merchandise_category == "product" ) {
+        $merchandise_category = "產品";
+        $title = $entity->field_product_name->value;
+    } else if ( $merchandise_category == "goods" ) {
+        $merchandise_category = "零件/物品";
+        $title = $entity->field_goods_name->value;
+    }
+
+    $ajax_response->addCommand(new InvokeCommand('#edit-merchandise-name', 'val', [$title]));
+    $ajax_response->addCommand(new InvokeCommand('#edit-merchandise-category', 'val', [$merchandise_category]));
+    
+	return $ajax_response;
+}
+
+function ajax_purchase_order_calculate_price(array $form, FormStateInterface $form_state) {
+    $ajax_response = new AjaxResponse();
+    $quantity = $form_state->getValue('quantity');
+    $price = $form_state->getValue('price');
+    $total = 0;
+
+    if ( !empty($quantity) && !empty($price) ) {    
+        $total = $quantity * $price;
+    }
+    $ajax_response->addCommand(new InvokeCommand('#edit-total-amount', 'val', [$total]));
+    
+    return $ajax_response;
+}
+
+function add_purchase_item_callback(array $form, FormStateInterface $form_state) {
+    $response = new AjaxResponse();
+	$status = "";
+	$entity = $form_state->getFormObject()->getEntity();
+	if ( !empty($entity->id()) ) {
+		if ( empty($form_state->getValue('list_merchandise')) || empty($form_state->getValue('quantity')) ) {
+			$status = '<font color="red">產品/零件/物品編號和數量必填!</font>';	
+		} else {
+			$item_id = gen_purchase_item_id($entity->title->value);
+			$item = \Drupal\taxonomy\Entity\Term::create(['vid' => 'purchase_items']);
+			$item->set('name', $item_id);
+			$item->field_order_id->target_id = $entity->id();
+			$item->set('field_product_goods', $form_state->getValue('list_merchandise'));
+			$item->set('field_quantity', $form_state->getValue('quantity'));
+			$item->set('field_price', $form_state->getValue('price'));
+			$item->set('field_total_amount', $form_state->getValue('total_amount'));
+			$item->save();
+			$form['field_sell_products']['widget'][0]['target_id']['#default_value'] = $item->id();
+			$status = '<font color="blue">新增成功!</font>';
+
+			$table = items_table_generate($entity->id());
+			$response->addCommand(new HtmlCommand('#purchase-item-table', $table));
+		}
+	} else {
+		$status = '<font color="red">此採購單還不在資料庫, 請先儲存建立此採購單!</font>';
+	}
+
+	$response->addCommand(new HtmlCommand('.add-purchase-item-status-message', $status));
+	$response->addCommand(new InvokeCommand('#edit-list-merchandise', 'val', [""]));
+	$response->addCommand(new InvokeCommand('#edit-merchandise-name', 'val', [""]));
+	$response->addCommand(new InvokeCommand('#edit-merchandise-category', 'val', [""]));
+	$response->addCommand(new InvokeCommand('#edit-quantity', 'val', [""]));
+	$response->addCommand(new InvokeCommand('#edit-price', 'val', [""]));
+	$response->addCommand(new InvokeCommand('#edit-total-amount', 'val', [""]));
+    return $response;
+}
+
+function items_table_generate($order_id) {
+	$tids = \Drupal::entityQuery("taxonomy_term")->condition("vid", "purchase_items")
+				->condition('field_order_id', $order_id)
+				->execute();
+	$table = "";
+	if ( count($tids) == 0 ) {
+		$table = '<div id="purchase-item-table"></div>';
+		return $table;
+	}
+
+	$table = '<div id="purchase-item-table"><table>-BODY-</table></div>';
+	$table_head = "<thead><tr><td>採購項目編號</td><td>產品/零件/物品編號</td><td>產品/零件/物品名稱</td><td>採購類別</td><td>數量</td><td>單價</td><td>金額</td><td></td></tr></thead>";
+	$table_body_begin = '<tbody>';
+	$table_body = '';
+
+	foreach($tids as $tid) {
+		$item = \Drupal\taxonomy\Entity\Term::load($tid);
+		$product_or_goods = \Drupal\node\Entity\Node::load($item->field_product_goods->target_id);
+        if ( $product_or_goods->bundle() == "goods" ) {
+            $category = "零件/物件";
+            $name = $product_or_goods->field_goods_name->value;
+        } else {
+            $category = "產品";
+            $name = $product_or_goods->field_product_name->value;
+        }
+
+		$dropdown_button = '<div class="dropbutton-wrapper dropbutton-multiple">
+					<div class="dropbutton-widget">
+						<ul class="dropbutton">
+							<li class="edit dropbutton-action">
+								<a href="/taxonomy/term/' . $tid .'/edit?destination=/node/' . $order_id .'/edit" hreflang="en">Edit</a>
+							</li>
+							<li class="dropbutton-toggle">
+								<button type="button">
+									<span class="dropbutton-arrow">
+										<span class="visually-hidden">List additional actions</span>
+									</span>
+								</button>
+							</li>
+							<li class="delete dropbutton-action secondary-action">
+								<a href="/taxonomy/term/' . $tid .'/delete?destination=/node/' . $order_id .'/edit" hreflang="en">Delete</a>
+							</li>
+						</ul>
+					</div>
+				</div>';
+		$table_body .= '<tr><td>' . $item->name->value . '</td><td>' . $product_or_goods->title->value . '</td><td>' . $name . '</td><td>' . $category . '</td><td>' . $item->field_quantity->value . '</td><td>' . $item->field_price->value . '</td><td>' . $item->field_total_amount->value . '</td><td>' . $dropdown_button . '</td></tr>';
+	}
+	$table_body_end = '</tbody>';
+
+	$table_body = $table_head . $table_body_begin . $table_body . $table_body_end;
+	$table = str_replace('-BODY-', $table_body, $table);
+	
+	return $table;
+}
+
+function ajax_vendor_order_status_changed_validation(array $form, FormStateInterface $form_state) {
+    $ajax_response = new AjaxResponse();
+	$node = $form_state->getFormObject()->getEntity();
+	$selected_key = $form_state->getValue(field_purchase_status)[0]['value'];
+	$selected_value = get_entity_storage_label($node, 'field_purchase_status', $selected_key);
+
+	$message = '<div class="purchase-order-status-message"></div>';
+	$ajax_response->addCommand(new HtmlCommand('.purchase-order-status-message', $message));
+	if ( $selected_key == 'receive' || $selected_key == 'done' ) {
+		if ( $node->isNew() ) {
+			$message = '<div class="purchase-order-status-message"><font color="red">此新採購單還未被建立及儲存, 無法選擇' . $selected_value . '選項</font></div>';
+			$ajax_response->addCommand(new HtmlCommand('.purchase-order-status-message', $message));
+			$ajax_response->addCommand(new InvokeCommand('#edit-field-purchase-status', 'val', [$node->field_purchase_status->value]));
+		} else {
+			$purchase_items_tids = \Drupal::entityQuery("taxonomy_term")
+											->condition('vid', 'purchase_items')
+											->condition('field_order_id', $node->id())
+											->execute();
+			if ( count($purchase_items_tids) == 0 ) {
+				$message = '<div class="purchase-order-status-message"><font color="red">此採購單沒有任何採購項目, 無法選擇' . $selected_value . '選項</font></div>';
+				$ajax_response->addCommand(new HtmlCommand('.purchase-order-status-message', $message));
+				$ajax_response->addCommand(new InvokeCommand('#edit-field-purchase-status', 'val', [$node->field_purchase_status->value]));
+			} else {
+				foreach($purchase_items_tids as $purchase_items_tid) {
+					$purchase_item = \Drupal\taxonomy\Entity\Term::load($purchase_items_tid);
+					if ( $purchase_item->field_has_inventoried_->value == false ) {
+						$message = '<div class="purchase-order-status-message"><font color="red">此採購單還有一或多個採購項目還沒入庫, 無法選擇' . $selected_value . '選項</font></div>';
+						$ajax_response->addCommand(new HtmlCommand('.purchase-order-status-message', $message));
+						$ajax_response->addCommand(new InvokeCommand('#edit-field-purchase-status', 'val', [$node->field_purchase_status->value]));
+						break;
+					}
+				}
+			}
+		}	
+	}
+	
+	return $ajax_response;
+}

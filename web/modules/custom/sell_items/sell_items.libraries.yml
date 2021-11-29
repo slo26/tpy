@@ -1,0 +1,8 @@
+sell_items:
+  version: VERSION
+  css:
+    theme:
+      css/sell_items.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupal

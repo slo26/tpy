@@ -1,0 +1,106 @@
+<?php
+use \Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax;
+
+function stock_up_content_type_node_presave(Drupal\Core\Entity\EntityInterface $node) {
+    if ( $node->bundle() == 'stock_up' && $node->isNew() ) {
+        $storage = \Drupal\node\Entity\Node::load($node->field_storage_id->target_id);
+        $entity = \Drupal\node\Entity\Node::load($node->field_product_goods->target_id);
+        $node->set('title', trim($storage->title->value) . "+" . trim($entity->title->value));
+    }
+}
+
+function stock_up_content_type_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
+    if ( $form_id === 'node_stock_up_form' || $form_id == 'node_stock_up_edit_form' ) {
+        $node = $form_state->getFormObject()->getEntity();
+
+        $form['field_storage_id']['widget']['#ajax'] = array(
+                'callback' => 'ajax_stock_up_storage_info_loading',
+                'wrapper' => 'ajax-wrapper',
+                'event' => 'autocompleteclose change',
+        );
+
+        $default_value = ( empty($node) ) ? '' : get_storage_name_by_nid($node->field_storage_id->target_id);
+        $form['storage_name'] = array(
+            '#title' => '倉庫名稱',
+            '#type' => 'textfield',
+            '#default_value' => $default_value,
+            '#size' => 60,
+			'#disabled' => true,
+            '#weight' => 1,
+        );
+
+        $form['field_product_goods']['widget'][0]['target_id']['#ajax'] = array(
+                'callback' => 'ajax_stock_up_product_goods_info_loading',
+                'wrapper' => 'ajax-wrapper',
+                'event' => 'autocompleteclose change',
+        );
+
+        $default_value = ( empty($node) ) ? '' : get_product_or_goods_name_by_nid($node->field_product_goods->target_id);
+
+        $form['product_or_goods_name'] = array(
+            '#title' => '產品/零件/物件名稱',
+            '#type' => 'textfield',
+            '#default_value' => $default_value,
+            '#size' => 60,
+			'#disabled' => true,
+            '#weight' => 2,
+        );
+
+        $default_value = "";
+        if ( !$node->isNew() ) {
+            $entity = \Drupal\node\Entity\Node::load($node->field_product_goods->target_id);
+            if ( $entity->type->target_id == "product" ) {
+                $default_value = get_entity_storage_label($entity, 'field_color', $entity->field_color->value); 
+            }
+        }
+        
+        $form['product_color'] = array(
+            '#title' => '產品顏色',
+            '#type' => 'textfield',
+            '#default_value' => $default_value,
+            '#size' => 10,
+            '#disabled' => true,
+            '#weight' => 2,
+        );
+        $form['#validate'][] = 'stock_up_form_validate';
+    }
+}
+
+function stock_up_form_validate($form, &$form_state) {
+    if ( empty($form_state->getValue('field_storage_id')[0]['target_id']) == 1 ) {
+        $form_state->setError($form , t('儲存沒有成功, 倉庫編號必需填寫.'));
+    }
+}
+
+function ajax_stock_up_storage_info_loading(array $form, FormStateInterface $form_state) {
+    $ajax_response = new AjaxResponse();
+    $storage_nid = $form_state->getValue('field_storage_id')[0]['target_id'];
+    $storage = \Drupal\node\Entity\Node::load($storage_nid);
+    $field_storage_name = $storage->field_storage_name->value;
+
+    $ajax_response->addCommand(new InvokeCommand('#edit-storage-name', 'val', [$field_storage_name]));
+    return $ajax_response;
+}
+
+function ajax_stock_up_product_goods_info_loading(array $form, FormStateInterface $form_state) {
+    $ajax_response = new AjaxResponse();
+    $nid = $form_state->getValue('field_product_goods')[0]['target_id'];
+    $node = \Drupal\node\Entity\Node::load($nid);
+    if ( $node->type->target_id == "goods" ) {
+        $name = $node->field_goods_name->value;
+    } else {
+        $name = $node->field_product_name->value;
+        $product_color = $node->field_color->value;
+        $ajax_response->addCommand(new InvokeCommand('#edit-product-color', 'val', [get_entity_storage_label($node, 'field_color', $product_color)]));
+    }
+    
+    $ajax_response->addCommand(new InvokeCommand('#edit-product-or-goods-name', 'val', [$name]));
+    return $ajax_response;
+}
+
+
+

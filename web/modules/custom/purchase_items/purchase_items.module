@@ -1,0 +1,127 @@
+<?php
+use \Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax;
+
+function purchase_items_taxonomy_term_presave($term) {
+	if ( $term->bundle() == "purchase_items" ) {
+        if ( $term->isNew() ) {
+            $term->set('name', gen_purchase_item_id());
+        }
+
+        if ( $term->field_has_inventoried_->value ) {
+             $stock_up_nids = \Drupal::entityQuery("node")
+                        ->condition('type', 'stock_up')
+                        ->condition('field_product_goods', $term->field_product_goods->target_id)
+                        ->condition('field_storage_id', $term->field_storage->target_id)
+                        ->execute();
+            foreach($stock_up_nids as $stock_up_nid) {
+                $stock_up = \Drupal\node\Entity\Node::load($stock_up_nid);
+                $total_num = $stock_up->field_stock->value + $term->field_quantity->value;
+                $stock_up->set('field_stock', $total_num);
+                $stock_up->save();
+                $message = get_product_or_goods_name_by_nid($term->field_product_goods->target_id) . " 儲存在 " . get_storage_name_by_nid($term->field_storage->target_id) . " 的庫存是 " . $total_num; 
+                \Drupal::messenger()->addMessage($message);
+            }
+        }
+    }
+}
+
+function purchase_items_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
+    if ( $form_id == "taxonomy_term_purchase_items_form" ) {
+        $term = $form_state->getFormObject()->getEntity();
+        if ( $term->isNew() ) {
+            $form ['name']['widget'][0]['value']['#default_value'] = gen_purchase_item_id();
+			$form ['name']['widget'][0]['value']['#disabled'] = true;
+        }
+
+        $form['field_storage']['widget']['#ajax'] = array(
+            'callback' => 'ajax_storage',
+            'event' => 'change',
+        );
+
+        $form['message_for_storage'] = array(
+			'#type' => 'markup',
+			'#markup' => '<div class="message-for-storage"></div>',
+            '#weight' => 3,
+        );
+
+        $form['field_has_inventoried_']['widget']['value']['#ajax'] = array(
+            'callback' => 'ajax_checkbox',
+            'event' => 'change',
+        );
+
+        $form['message_for_checkbox'] = array(
+			'#type' => 'markup',
+			'#markup' => '<div class="message-for-checkbox"></div>',
+            '#weight' => $form['field_has_inventoried_']['#weight'] + 1,
+        );
+
+        $form['#validate'][] = 'purchase_items_form_validate';
+    }
+}
+
+function ajax_checkbox(array $form, FormStateInterface $form_state) {
+    $ajax_response = new AjaxResponse();
+    $message = "";
+    if ( $form_state->getValue('field_has_inventoried_')['value'] == 1 && empty($form_state->getValue('field_storage')[0]['target_id']) == 1 ) {
+        $message = '<font color="red">儲存沒有成功, 無法入庫, 請填寫要入庫的倉庫</font>';
+        $ajax_response->addCommand(new HtmlCommand('.message-for-checkbox', $message));
+    } else {
+        $ajax_response->addCommand(new HtmlCommand('.message-for-checkbox', $message));
+    }
+    return $ajax_response;
+}
+
+function ajax_storage(array $form, FormStateInterface $form_state) {
+    $ajax_response = new AjaxResponse();
+    $message = "";
+    $storage_nid = $form_state->getValue('field_storage')[0]['target_id'];
+    if ( $storage_nid != 0 ) {
+        $product_goods_nid = $form_state->getValue('field_product_goods')[0]['target_id'];
+        $stock_up_nids = \Drupal::entityQuery("node")
+                                ->condition('type', 'stock_up')
+                                ->condition('field_storage_id', $storage_nid)
+                                ->condition('field_product_goods', $product_goods_nid)
+                                ->execute();
+        if ( count($stock_up_nids) == 0 ) {
+            $message = '<font color="red">倉儲沒有這物品, 請先點此<a href="/node/add/stock_up" target="_blank">連接</a>以手動建立此物品在倉儲.</font>';
+            
+        }
+    }
+    
+    $ajax_response->addCommand(new HtmlCommand('.message-for-storage', $message));
+    return $ajax_response;
+}
+
+function purchase_items_form_validate($form, &$form_state) {
+    if ( $form_state->getValue('field_has_inventoried_')['value'] == 1 && empty($form_state->getValue('field_storage')[0]['target_id']) == 1 ) {
+        $form_state->setError($form , t('儲存沒有成功, 無法入庫, 請填寫要入庫的倉庫.'));
+    }
+
+    $storage_nid = $form_state->getValue('field_storage')[0]['target_id'];
+    $product_goods_nid = $form_state->getValue('field_product_goods')[0]['target_id'];
+    $stock_up_nids = \Drupal::entityQuery("node")
+                            ->condition('type', 'stock_up')
+                            ->condition('field_storage_id', $storage_nid)
+                            ->condition('field_product_goods', $product_goods_nid)
+                            ->execute();
+    if ( count($stock_up_nids) == 0 ) {
+        $message = '倉儲沒有這物品, 請先以手動建立此物品在倉儲.';
+        $form_state->setError($form , $message);
+    }
+}
+
+function gen_purchase_item_id($order_id = null) {
+    $total = \Drupal::entityQuery("taxonomy_term")
+                    ->condition("vid", "purchase_items")
+                    ->execute();
+    if ( $order_id == null ) {
+        return "PI-" . date("md") . "-" . (count($total) + 1);
+    } else {
+        $replace = substr($order_id, 0, 7);
+        return str_replace($replace, "PI-", $order_id) . "-" . (count($total)+1);
+    }
+}

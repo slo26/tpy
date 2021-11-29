@@ -1,0 +1,9 @@
+sales_order_content_type:
+  version: VERSION
+  css:
+    theme:
+      css/sales_order_content_type.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupal.dropbutton

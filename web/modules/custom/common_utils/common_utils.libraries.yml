@@ -1,0 +1,8 @@
+common_utils:
+  version: VERSION
+  css:
+    theme:
+      css/common_utils.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupal

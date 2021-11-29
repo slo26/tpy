@@ -1,0 +1,7 @@
+common_utils.settings:
+  path: '/admin/config/common_utils'
+  defaults:
+    _form: '\Drupal\common_utils\Form\CommonUtilsSettingsForm'
+    _title: 'Common Utils Configuration'
+  requirements:
+    _permission: 'administer site configuration'

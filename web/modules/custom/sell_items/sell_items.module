@@ -1,0 +1,162 @@
+<?php
+use \Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_entity_operation().
+ */
+function sell_items_entity_operation(\Drupal\Core\Entity\EntityInterface $entity) {
+    $operations = [];
+    if ( $entity->getEntityTypeId() == 'taxonomy_term' && $entity->bundle() === 'sell_items' ) {
+        $roles = \Drupal::currentUser()->getRoles();
+        $operations['has_packed'] = [
+                'title' => t('以包裝'),
+                'weight' => '100',
+                'url' => Url::fromRoute('sell_items.has_packed',  ['taxonomy_term' => $entity->id()]),
+        ];
+    }
+  return $operations;
+}
+
+/**
+ * Implements hook_page_preprocess_html().
+ */
+function sell_items_preprocess_html(&$variables) {
+    //Add JS and CSS library
+    $variables['#attached']['library'][] = 'sell_items/sell_items';
+}
+
+function sell_items_taxonomy_term_presave($term) {
+	if ( $term->bundle() == "sell_items" ) {
+        if ( empty($term->field_order_id->target_id) ) {
+            $term->set('name', gen_sell_item_id());
+        }
+
+        $original_term = $term->original;
+        if ( $term->field_is_packed->value == true && $original_term->field_is_packed->value == false ) {
+            $stock_up_nids = \Drupal::entityQuery("node")
+                        ->condition('type', 'stock_up')
+                        ->condition('field_product_goods', $term->field_product_id->target_id)
+                        ->condition('field_storage_id', $term->field_storage->target_id)
+                        ->execute();
+            foreach($stock_up_nids as $stock_up_nid) {
+                $stock_up = \Drupal\node\Entity\Node::load($stock_up_nid);
+                if ( $stock_up->field_stock->value >= $term->field_quantity->value ) {
+                    $remain_num = $stock_up->field_stock->value - $term->field_quantity->value;
+                    $stock_up->set('field_stock', $remain_num);
+                    $stock_up->save();
+                    $message = get_product_name_by_nid($term->field_product_id->target_id) . " 儲存在 " . get_storage_name_by_nid($term->field_storage->target_id) . " 的庫存剩餘 " . $remain_num; 
+                    \Drupal::messenger()->addMessage($message);
+                } else {
+                    $message = get_product_name_by_nid($term->field_product_id->target_id) . " 儲存在 " . get_storage_name_by_nid($term->field_storage->target_id) . " 的庫存剩餘 " . $remain_num . " 不足, 儲存失敗"; 
+                    \Drupal::messenger()->addMessage($message, 'error');
+                    $term->set('field_is_packed', false);
+                    //throw new \Exception($message);
+                }
+            }
+        } else if ( $term->field_is_packed->value == false && $original_term->field_is_packed->value == true ) {
+            $stock_up_nids = \Drupal::entityQuery("node")
+                        ->condition('type', 'stock_up')
+                        ->condition('field_product_goods', $term->field_product_id->target_id)
+                        ->condition('field_storage_id', $term->field_storage->target_id)
+                        ->execute();
+            foreach($stock_up_nids as $stock_up_nid) {
+                $stock_up = \Drupal\node\Entity\Node::load($stock_up_nid);
+                $remain_num = $stock_up->field_stock->value + $term->field_quantity->value;
+                $stock_up->set('field_stock', $remain_num);
+                $stock_up->save();
+                $message = "數量" . $remain_num . "歸回以包裝前."; 
+                \Drupal::messenger()->addMessage($message);
+                break;
+            }
+        }
+	}
+}
+
+function sell_items_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
+    if ($form_id === 'taxonomy_term_sell_items_form' ) {
+        $term = $form_state->getFormObject()->getEntity();
+        if ( $term->isNew() ) {
+            $form ['name']['widget'][0]['value']['#default_value'] = gen_sell_item_id();
+			$form ['name']['widget'][0]['value']['#disabled'] = true;
+        }
+
+        $form['field_order_id']['widget'][0]['target_id']['#ajax'] = array(
+                'callback' => 'ajax_order_id_was_input',
+                'wrapper' => 'ajax-wrapper',
+                'event' => 'autocompleteclose change',
+        );
+
+        $form['field_product_id']['widget'][0]['target_id']['#ajax'] = array(
+                'callback' => 'ajax_sell_items_product_loading',
+                'wrapper' => 'ajax-wrapper',
+                'event' => 'autocompleteclose change',
+        );
+
+        $form['field_quantity']['widget'][0]['value']['#ajax'] = array(
+            'callback' => 'ajax_sell_items_calculate_price',
+			'event' => 'change',
+        );
+        $form['field_quantity']['widget'][0]['value']['#attributes'] = array(
+            'min' => '0',
+        );
+        $form['field_discount']['widget'][0]['value']['#ajax'] = array(
+            'callback' => 'ajax_sell_items_calculate_price',
+			'event' => 'change',
+        );
+    }
+}
+
+function ajax_sell_items_calculate_price(array $form, FormStateInterface $form_state) {
+	$ajax_response = new AjaxResponse();
+	$quantity = (int)$form_state->getValue('field_quantity')[0]['value'];
+	$price = (int)$form_state->getValue('field_price')[0]['value'];
+	$discount = (double)$form_state->getValue('field_discount')[0]['value'];
+	$total_amount = 0;
+	if ( empty($discount) || $discount <= 0 ) {
+		$tota_amount = $quantity*$price;
+	} else {
+		$discount = $discount/100;
+		$discount_price = $price - ($price*$discount);
+		$tota_amount = $discount_price*$quantity;
+	}
+
+	$ajax_response->addCommand(new InvokeCommand('#edit-field-total-amount-0-value', 'val', [$tota_amount]));
+
+	return $ajax_response;
+}
+
+function ajax_order_id_was_input(array $form, FormStateInterface $form_state) {
+        $ajax_response = new AjaxResponse();
+        $order_id = $form_state->getValue('field_order_id')[0]['target_id'];
+        $order = \Drupal\node\Entity\Node::load($order_id);
+        $order_number = $order->title->value;
+
+        $ajax_response->addCommand(new InvokeCommand('#edit-name-0-value', 'val', [gen_sell_item_id($order_number)]));
+        return $ajax_response;
+}
+
+function ajax_sell_items_product_loading(array $form, FormStateInterface $form_state) {
+        $ajax_response = new AjaxResponse();
+        $product_id = $form_state->getValue('field_product_id')[0]['target_id'];
+        $product = \Drupal\node\Entity\Node::load($product_id);
+        
+        $ajax_response->addCommand(new InvokeCommand('#edit-field-quantity-0-value', 'attr', ['max', $product->field_stock->value]));
+        $ajax_response->addCommand(new InvokeCommand('#edit-field-quantity-0-value', 'val', [0]));
+        $ajax_response->addCommand(new InvokeCommand('#edit-field-price-0-value', 'val', [$product->field_retail_price->value]));
+        return $ajax_response;
+}
+
+function gen_sell_item_id($order_id = null) {
+    $total = \Drupal::entityQuery("taxonomy_term")
+                    ->condition("vid", "sell_items")
+                    ->execute();
+    if ( $order_id == null ) {
+        return "P-" . date("md") . "-" . (count($total) + 1);
+    } else {
+        $replace = substr($order_id, 0, 7);
+        return str_replace($replace, "P-", $order_id) . "-" . (count($total)+1);
+    }
+}
