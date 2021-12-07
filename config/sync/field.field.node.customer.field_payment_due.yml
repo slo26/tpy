@@ -1,0 +1,23 @@
+uuid: 245b2457-3c44-4366-92cd-2cfedb6eddd9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_payment_due
+    - node.type.customer
+id: node.customer.field_payment_due
+field_name: field_payment_due
+entity_type: node
+bundle: customer
+label: 結帳日
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

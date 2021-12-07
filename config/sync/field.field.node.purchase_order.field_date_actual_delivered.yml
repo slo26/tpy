@@ -1,0 +1,21 @@
+uuid: 953bd035-33b8-4041-b678-87299ffaaada
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_date_actual_delivered
+    - node.type.purchase_order
+  module:
+    - datetime
+id: node.purchase_order.field_date_actual_delivered
+field_name: field_date_actual_delivered
+entity_type: node
+bundle: purchase_order
+label: 出貨日
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

@@ -1,0 +1,18 @@
+uuid: 1a60493d-ac24-41eb-bedb-2655f45ea3b5
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.sales_order
+id: node.sales_order.title
+field_name: title
+entity_type: node
+bundle: sales_order
+label: 銷售編號
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

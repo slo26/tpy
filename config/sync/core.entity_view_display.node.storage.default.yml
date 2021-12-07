@@ -1,0 +1,50 @@
+uuid: 189284f6-93cf-467a-b0b8-5af755b4a42f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.storage.field_contact_person
+    - field.field.node.storage.field_long_comment
+    - field.field.node.storage.field_phone
+    - field.field.node.storage.field_storage_name
+    - node.type.storage
+  module:
+    - user
+id: node.storage.default
+targetEntityType: node
+bundle: storage
+mode: default
+content:
+  field_contact_person:
+    weight: 2
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_long_comment:
+    weight: 3
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+    region: content
+  field_phone:
+    weight: 1
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_storage_name:
+    weight: 0
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+hidden:
+  links: true

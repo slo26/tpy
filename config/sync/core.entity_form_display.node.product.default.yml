@@ -1,0 +1,136 @@
+uuid: 14203c73-bc4b-46c9-a0af-d4886fb3ce4d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.product.field_color
+    - field.field.node.product.field_comment
+    - field.field.node.product.field_cost_price
+    - field.field.node.product.field_dealer_price
+    - field.field.node.product.field_directions
+    - field.field.node.product.field_product_category
+    - field.field.node.product.field_product_image
+    - field.field.node.product.field_product_name
+    - field.field.node.product.field_retail_price
+    - field.field.node.product.field_size
+    - field.field.node.product.field_specification
+    - field.field.node.product.field_weight
+    - image.style.thumbnail
+    - node.type.product
+  module:
+    - image
+id: node.product.default
+targetEntityType: node
+bundle: product
+mode: default
+content:
+  field_color:
+    weight: 8
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_comment:
+    weight: 12
+    settings:
+      size: 60
+      placeholder: 備註
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_cost_price:
+    weight: 9
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  field_dealer_price:
+    weight: 11
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  field_directions:
+    weight: 5
+    settings:
+      size: 60
+      placeholder: 說明
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_product_category:
+    weight: 1
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_product_image:
+    weight: 0
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    third_party_settings: {  }
+    type: image_image
+    region: content
+  field_product_name:
+    weight: 3
+    settings:
+      size: 60
+      placeholder: 產品名稱
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_retail_price:
+    weight: 10
+    settings:
+      placeholder: 零售價錢
+    third_party_settings: {  }
+    type: number
+    region: content
+  field_size:
+    weight: 6
+    settings:
+      size: 60
+      placeholder: 尺寸
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_specification:
+    weight: 4
+    settings:
+      size: 60
+      placeholder: 規格
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_weight:
+    weight: 7
+    settings:
+      size: 60
+      placeholder: 重量
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  status:
+    type: boolean_checkbox
+    weight: 13
+    region: content
+    settings:
+      display_label: true
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 2
+    region: content
+    settings:
+      size: 60
+      placeholder: 產品編號
+    third_party_settings: {  }
+hidden:
+  created: true
+  path: true
+  promote: true
+  sticky: true
+  uid: true

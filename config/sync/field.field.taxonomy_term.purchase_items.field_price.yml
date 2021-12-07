@@ -1,0 +1,23 @@
+uuid: 104f10b5-e1fd-42e4-a32c-50bcc36165cb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_price
+    - taxonomy.vocabulary.purchase_items
+id: taxonomy_term.purchase_items.field_price
+field_name: field_price
+entity_type: taxonomy_term
+bundle: purchase_items
+label: 單價
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: !!float 0
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

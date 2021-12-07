@@ -1,0 +1,22 @@
+uuid: 771487cc-1824-453b-9f37-88b379b9c31a
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.goods
+id: node.goods.status
+field_name: status
+entity_type: node
+bundle: goods
+label: Published
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

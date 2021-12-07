@@ -1,0 +1,29 @@
+uuid: 72e9de59-3f71-4e7a-a6b2-d9cdc1174062
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_order_id
+    - node.type.sales_order
+    - taxonomy.vocabulary.sell_items
+id: taxonomy_term.sell_items.field_order_id
+field_name: field_order_id
+entity_type: taxonomy_term
+bundle: sell_items
+label: 訂單編號
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      sales_order: sales_order
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

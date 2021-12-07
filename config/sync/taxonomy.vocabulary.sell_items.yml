@@ -1,0 +1,8 @@
+uuid: 7646628a-88a5-46af-8542-c593d0825efb
+langcode: en
+status: true
+dependencies: {  }
+name: 'Sell Items'
+vid: sell_items
+description: ''
+weight: 0

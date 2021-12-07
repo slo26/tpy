@@ -1,0 +1,20 @@
+uuid: 73f0a278-7a01-484e-87c3-c2697b244408
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_total_employee
+field_name: field_total_employee
+entity_type: node
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

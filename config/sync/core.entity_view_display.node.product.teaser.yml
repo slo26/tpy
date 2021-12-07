@@ -1,0 +1,92 @@
+uuid: d6925c9e-b070-425e-bbdb-c09d6b306aca
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.product.field_color
+    - field.field.node.product.field_comment
+    - field.field.node.product.field_cost_price
+    - field.field.node.product.field_dealer_price
+    - field.field.node.product.field_directions
+    - field.field.node.product.field_product_category
+    - field.field.node.product.field_product_image
+    - field.field.node.product.field_product_name
+    - field.field.node.product.field_retail_price
+    - field.field.node.product.field_size
+    - field.field.node.product.field_specification
+    - field.field.node.product.field_weight
+    - image.style.large
+    - node.type.product
+  module:
+    - image
+    - options
+    - user
+id: node.product.teaser
+targetEntityType: node
+bundle: product
+mode: teaser
+content:
+  field_comment:
+    type: string
+    weight: 8
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_directions:
+    type: string
+    weight: 4
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_product_category:
+    type: list_default
+    weight: 1
+    region: content
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+  field_product_image:
+    type: image
+    weight: 0
+    region: content
+    label: hidden
+    settings:
+      image_style: large
+      image_link: ''
+    third_party_settings: {  }
+  field_size:
+    type: string
+    weight: 5
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_specification:
+    type: string
+    weight: 3
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_weight:
+    type: string
+    weight: 6
+    region: content
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+hidden:
+  field_color: true
+  field_cost_price: true
+  field_dealer_price: true
+  field_product_name: true
+  field_retail_price: true
+  links: true

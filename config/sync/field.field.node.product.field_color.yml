@@ -1,0 +1,21 @@
+uuid: 81cab2cf-cb80-482f-a669-425abbbd563e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_color
+    - node.type.product
+  module:
+    - options
+id: node.product.field_color
+field_name: field_color
+entity_type: node
+bundle: product
+label: 顏色
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

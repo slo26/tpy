@@ -1,0 +1,19 @@
+uuid: da34d7d5-784a-40ff-82db-c85fcd908484
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_size
+    - node.type.product
+id: node.product.field_size
+field_name: field_size
+entity_type: node
+bundle: product
+label: 尺寸
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

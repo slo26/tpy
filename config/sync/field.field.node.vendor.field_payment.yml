@@ -1,0 +1,21 @@
+uuid: 0a7b78b0-636c-4c8b-9059-0bb53861661d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_payment
+    - node.type.vendor
+  module:
+    - options
+id: node.vendor.field_payment
+field_name: field_payment
+entity_type: node
+bundle: vendor
+label: 付款方式
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

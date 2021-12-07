@@ -1,0 +1,31 @@
+uuid: ce21e9c1-3c86-43bc-a3b0-3506f8abe969
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_product_goods
+    - node.type.goods
+    - node.type.product
+    - taxonomy.vocabulary.purchase_items
+id: taxonomy_term.purchase_items.field_product_goods
+field_name: field_product_goods
+entity_type: taxonomy_term
+bundle: purchase_items
+label: 產品/零件/物件
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      product: product
+      goods: goods
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: product
+field_type: entity_reference

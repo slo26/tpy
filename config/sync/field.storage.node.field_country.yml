@@ -1,0 +1,30 @@
+uuid: 8bea55f7-6313-4cff-8c2d-c783742d9810
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_country
+field_name: field_country
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: tw
+      label: 台灣(TW)
+    -
+      value: cn
+      label: 中國(CN)
+    -
+      value: us
+      label: 美國(US)
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

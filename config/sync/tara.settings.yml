@@ -1,0 +1,38 @@
+all_icons_show: 0
+facebook_url: ''
+twitter_url: ''
+instagram_url: ''
+linkedin_url: ''
+youtube_url: ''
+vk_url: ''
+whatsapp_url: 'https://lin.ee/5mQ6p4W'
+github_url: ''
+telegram_url: ''
+vimeo_url: ''
+slider_show: 1
+slider_image:
+  - '3'
+slider_time: '5000'
+slider_dots: 'true'
+slider_code: "<li>\r\n\t<h1>實用地板插座</h1>\r\n\t<br />\r\n\t<a class=\"button\" href=\"/node/10\">更多</a>\r\n</li>\r\n<li>\r\n\t<h1>整合住家弱電, 讓家裡更有智能</h1>\r\n\t<br />\r\n\t<a class=\"button\" href=\"/node/2\">更多</a>\r\n</li>\r\n<li>\r\n\t<h1>如何多媒體, 請看這裡</h1>\r\n\t<br />\r\n\t<a class=\"button\" href=\"/node/7\">更多</a>\r\n</li>"
+front_sidebar: 0
+google_font: local
+comment_user_pic: 0
+node_author_pic: 0
+node_tags: 0
+copyright_text: 1
+scrolltotop_on: 1
+css_extra: 1
+css_code: ".node-title {\r\n    display: none;\r\n}\r\n.feed-icon {\r\n    display:none;\r\n}"
+_core:
+  default_config_hash: 6r9KA1Wa13n0_l8yU0AP5GKn49rkKotIYeyrdd22qac
+features:
+  node_user_picture: true
+  comment_user_picture: true
+  comment_user_verification: true
+  favicon: true
+logo:
+  use_default: false
+  path: 'public://TPY-logo.gif'
+favicon:
+  use_default: true

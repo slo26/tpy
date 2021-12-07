@@ -1,0 +1,17 @@
+uuid: 06e185a7-f9b9-47d8-9de3-f32390b6d056
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 廠商
+type: vendor
+description: Vendor
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

@@ -38,11 +38,18 @@ custom_toolbar.storage:
   requirements:
     _role: 'authenticated'
 
-
 custom_toolbar.main:
   path: '/admin/main'
   defaults:
     _controller: '\Drupal\custom_toolbar\Controller\CustomToolbarController::mainPanel'
     _title: '主畫面'
+  requirements:
+    _role: 'authenticated'
+
+custom_toolbar.dropdown_setting:
+  path: '/admin/dropdown-setting'
+  defaults:
+    _controller: '\Drupal\custom_toolbar\Controller\CustomToolbarController::dropdownSetting'
+    _title: '下拉選項設定修改'
   requirements:
     _role: 'authenticated'

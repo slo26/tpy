@@ -1,0 +1,33 @@
+uuid: 1202fde4-b4aa-492f-a483-150a78776958
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_color
+field_name: field_color
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: silver
+      label: 銀色
+    -
+      value: copper
+      label: 銅色
+    -
+      value: white
+      label: 白色
+    -
+      value: black
+      label: 黑色
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

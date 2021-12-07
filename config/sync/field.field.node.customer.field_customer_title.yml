@@ -1,0 +1,19 @@
+uuid: 28dbb36a-1c69-4833-8600-ff68242440a3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_customer_title
+    - node.type.customer
+id: node.customer.field_customer_title
+field_name: field_customer_title
+entity_type: node
+bundle: customer
+label: 客戶名稱
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

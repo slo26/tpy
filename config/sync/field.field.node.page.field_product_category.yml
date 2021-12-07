@@ -1,0 +1,21 @@
+uuid: 2172160a-f71d-4db4-9864-59ebfd617e10
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_product_category
+    - node.type.page
+  module:
+    - options
+id: node.page.field_product_category
+field_name: field_product_category
+entity_type: node
+bundle: page
+label: 'Product Category'
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

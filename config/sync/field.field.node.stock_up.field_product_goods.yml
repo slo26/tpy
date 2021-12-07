@@ -1,0 +1,25 @@
+uuid: a3e13d80-74ca-4ea1-a84d-4d5e306ba29e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_product_goods
+    - node.type.stock_up
+id: node.stock_up.field_product_goods
+field_name: field_product_goods
+entity_type: node
+bundle: stock_up
+label: 產品型號/零件或物件媥號
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: product_and_goods_entities_for_view
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference

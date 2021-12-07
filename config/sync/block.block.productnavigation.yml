@@ -1,0 +1,25 @@
+uuid: b19bb32d-aab9-4985-b0a9-fb44753e9bba
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.product-navigation
+  module:
+    - system
+  theme:
+    - tara
+id: productnavigation
+theme: tara
+region: sidebar_second
+weight: 0
+provider: null
+plugin: 'system_menu_block:product-navigation'
+settings:
+  id: 'system_menu_block:product-navigation'
+  label: 'Product navigation'
+  provider: system
+  label_display: '0'
+  level: 1
+  depth: 0
+  expand_all_items: false
+visibility: {  }

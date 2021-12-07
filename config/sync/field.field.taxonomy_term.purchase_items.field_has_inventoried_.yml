@@ -1,0 +1,23 @@
+uuid: 22382155-f8e1-41de-8fb6-aa916d81bb95
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_has_inventoried_
+    - taxonomy.vocabulary.purchase_items
+id: taxonomy_term.purchase_items.field_has_inventoried_
+field_name: field_has_inventoried_
+entity_type: taxonomy_term
+bundle: purchase_items
+label: 以入庫
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 有
+  off_label: 無
+field_type: boolean

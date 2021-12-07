@@ -1,0 +1,25 @@
+uuid: 01b57783-3b67-46aa-ab8a-3269d0d03b9e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_retail_price
+    - node.type.product
+id: node.product.field_retail_price
+field_name: field_retail_price
+entity_type: node
+bundle: product
+label: 零售價錢
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: !!float 0
+default_value_callback: ''
+settings:
+  min: !!float 0
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

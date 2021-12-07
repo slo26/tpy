@@ -1,0 +1,23 @@
+uuid: 0a0ca693-a84e-47a6-af95-a62f4cbd9043
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_price
+    - taxonomy.vocabulary.sell_items
+id: taxonomy_term.sell_items.field_price
+field_name: field_price
+entity_type: taxonomy_term
+bundle: sell_items
+label: 單價
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

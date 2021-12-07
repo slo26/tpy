@@ -1,0 +1,23 @@
+uuid: a83f5e98-ff09-4aa5-9af9-2a56ac3d276c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_cost_price
+    - node.type.product
+id: node.product.field_cost_price
+field_name: field_cost_price
+entity_type: node
+bundle: product
+label: 成本價
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: !!float 0
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

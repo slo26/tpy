@@ -1,0 +1,23 @@
+uuid: f813c053-6047-41f4-b040-6534eaff1bbd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_is_packed
+    - taxonomy.vocabulary.sell_items
+id: taxonomy_term.sell_items.field_is_packed
+field_name: field_is_packed
+entity_type: taxonomy_term
+bundle: sell_items
+label: 以包裝
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 有
+  off_label: 無
+field_type: boolean

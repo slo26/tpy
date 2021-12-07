@@ -1,0 +1,18 @@
+uuid: 4133ab38-d04a-47f5-b1d9-fe2167058ffe
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.purchase_order
+id: node.purchase_order.title
+field_name: title
+entity_type: node
+bundle: purchase_order
+label: 採購編號
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

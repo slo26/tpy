@@ -1,0 +1,23 @@
+uuid: cfcfc081-3b32-4ddf-83e2-a891b52e17c2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_stock
+    - node.type.stock_up
+id: node.stock_up.field_stock
+field_name: field_stock
+entity_type: node
+bundle: stock_up
+label: 庫存
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 0
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

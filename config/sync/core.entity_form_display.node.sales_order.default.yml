@@ -1,0 +1,101 @@
+uuid: 43d4d1b8-152c-41d7-999d-c39751d6b625
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.sales_order.field_customer_entity
+    - field.field.node.sales_order.field_date_actual_delivered
+    - field.field.node.sales_order.field_date_expect_to_deliver
+    - field.field.node.sales_order.field_delivery
+    - field.field.node.sales_order.field_logistics
+    - field.field.node.sales_order.field_order_status
+    - field.field.node.sales_order.field_receiver
+    - field.field.node.sales_order.field_sales_date
+    - field.field.node.sales_order.field_sell_products
+    - field.field.node.sales_order.field_shipping_number
+    - node.type.sales_order
+  module:
+    - datetime
+id: node.sales_order.default
+targetEntityType: node
+bundle: sales_order
+mode: default
+content:
+  field_customer_entity:
+    weight: 3
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
+  field_date_actual_delivered:
+    weight: 9
+    settings: {  }
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  field_date_expect_to_deliver:
+    weight: 8
+    settings: {  }
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  field_delivery:
+    weight: 5
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_logistics:
+    weight: 6
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_order_status:
+    weight: 2
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_receiver:
+    weight: 4
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_sales_date:
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  field_shipping_number:
+    weight: 7
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  title:
+    type: string_textfield
+    weight: 1
+    region: content
+    settings:
+      size: 60
+      placeholder: 訂單編號
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_sell_products: true
+  path: true
+  promote: true
+  status: true
+  sticky: true
+  uid: true

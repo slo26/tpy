@@ -1,0 +1,18 @@
+uuid: b3d30456-dcea-414c-863a-e836efa78f5b
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.storage
+id: node.storage.title
+field_name: title
+entity_type: node
+bundle: storage
+label: 倉庫代碼
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,19 @@
+uuid: 0025699d-0d3e-49ee-80a1-b6d3d774e5cc
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_product_name
+    - node.type.product
+id: node.product.field_product_name
+field_name: field_product_name
+entity_type: node
+bundle: product
+label: 產品名稱
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

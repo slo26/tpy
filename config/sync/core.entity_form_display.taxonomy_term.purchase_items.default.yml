@@ -1,0 +1,84 @@
+uuid: 47c57f50-fadd-4437-bf3e-8d1feeb09f96
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.purchase_items.field_has_inventoried_
+    - field.field.taxonomy_term.purchase_items.field_order_id
+    - field.field.taxonomy_term.purchase_items.field_price
+    - field.field.taxonomy_term.purchase_items.field_product_goods
+    - field.field.taxonomy_term.purchase_items.field_quantity
+    - field.field.taxonomy_term.purchase_items.field_storage
+    - field.field.taxonomy_term.purchase_items.field_total_amount
+    - taxonomy.vocabulary.purchase_items
+id: taxonomy_term.purchase_items.default
+targetEntityType: taxonomy_term
+bundle: purchase_items
+mode: default
+content:
+  field_has_inventoried_:
+    weight: 7
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_order_id:
+    weight: 1
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
+  field_price:
+    weight: 5
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  field_product_goods:
+    weight: 2
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
+  field_quantity:
+    weight: 4
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  field_storage:
+    weight: 3
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_total_amount:
+    weight: 6
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  description: true
+  path: true
+  status: true

@@ -1,0 +1,25 @@
+uuid: 9ae799e4-5ad7-4627-a5c7-343e9a5c6138
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:10fb93ae-563b-4c8d-9aa8-b7595a38d7c5'
+  module:
+    - block_content
+  theme:
+    - tara
+id: headercontactinformation
+theme: tara
+region: header_top
+weight: 0
+provider: null
+plugin: 'block_content:10fb93ae-563b-4c8d-9aa8-b7595a38d7c5'
+settings:
+  id: 'block_content:10fb93ae-563b-4c8d-9aa8-b7595a38d7c5'
+  label: 'Header Contact Information'
+  provider: block_content
+  label_display: '0'
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

@@ -1,0 +1,33 @@
+uuid: 506b3ad6-89ab-45fd-9807-bcc5f9ad7f27
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_logistics
+field_name: field_logistics
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: kerry
+      label: 嘉榮貨運
+    -
+      value: hct
+      label: 新竹貨運
+    -
+      value: postoffice
+      label: 中華郵政
+    -
+      value: tcat
+      label: 黑貓
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

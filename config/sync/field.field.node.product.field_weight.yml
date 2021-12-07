@@ -1,0 +1,19 @@
+uuid: ce538754-39a5-405c-863a-50d0e387ce86
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_weight
+    - node.type.product
+id: node.product.field_weight
+field_name: field_weight
+entity_type: node
+bundle: product
+label: 重量
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,17 @@
+uuid: 3f44b9a4-41ee-4c96-802b-1168c42d0271
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 商品庫存
+type: stock_up
+description: Inventory
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

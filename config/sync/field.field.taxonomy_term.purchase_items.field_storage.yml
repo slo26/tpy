@@ -1,0 +1,29 @@
+uuid: 538d9f30-5f85-490d-8c35-7b53be87a3ec
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_storage
+    - node.type.storage
+    - taxonomy.vocabulary.purchase_items
+id: taxonomy_term.purchase_items.field_storage
+field_name: field_storage
+entity_type: taxonomy_term
+bundle: purchase_items
+label: 倉庫
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      storage: storage
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

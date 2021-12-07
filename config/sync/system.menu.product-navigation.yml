@@ -1,0 +1,8 @@
+uuid: 28d1e75e-5411-4d2e-a09b-b1cd2bd7341e
+langcode: en
+status: true
+dependencies: {  }
+id: product-navigation
+label: 'Product navigation'
+description: ''
+locked: false

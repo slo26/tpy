@@ -1,0 +1,19 @@
+uuid: d06010b4-ffab-4f63-9e67-acf7b5ff40e7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_phone
+    - node.type.storage
+id: node.storage.field_phone
+field_name: field_phone
+entity_type: node
+bundle: storage
+label: 聯絡人電話
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

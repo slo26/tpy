@@ -1,0 +1,183 @@
+uuid: b7b8e069-9974-4afa-968f-3ed7b28f74e4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.vendor.field_account_name
+    - field.field.node.vendor.field_address
+    - field.field.node.vendor.field_bank_account
+    - field.field.node.vendor.field_bank_name
+    - field.field.node.vendor.field_bank_routing_number
+    - field.field.node.vendor.field_branch_name
+    - field.field.node.vendor.field_contact_person
+    - field.field.node.vendor.field_country
+    - field.field.node.vendor.field_email
+    - field.field.node.vendor.field_fax
+    - field.field.node.vendor.field_long_comment
+    - field.field.node.vendor.field_mobile
+    - field.field.node.vendor.field_payment
+    - field.field.node.vendor.field_payment_condition
+    - field.field.node.vendor.field_payment_due
+    - field.field.node.vendor.field_phone
+    - field.field.node.vendor.field_uniform_number
+    - field.field.node.vendor.field_vendor_name
+    - node.type.vendor
+id: node.vendor.default
+targetEntityType: node
+bundle: vendor
+mode: default
+content:
+  field_account_name:
+    weight: 14
+    settings:
+      size: 30
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_address:
+    weight: 5
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_bank_account:
+    weight: 12
+    settings:
+      size: 30
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_bank_name:
+    weight: 9
+    settings:
+      size: 30
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_bank_routing_number:
+    weight: 13
+    settings:
+      size: 30
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_branch_name:
+    weight: 10
+    settings:
+      size: 30
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_contact_person:
+    weight: 6
+    settings:
+      size: 30
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_country:
+    weight: 11
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_email:
+    weight: 8
+    settings:
+      size: 30
+      placeholder: ''
+    third_party_settings: {  }
+    type: email_default
+    region: content
+  field_fax:
+    weight: 4
+    settings:
+      size: 30
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_long_comment:
+    weight: 18
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textarea
+    region: content
+  field_mobile:
+    weight: 7
+    settings:
+      size: 30
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_payment:
+    weight: 15
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_payment_condition:
+    weight: 16
+    settings:
+      size: 30
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_payment_due:
+    weight: 17
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  field_phone:
+    weight: 3
+    settings:
+      size: 30
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_uniform_number:
+    weight: 2
+    settings:
+      size: 30
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_vendor_name:
+    weight: 1
+    settings:
+      size: 30
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 30
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  path: true
+  promote: true
+  status: true
+  sticky: true
+  uid: true

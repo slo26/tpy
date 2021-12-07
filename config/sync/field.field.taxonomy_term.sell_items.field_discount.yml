@@ -1,0 +1,23 @@
+uuid: 2efa9c30-1f44-4741-8f32-c03cc3de716c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_discount
+    - taxonomy.vocabulary.sell_items
+id: taxonomy_term.sell_items.field_discount
+field_name: field_discount
+entity_type: taxonomy_term
+bundle: sell_items
+label: 折扣(%)
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

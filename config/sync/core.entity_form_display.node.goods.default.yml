@@ -1,0 +1,55 @@
+uuid: e1f7ee47-5aa1-4d91-843b-15231f9ab02d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.goods.field_goods_name
+    - field.field.node.goods.field_long_comment
+    - field.field.node.goods.field_product_model
+    - node.type.goods
+id: node.goods.default
+targetEntityType: node
+bundle: goods
+mode: default
+content:
+  field_goods_name:
+    weight: 1
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_long_comment:
+    weight: 3
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textarea
+    region: content
+  field_product_model:
+    weight: 2
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  path: true
+  promote: true
+  status: true
+  sticky: true
+  uid: true

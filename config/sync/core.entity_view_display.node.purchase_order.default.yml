@@ -1,0 +1,71 @@
+uuid: 1ab893cf-cd1b-4e30-abce-ff6604f9c2ec
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.purchase_order.field_date_actual_arrived
+    - field.field.node.purchase_order.field_date_actual_delivered
+    - field.field.node.purchase_order.field_logistics
+    - field.field.node.purchase_order.field_purchase_status
+    - field.field.node.purchase_order.field_shipping_number
+    - field.field.node.purchase_order.field_vendor_entity
+    - node.type.purchase_order
+  module:
+    - datetime
+    - options
+    - user
+id: node.purchase_order.default
+targetEntityType: node
+bundle: purchase_order
+mode: default
+content:
+  field_date_actual_arrived:
+    weight: 3
+    label: above
+    settings:
+      format_type: medium
+      timezone_override: ''
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  field_date_actual_delivered:
+    weight: 2
+    label: above
+    settings:
+      format_type: medium
+      timezone_override: ''
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  field_logistics:
+    weight: 4
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+    region: content
+  field_purchase_status:
+    weight: 0
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
+    region: content
+  field_shipping_number:
+    weight: 5
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_vendor_entity:
+    weight: 1
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+hidden:
+  links: true

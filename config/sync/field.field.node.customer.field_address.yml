@@ -1,0 +1,19 @@
+uuid: 8bf4e629-881f-4c5c-83ae-5135af0b5564
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_address
+    - node.type.customer
+id: node.customer.field_address
+field_name: field_address
+entity_type: node
+bundle: customer
+label: 客戶地址
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

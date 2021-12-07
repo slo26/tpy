@@ -1,0 +1,22 @@
+uuid: 47832d6f-e72c-4786-8788-9ea93a03b7cc
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.purchase_order
+id: node.purchase_order.status
+field_name: status
+entity_type: node
+bundle: purchase_order
+label: Published
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

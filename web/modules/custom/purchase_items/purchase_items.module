@@ -11,8 +11,9 @@ function purchase_items_taxonomy_term_presave($term) {
             $term->set('name', gen_purchase_item_id());
         }
 
-        if ( $term->field_has_inventoried_->value ) {
-             $stock_up_nids = \Drupal::entityQuery("node")
+        $original_term = $term->original;
+        if ( $term->field_has_inventoried_->value == true && $original_term->field_has_inventoried_->value == false ) {
+            $stock_up_nids = \Drupal::entityQuery("node")
                         ->condition('type', 'stock_up')
                         ->condition('field_product_goods', $term->field_product_goods->target_id)
                         ->condition('field_storage_id', $term->field_storage->target_id)
@@ -23,6 +24,20 @@ function purchase_items_taxonomy_term_presave($term) {
                 $stock_up->set('field_stock', $total_num);
                 $stock_up->save();
                 $message = get_product_or_goods_name_by_nid($term->field_product_goods->target_id) . " 儲存在 " . get_storage_name_by_nid($term->field_storage->target_id) . " 的庫存是 " . $total_num; 
+                \Drupal::messenger()->addMessage($message);
+            }
+        } else if ( $term->field_has_inventoried_->value == false && $original_term->field_has_inventoried_->value == true ) {
+            $stock_up_nids = \Drupal::entityQuery("node")
+                        ->condition('type', 'stock_up')
+                        ->condition('field_product_goods', $term->field_product_goods->target_id)
+                        ->condition('field_storage_id', $term->field_storage->target_id)
+                        ->execute();
+            foreach($stock_up_nids as $stock_up_nid) {
+                $stock_up = \Drupal\node\Entity\Node::load($stock_up_nid);
+                $total_num = $stock_up->field_stock->value - $term->field_quantity->value;
+                $stock_up->set('field_stock', $total_num);
+                $stock_up->save();
+                $message = "以入庫被取消, 原入庫數量" . $term->field_quantity->value . "以從倉庫移除."; 
                 \Drupal::messenger()->addMessage($message);
             }
         }

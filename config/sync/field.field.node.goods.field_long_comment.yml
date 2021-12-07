@@ -1,0 +1,19 @@
+uuid: deaa6401-ea2e-4107-a2c0-635b5a6f97b7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_long_comment
+    - node.type.goods
+id: node.goods.field_long_comment
+field_name: field_long_comment
+entity_type: node
+bundle: goods
+label: 敘述
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

@@ -1,0 +1,22 @@
+uuid: ccc2e586-8b4a-4f48-a053-a4a8bbbf59ca
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.storage
+id: node.storage.status
+field_name: status
+entity_type: node
+bundle: storage
+label: Published
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

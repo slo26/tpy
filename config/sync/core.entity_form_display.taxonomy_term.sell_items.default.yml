@@ -1,0 +1,101 @@
+uuid: 671ae5bd-d43c-46b3-9837-02db4a2d7709
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.sell_items.field_comments
+    - field.field.taxonomy_term.sell_items.field_discount
+    - field.field.taxonomy_term.sell_items.field_is_packed
+    - field.field.taxonomy_term.sell_items.field_order_id
+    - field.field.taxonomy_term.sell_items.field_price
+    - field.field.taxonomy_term.sell_items.field_product_id
+    - field.field.taxonomy_term.sell_items.field_quantity
+    - field.field.taxonomy_term.sell_items.field_storage
+    - field.field.taxonomy_term.sell_items.field_total_amount
+    - taxonomy.vocabulary.sell_items
+id: taxonomy_term.sell_items.default
+targetEntityType: taxonomy_term
+bundle: sell_items
+mode: default
+content:
+  field_comments:
+    weight: 9
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textarea
+    region: content
+  field_discount:
+    weight: 5
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  field_is_packed:
+    weight: 8
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+    region: content
+  field_order_id:
+    weight: 1
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
+  field_price:
+    weight: 6
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  field_product_id:
+    weight: 2
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
+  field_quantity:
+    weight: 4
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  field_storage:
+    weight: 3
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_total_amount:
+    weight: 7
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: 出售編號
+    third_party_settings: {  }
+hidden:
+  description: true
+  path: true
+  status: true

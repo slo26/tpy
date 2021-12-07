@@ -1,4 +1,5 @@
 <?php
+use \Drupal\field\Entity\FieldConfig;
 
 /**
  * Implements hook_page_preprocess_html().
@@ -6,6 +7,15 @@
 function common_utils_preprocess_html(&$variables) {
     //Add JS and CSS library
     $variables['#attached']['library'][] = 'common_utils/common_utils';
+}
+
+function getFieldStorageSettingsAllowedValues($field_name, $content_type) {
+    try {   
+        $settings = FieldConfig::load('node.'.$content_type.'.'.$field_name)->getFieldStorageDefinition()->getSettings();
+        return $settings['allowed_values'];
+    } catch (Exeption $ex) {
+        return null;
+    }
 }
 
 function get_entity_storage_key($entity, $field_name, $value) {
@@ -69,7 +79,7 @@ function find_product_nid_where_storage_at($product_nid) {
     
     $stock_up_nids = \Drupal::entityQuery("node")
                         ->condition('type', 'stock_up')
-                        ->condition('field_product_model', $product_nid)
+                        ->condition('field_product_goods', $product_nid)
                         ->execute();
     foreach ($stock_up_nids as $stock_up_nid) {
         $stock_up = \Drupal\node\Entity\Node::load($stock_up_nid);

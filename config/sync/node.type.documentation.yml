@@ -1,0 +1,17 @@
+uuid: 0d4832ec-def0-42e4-a23b-21ff84349f8a
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 文件
+type: documentation
+description: Documentation
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

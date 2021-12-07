@@ -1,0 +1,18 @@
+uuid: 2281a770-2ac0-4f04-9cd4-ad77b5e502ae
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.stock_up
+id: node.stock_up.title
+field_name: title
+entity_type: node
+bundle: stock_up
+label: 庫存編號
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

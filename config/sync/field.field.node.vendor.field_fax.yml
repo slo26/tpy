@@ -1,0 +1,19 @@
+uuid: 703a52f2-0d17-476d-9f24-3207d2bd9a0c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_fax
+    - node.type.vendor
+id: node.vendor.field_fax
+field_name: field_fax
+entity_type: node
+bundle: vendor
+label: 傳真
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

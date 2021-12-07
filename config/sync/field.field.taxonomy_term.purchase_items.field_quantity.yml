@@ -1,0 +1,23 @@
+uuid: 5300e21a-4d7b-4095-a3d4-a258a94292b3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_quantity
+    - taxonomy.vocabulary.purchase_items
+id: taxonomy_term.purchase_items.field_quantity
+field_name: field_quantity
+entity_type: taxonomy_term
+bundle: purchase_items
+label: 數量
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 0
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

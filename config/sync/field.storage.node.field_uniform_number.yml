@@ -1,0 +1,21 @@
+uuid: 8e2fcaa6-ad4e-445c-9010-166ead2ff958
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_uniform_number
+field_name: field_uniform_number
+entity_type: node
+type: string
+settings:
+  max_length: 50
+  is_ascii: false
+  case_sensitive: false
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

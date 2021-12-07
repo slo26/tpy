@@ -1,0 +1,52 @@
+uuid: 8faba28c-a4e2-4c75-be5a-4e8249811196
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.customer.field_address
+    - field.field.node.customer.field_contact_person
+    - field.field.node.customer.field_customer_title
+    - field.field.node.customer.field_customer_type
+    - field.field.node.customer.field_delivery
+    - field.field.node.customer.field_email
+    - field.field.node.customer.field_fax
+    - field.field.node.customer.field_mobile
+    - field.field.node.customer.field_owner
+    - field.field.node.customer.field_payment
+    - field.field.node.customer.field_payment_condition
+    - field.field.node.customer.field_payment_due
+    - field.field.node.customer.field_phone
+    - field.field.node.customer.field_total_employee
+    - field.field.node.customer.field_uniform_number
+    - field.field.node.customer.field_web_site
+    - node.type.customer
+  module:
+    - user
+id: node.customer.teaser
+targetEntityType: node
+bundle: customer
+mode: teaser
+content:
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_address: true
+  field_contact_person: true
+  field_customer_title: true
+  field_customer_type: true
+  field_delivery: true
+  field_email: true
+  field_fax: true
+  field_mobile: true
+  field_owner: true
+  field_payment: true
+  field_payment_condition: true
+  field_payment_due: true
+  field_phone: true
+  field_total_employee: true
+  field_uniform_number: true
+  field_web_site: true

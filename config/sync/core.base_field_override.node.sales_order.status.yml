@@ -1,0 +1,22 @@
+uuid: 85043559-b499-4119-9c26-6a856c428b43
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.sales_order
+id: node.sales_order.status
+field_name: status
+entity_type: node
+bundle: sales_order
+label: Published
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

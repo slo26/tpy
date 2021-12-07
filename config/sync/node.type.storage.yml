@@ -1,0 +1,17 @@
+uuid: f726c929-5768-4e1f-83ba-cfd0b649833c
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 倉庫
+type: storage
+description: Storage
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

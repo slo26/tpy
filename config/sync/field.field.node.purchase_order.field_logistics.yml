@@ -1,0 +1,21 @@
+uuid: 091ee1ba-5a24-4378-8372-84361707d7e3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_logistics
+    - node.type.purchase_order
+  module:
+    - options
+id: node.purchase_order.field_logistics
+field_name: field_logistics
+entity_type: node
+bundle: purchase_order
+label: 物流
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

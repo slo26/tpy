@@ -1,0 +1,30 @@
+uuid: ac92b07e-bfb3-4242-983b-0505df888a3e
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_delivery
+field_name: field_delivery
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: mail_out
+      label: 物流
+    -
+      value: pickup
+      label: 自取
+    -
+      value: delivery
+      label: 送貨
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

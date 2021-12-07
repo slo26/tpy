@@ -1,0 +1,17 @@
+uuid: a1e24269-b260-46bc-91cd-bfac74eb2d42
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 產品
+type: product
+description: Product
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

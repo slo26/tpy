@@ -10,6 +10,94 @@ use Drupal\Core\Controller\ControllerBase;
 
 class CustomToolbarController extends ControllerBase {
 
+    public function dropdownSetting() {
+        $markup = '<div id="block-seven-content" class="block block-system block-system-main-block">';
+        $markup .= '<div class="clearfix">';
+
+        $markup .= '<div class="layout-column layout-column--half">';
+        $markup .= '<div class="panel">';
+        $markup .= '<h3 class="panel__title">產品相關</h3>';
+        $markup .= '<div class="panel__content">';
+        $markup .= '<ul class="admin-list">';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/structure/types/manage/product/fields/node.product.field_product_category/storage">';
+        $markup .= '<span class="label">產品分類</span>';
+        $settings = getFieldStorageSettingsAllowedValues('field_product_category', 'product');
+        $markup .= '<div class="description">以下是此下拉的設定:</br>' .  implode(", ", $settings) .'</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/structure/types/manage/product/fields/node.product.field_color/storage">';
+        $markup .= '<span class="label">產品顏色</span>';
+        $settings = getFieldStorageSettingsAllowedValues('field_color', 'product');
+        $markup .= '<div class="description">以下是此下拉的設定:</br>' .  implode(", ", $settings) .'</div>';
+        $markup .= '</a></li>';
+        $markup .= '</ul></div></div>';
+
+        $markup .= '<div class="panel">';
+        $markup .= '<h3 class="panel__title">其他</h3>';
+        $markup .= '<div class="panel__content">';
+        $markup .= '<ul class="admin-list">';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/structure/types/manage/vendor/fields/node.vendor.field_country/storage">';
+        $markup .= '<span class="label">國別</span>';
+        $settings = getFieldStorageSettingsAllowedValues('field_country', 'vendor');
+        $markup .= '<div class="description">以下是此下拉的設定:</br>' .  implode(", ", $settings) .'</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/structure/types/manage/customer/fields/node.customer.field_customer_type/storage">';
+        $markup .= '<span class="label">客戶種類</span>';
+        $settings = getFieldStorageSettingsAllowedValues('field_customer_type', 'customer');
+        $markup .= '<div class="description">以下是此下拉的設定:</br>' .  implode(", ", $settings) .'</div>';
+        $markup .= '</a></li>';
+        $markup .= '</ul></div></div>';
+
+        $markup .= '</div>';
+
+        $markup .= '<div class="layout-column layout-column--half">';
+        $markup .= '<div class="panel">';
+        $markup .= '<h3 class="panel__title">訂單/採購相關</h3>';
+        $markup .= '<div class="panel__content">';
+        $markup .= '<ul class="admin-list">';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/structure/types/manage/purchase_order/fields/node.purchase_order.field_logistics/storage">';
+        $markup .= '<span class="label">物流</span>';
+        $settings = getFieldStorageSettingsAllowedValues('field_logistics', 'purchase_order');
+        $markup .= '<div class="description">以下是此下拉的設定:</br>' .  implode(", ", $settings) .'</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/structure/types/manage/sales_order/fields/node.sales_order.field_order_status/storage">';
+        $markup .= '<span class="label">訂單狀態</span>';
+        $settings = getFieldStorageSettingsAllowedValues('field_order_status', 'sales_order');
+        $markup .= '<div class="description">以下是此下拉的設定:</br>' .  implode(", ", $settings) .'</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/structure/types/manage/purchase_order/fields/node.purchase_order.field_purchase_status/storage">';
+        $markup .= '<span class="label">採購狀態</span>';
+        $settings = getFieldStorageSettingsAllowedValues('field_purchase_status', 'purchase_order');
+        $markup .= '<div class="description">以下是此下拉的設定:</br>' .  implode(", ", $settings) .'</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/structure/types/manage/customer/fields/node.customer.field_payment/storage">';
+        $markup .= '<span class="label">付款方式</span>';
+        $settings = getFieldStorageSettingsAllowedValues('field_payment', 'customer');
+        $markup .= '<div class="description">以下是此下拉的設定:</br>' .  implode(", ", $settings) .'</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/structure/types/manage/customer/fields/node.customer.field_delivery/storage">';
+        $markup .= '<span class="label">出貨方式</span>';
+        $settings = getFieldStorageSettingsAllowedValues('field_delivery', 'customer');
+        $markup .= '<div class="description">以下是此下拉的設定:</br>' .  implode(", ", $settings) .'</div>';
+        $markup .= '</a></li>';
+        $markup .= '</ul></div></div>';
+
+        $markup .= '</div></div>';
+
+        return array(
+            '#type' => 'markup',
+            '#markup' => $markup,
+        );
+    }
+
     public function mainPanel() {
         $markup = '<div id="block-seven-content" class="block block-system block-system-main-block">';
         $markup .= '<div class="clearfix">';
@@ -173,7 +261,6 @@ class CustomToolbarController extends ControllerBase {
             '#type' => 'markup',
             '#markup' => $markup,
         );
-
     }
 
     public function sell() {

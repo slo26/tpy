@@ -1,0 +1,17 @@
+uuid: a7841b94-a84f-410f-896f-c8abafdd2e1e
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 客戶
+type: customer
+description: Customer
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: true

@@ -1,0 +1,28 @@
+uuid: c0784e79-1b09-4003-961b-549f6f5ae85a
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.storage.field_contact_person
+    - field.field.node.storage.field_long_comment
+    - field.field.node.storage.field_phone
+    - field.field.node.storage.field_storage_name
+    - node.type.storage
+  module:
+    - user
+id: node.storage.teaser
+targetEntityType: node
+bundle: storage
+mode: teaser
+content:
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_contact_person: true
+  field_long_comment: true
+  field_phone: true
+  field_storage_name: true

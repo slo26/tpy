@@ -1,0 +1,19 @@
+uuid: b2000c8b-2e53-48bd-80e8-b4f18b17a791
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_payment_condition
+    - node.type.vendor
+id: node.vendor.field_payment_condition
+field_name: field_payment_condition
+entity_type: node
+bundle: vendor
+label: 付款條件
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

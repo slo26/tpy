@@ -1,0 +1,25 @@
+uuid: bfb4f854-1b22-4217-a586-b9ab3f2381c5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_dealer_price
+    - node.type.product
+id: node.product.field_dealer_price
+field_name: field_dealer_price
+entity_type: node
+bundle: product
+label: 經銷商價錢
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: !!float 0
+default_value_callback: ''
+settings:
+  min: !!float 0
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

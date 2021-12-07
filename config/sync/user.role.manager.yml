@@ -1,0 +1,37 @@
+uuid: 41ee7f3f-30bb-40d8-baee-777cc18fcb4d
+langcode: en
+status: true
+dependencies: {  }
+id: manager
+label: manager
+weight: 4
+is_admin: null
+permissions:
+  - 'access taxonomy overview'
+  - 'access user profiles'
+  - 'administer account settings'
+  - 'administer node fields'
+  - 'administer users'
+  - 'administer views'
+  - 'cancel account'
+  - 'change own username'
+  - 'delete any customer content'
+  - 'delete any documentation content'
+  - 'delete any page content'
+  - 'delete any product content'
+  - 'delete any sales_order content'
+  - 'delete any stock_up content'
+  - 'delete any storage content'
+  - 'delete any vendor content'
+  - 'delete customer revisions'
+  - 'delete documentation revisions'
+  - 'delete own vendor content'
+  - 'delete page revisions'
+  - 'delete product revisions'
+  - 'delete sales_order revisions'
+  - 'delete stock_up revisions'
+  - 'delete storage revisions'
+  - 'delete vendor revisions'
+  - 'select account cancellation method'
+  - 'view the administration theme'
+  - 'view user email addresses'

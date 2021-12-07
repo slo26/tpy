@@ -1,0 +1,29 @@
+uuid: 24bb6960-4b6e-4dbb-a783-bc3e0fd7f579
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_vendor_entity
+    - node.type.purchase_order
+    - node.type.vendor
+id: node.purchase_order.field_vendor_entity
+field_name: field_vendor_entity
+entity_type: node
+bundle: purchase_order
+label: 廠商
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      vendor: vendor
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

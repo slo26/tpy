@@ -1,0 +1,43 @@
+uuid: 1e7118e8-36a4-453a-ba3c-b4cefb2b627d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.stock_up.field_product_goods
+    - field.field.node.stock_up.field_stock
+    - field.field.node.stock_up.field_storage_id
+    - node.type.stock_up
+  module:
+    - user
+id: node.stock_up.default
+targetEntityType: node
+bundle: stock_up
+mode: default
+content:
+  field_product_goods:
+    weight: 2
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+  field_stock:
+    weight: 3
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    type: number_integer
+    region: content
+  field_storage_id:
+    weight: 0
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+hidden:
+  links: true

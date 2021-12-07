@@ -1,0 +1,21 @@
+uuid: 5c909184-e149-4b82-bde2-65fe49ef9950
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_delivery
+    - node.type.customer
+  module:
+    - options
+id: node.customer.field_delivery
+field_name: field_delivery
+entity_type: node
+bundle: customer
+label: 出貨方式
+description: 可複選
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

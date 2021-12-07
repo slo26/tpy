@@ -1,0 +1,17 @@
+uuid: ebe99ece-2604-4e08-bb33-9073737f4191
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 零件／物品
+type: goods
+description: Goods/Parts
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

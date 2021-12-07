@@ -1,0 +1,33 @@
+uuid: 1907f727-4574-4c19-bf59-2d70e554ffd0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.documentation.body
+    - field.field.node.documentation.field_keywords
+    - node.type.documentation
+  module:
+    - text
+    - user
+id: node.documentation.default
+targetEntityType: node
+bundle: documentation
+mode: default
+content:
+  body:
+    label: hidden
+    type: text_default
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+  field_keywords:
+    weight: 1
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+hidden:
+  links: true

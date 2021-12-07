@@ -1,0 +1,18 @@
+uuid: abc0500c-db9b-401a-843c-b5c519d152c5
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.customer
+id: node.customer.title
+field_name: title
+entity_type: node
+bundle: customer
+label: 客戶編號
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

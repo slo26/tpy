@@ -1,0 +1,19 @@
+uuid: c0a4998f-1dbc-428e-95f6-f5a2414d3a36
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bank_routing_number
+    - node.type.vendor
+id: node.vendor.field_bank_routing_number
+field_name: field_bank_routing_number
+entity_type: node
+bundle: vendor
+label: 銀行通匯代號
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

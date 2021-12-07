@@ -1,0 +1,23 @@
+uuid: 26244a5a-efe3-47fd-92fc-62b144ff8af1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_total_amount
+    - taxonomy.vocabulary.purchase_items
+id: taxonomy_term.purchase_items.field_total_amount
+field_name: field_total_amount
+entity_type: taxonomy_term
+bundle: purchase_items
+label: 總價
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: !!float 0
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

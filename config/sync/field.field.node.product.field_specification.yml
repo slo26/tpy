@@ -1,0 +1,19 @@
+uuid: 30ee1bca-05b5-43fa-8096-7cf54174103f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_specification
+    - node.type.product
+id: node.product.field_specification
+field_name: field_specification
+entity_type: node
+bundle: product
+label: 規格
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,33 @@
+uuid: 801266a4-ffe1-41aa-8c5f-841b5b042e14
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_purchase_status
+field_name: field_purchase_status
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: draft
+      label: 草稿
+    -
+      value: ship
+      label: 出貨
+    -
+      value: receive
+      label: 收貨
+    -
+      value: done
+      label: 完成
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

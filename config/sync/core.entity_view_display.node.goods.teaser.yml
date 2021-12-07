@@ -1,0 +1,26 @@
+uuid: 78dffce7-af07-49a3-b819-931d10f34223
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.goods.field_goods_name
+    - field.field.node.goods.field_long_comment
+    - field.field.node.goods.field_product_model
+    - node.type.goods
+  module:
+    - user
+id: node.goods.teaser
+targetEntityType: node
+bundle: goods
+mode: teaser
+content:
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_goods_name: true
+  field_long_comment: true
+  field_product_model: true

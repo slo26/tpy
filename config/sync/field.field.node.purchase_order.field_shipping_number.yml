@@ -1,0 +1,19 @@
+uuid: 3ea2faf3-89d5-4206-a17f-c11822064f2c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_shipping_number
+    - node.type.purchase_order
+id: node.purchase_order.field_shipping_number
+field_name: field_shipping_number
+entity_type: node
+bundle: purchase_order
+label: 貨運號碼
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

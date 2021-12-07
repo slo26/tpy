@@ -1,0 +1,45 @@
+uuid: 910892a7-9f3b-478b-bbac-6b3e8813aa71
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.stock_up.field_product_goods
+    - field.field.node.stock_up.field_stock
+    - field.field.node.stock_up.field_storage_id
+    - node.type.stock_up
+id: node.stock_up.default
+targetEntityType: node
+bundle: stock_up
+mode: default
+content:
+  field_product_goods:
+    weight: 2
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
+  field_stock:
+    weight: 3
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  field_storage_id:
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+hidden:
+  created: true
+  path: true
+  promote: true
+  status: true
+  sticky: true
+  title: true
+  uid: true

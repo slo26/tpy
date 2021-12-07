@@ -23,12 +23,10 @@ function sales_order_content_type_preprocess_html(&$variables) {
     $variables['#attached']['library'][] = 'sales_order_content_type/sales_order_content_type';
 }
 
-
 function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
 	if ( $form_id === 'node_sales_order_form' || $form_id == 'node_sales_order_edit_form' ) {
-		/*-----------------訂單資訊---------------------*/
 		$node = $form_state->getFormObject()->getEntity();
-
+		/*-----------------訂單資訊---------------------*/
 		$form['order_info'] = array(
 						'#type' => 'details',
 						'#title' => t('訂單資訊'),
@@ -340,6 +338,18 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 			'#suffix' => '</div>',
         );
 
+		$form['to_sell_item_list_by_all'] = array(
+				'#prefix' => '<div class="to-sell-item-list-by-all">',
+				'#suffix' => '</div>',
+				'#weight' => 30,
+		);
+
+		$form['to_sell_item_list_by_product'] = array(
+				'#prefix' => '<div class="to-sell-item-list-by-product">',
+				'#suffix' => '</div>',
+				'#weight' => 30,
+			);
+
 		$form['sell_item_table'] = array(
               '#title' => t('訂單項目管理'),
               '#weight' => 31,
@@ -369,7 +379,7 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 
 		if ( !$node->isNew() ) {
 			$form['to_sell_item_list'] = array(
-				'#prefix' => '<div class="to-sell-item-list"><a href="/admin/sell-items?title=' . $node->title->value .'" target="_blank">連結到此銷售訂單列表</a>',
+				'#prefix' => '<div class="to-sell-item-list"><a href="/admin/sell-items?title=' . $node->title->value .'" target="_blank">連接到此銷售訂單列表</a>',
 				'#suffix' => '</div>',
 				'#weight' => 32,
 			);
@@ -471,6 +481,17 @@ function ajax_product_loading(array $form, FormStateInterface $form_state) {
 		$ajax_response->addCommand(new InvokeCommand('#edit-price', 'val', [$product->field_retail_price->value]));
 		$ajax_response->addCommand(new InvokeCommand('#edit-total-amount', 'val', ['0']));
 
+		$customr_nid = $form_state->getValue('field_customer_entity')[0]['target_id'];
+		if ( !empty($customr_nid) ) {
+			$url = "/admin/view/$product_nid/history-sell-item/$customr_nid";
+			$hyperlink = '<a class="use-ajax" data-dialog-options="{&quot;width&quot;:900}" data-dialog-type="dialog" href=' . $url . '>產品對此客戶的歷史紀錄</a>';
+			$ajax_response->addCommand(new HtmlCommand('.to-sell-item-list-by-all', $hyperlink));
+			
+			$url = "/admin/view/$product_nid/history-sell-item/none";
+			$hyperlink = '<a class="use-ajax" data-dialog-options="{&quot;width&quot;:900}" data-dialog-type="dialog" href=' . $url . '>產品對所有客戶的歷史紀錄</a>';
+			$ajax_response->addCommand(new HtmlCommand('.to-sell-item-list-by-product', $hyperlink));
+		}
+		
         return $ajax_response;
 }
 
@@ -544,6 +565,9 @@ function create_single_item_callback(array $form, FormStateInterface $form_state
 	} else {
 		$status = '<font color="red">此銷售單還不在資料庫, 請先儲存建立此銷售單!</font>';
 	}
+
+	$response->addCommand(new HtmlCommand('.to-sell-item-list-by-all', ""));	
+	$response->addCommand(new HtmlCommand('.to-sell-item-list-by-product', ""));
 
 	$response->addCommand(new HtmlCommand('.add-item-status-message', $status));
 	$response->addCommand(new InvokeCommand('#edit-list-product', 'val', [""]));

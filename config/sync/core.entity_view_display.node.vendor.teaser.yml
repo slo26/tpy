@@ -1,0 +1,56 @@
+uuid: 6234e85f-1467-40b4-9dca-56f3ee6f4658
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.vendor.field_account_name
+    - field.field.node.vendor.field_address
+    - field.field.node.vendor.field_bank_account
+    - field.field.node.vendor.field_bank_name
+    - field.field.node.vendor.field_bank_routing_number
+    - field.field.node.vendor.field_branch_name
+    - field.field.node.vendor.field_contact_person
+    - field.field.node.vendor.field_country
+    - field.field.node.vendor.field_email
+    - field.field.node.vendor.field_fax
+    - field.field.node.vendor.field_long_comment
+    - field.field.node.vendor.field_mobile
+    - field.field.node.vendor.field_payment
+    - field.field.node.vendor.field_payment_condition
+    - field.field.node.vendor.field_payment_due
+    - field.field.node.vendor.field_phone
+    - field.field.node.vendor.field_uniform_number
+    - field.field.node.vendor.field_vendor_name
+    - node.type.vendor
+  module:
+    - user
+id: node.vendor.teaser
+targetEntityType: node
+bundle: vendor
+mode: teaser
+content:
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_account_name: true
+  field_address: true
+  field_bank_account: true
+  field_bank_name: true
+  field_bank_routing_number: true
+  field_branch_name: true
+  field_contact_person: true
+  field_country: true
+  field_email: true
+  field_fax: true
+  field_long_comment: true
+  field_mobile: true
+  field_payment: true
+  field_payment_condition: true
+  field_payment_due: true
+  field_phone: true
+  field_uniform_number: true
+  field_vendor_name: true

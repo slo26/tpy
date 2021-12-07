@@ -1,0 +1,32 @@
+uuid: 720add09-f9ae-4fde-989b-85825da196ae
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.purchase_order.field_date_actual_arrived
+    - field.field.node.purchase_order.field_date_actual_delivered
+    - field.field.node.purchase_order.field_logistics
+    - field.field.node.purchase_order.field_purchase_status
+    - field.field.node.purchase_order.field_shipping_number
+    - field.field.node.purchase_order.field_vendor_entity
+    - node.type.purchase_order
+  module:
+    - user
+id: node.purchase_order.teaser
+targetEntityType: node
+bundle: purchase_order
+mode: teaser
+content:
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_date_actual_arrived: true
+  field_date_actual_delivered: true
+  field_logistics: true
+  field_purchase_status: true
+  field_shipping_number: true
+  field_vendor_entity: true

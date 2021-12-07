@@ -1,0 +1,23 @@
+uuid: 8be37545-646f-4e91-a350-519b7d0b8128
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_total_amount
+    - taxonomy.vocabulary.sell_items
+id: taxonomy_term.sell_items.field_total_amount
+field_name: field_total_amount
+entity_type: taxonomy_term
+bundle: sell_items
+label: 總價
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

@@ -1,0 +1,19 @@
+uuid: cad30f71-181f-4b0c-9097-80d27d1897af
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_uniform_number
+    - node.type.vendor
+id: node.vendor.field_uniform_number
+field_name: field_uniform_number
+entity_type: node
+bundle: vendor
+label: 統一編號
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

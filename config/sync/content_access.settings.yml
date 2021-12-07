@@ -1,0 +1,19 @@
+content_access_roles_gids:
+  anonymous: 1
+  authenticated: 2
+  administrator: 3
+  employee: 4
+  manager: 5
+_core:
+  default_config_hash: 7LkiviGITIpniIOOIzpuxR7r4XzqqYN_cwu0fb0kx1M
+content_access_node_type:
+  sales_order: 'a:2:{s:8:"view_own";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}s:4:"view";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}}'
+  vendor: 'a:2:{s:8:"view_own";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}s:4:"view";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}}'
+  storage: 'a:2:{s:8:"view_own";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}s:4:"view";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}}'
+  stock_up: 'a:2:{s:8:"view_own";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}s:4:"view";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}}'
+  customer: 'a:2:{s:8:"view_own";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}s:4:"view";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}}'
+  documentation: 'a:2:{s:8:"view_own";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}s:4:"view";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}}'
+  product: 'a:2:{s:8:"view_own";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}s:4:"view";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}}'
+  page: 'a:2:{s:8:"view_own";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}s:4:"view";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}}'
+  purchase_order: 'a:2:{s:8:"view_own";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}s:4:"view";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}}'
+  goods: 'a:2:{s:8:"view_own";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}s:4:"view";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}}'

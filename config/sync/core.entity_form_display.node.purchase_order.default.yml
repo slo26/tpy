@@ -1,0 +1,64 @@
+uuid: 37a858d9-3403-4273-8d7c-2eee74aaf2ec
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.purchase_order.field_date_actual_arrived
+    - field.field.node.purchase_order.field_date_actual_delivered
+    - field.field.node.purchase_order.field_logistics
+    - field.field.node.purchase_order.field_purchase_status
+    - field.field.node.purchase_order.field_shipping_number
+    - field.field.node.purchase_order.field_vendor_entity
+    - node.type.purchase_order
+id: node.purchase_order.default
+targetEntityType: node
+bundle: purchase_order
+mode: default
+content:
+  field_logistics:
+    weight: 3
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_purchase_status:
+    weight: 1
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_shipping_number:
+    weight: 4
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_vendor_entity:
+    weight: 2
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: VD-
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_date_actual_arrived: true
+  field_date_actual_delivered: true
+  path: true
+  promote: true
+  status: true
+  sticky: true
+  uid: true

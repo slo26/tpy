@@ -1,0 +1,19 @@
+uuid: 18ed0c08-2107-413b-bf2f-78cd9ffeb146
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_goods_name
+    - node.type.goods
+id: node.goods.field_goods_name
+field_name: field_goods_name
+entity_type: node
+bundle: goods
+label: 零件／物品名稱
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

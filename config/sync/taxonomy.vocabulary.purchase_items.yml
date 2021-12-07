@@ -1,0 +1,8 @@
+uuid: ee296823-dc45-44b9-ba4a-b24ab46bc879
+langcode: en
+status: true
+dependencies: {  }
+name: 'Purchase Items'
+vid: purchase_items
+description: ''
+weight: 0

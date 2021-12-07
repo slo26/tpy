@@ -1,0 +1,29 @@
+uuid: 7d017a03-a684-4b04-9e4d-c27c95537086
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_product_id
+    - node.type.product
+    - taxonomy.vocabulary.sell_items
+id: taxonomy_term.sell_items.field_product_id
+field_name: field_product_id
+entity_type: taxonomy_term
+bundle: sell_items
+label: 產品型號
+description: ''
+required: true
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      product: product
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

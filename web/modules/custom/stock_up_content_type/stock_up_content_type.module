@@ -39,6 +39,12 @@ function stock_up_content_type_form_alter(&$form, FormStateInterface &$form_stat
                 'event' => 'autocompleteclose change',
         );
 
+        $form['message_for_product_goods'] = array(
+			'#type' => 'markup',
+			'#markup' => '<div class="message-for-product-goods"></div>',
+            '#weight' => 2,
+        );
+
         $default_value = ( empty($node) ) ? '' : get_product_or_goods_name_by_nid($node->field_product_goods->target_id);
 
         $form['product_or_goods_name'] = array(
@@ -71,8 +77,8 @@ function stock_up_content_type_form_alter(&$form, FormStateInterface &$form_stat
 }
 
 function stock_up_form_validate($form, &$form_state) {
-    if ( empty($form_state->getValue('field_storage_id')[0]['target_id']) == 1 ) {
-        $form_state->setError($form , t('儲存沒有成功, 倉庫編號必需填寫.'));
+    if ( empty($form_state->getValue('field_storage_id')[0]['target_id']) == 1 || empty($form_state->getValue('field_product_goods')[0]['target_id']) == 1 ) {
+        $form_state->setError($form , t('儲存沒有成功, 倉庫編號和產品型號/零件或物件媥號必需填寫.'));
     }
 }
 
@@ -89,16 +95,32 @@ function ajax_stock_up_storage_info_loading(array $form, FormStateInterface $for
 function ajax_stock_up_product_goods_info_loading(array $form, FormStateInterface $form_state) {
     $ajax_response = new AjaxResponse();
     $nid = $form_state->getValue('field_product_goods')[0]['target_id'];
-    $node = \Drupal\node\Entity\Node::load($nid);
-    if ( $node->type->target_id == "goods" ) {
-        $name = $node->field_goods_name->value;
+    $storage_nid = $form_state->getValue('field_storage_id')[0]['target_id'];
+    $stock_up_nids = \Drupal::entityQuery("node")
+                        ->condition('type', 'stock_up')
+                        ->condition('field_product_goods', $nid)
+                        ->condition('field_storage_id', $storage_nid)
+                        ->execute();
+
+    if ( count($stock_up_nids) == 0 ) {
+        $node = \Drupal\node\Entity\Node::load($nid);
+        if ( $node->type->target_id == "goods" ) {
+            $name = $node->field_goods_name->value;
+        } else {
+            $name = $node->field_product_name->value;
+            $product_color = $node->field_color->value;
+            $ajax_response->addCommand(new InvokeCommand('#edit-product-color', 'val', [get_entity_storage_label($node, 'field_color', $product_color)]));
+        }
+
+        $ajax_response->addCommand(new HtmlCommand('.message-for-product-goods', ""));
+        $ajax_response->addCommand(new InvokeCommand('#edit-product-or-goods-name', 'val', [$name]));
     } else {
-        $name = $node->field_product_name->value;
-        $product_color = $node->field_color->value;
-        $ajax_response->addCommand(new InvokeCommand('#edit-product-color', 'val', [get_entity_storage_label($node, 'field_color', $product_color)]));
+        $message = '<font color="red">同樣的產品/零件/物件以在此倉庫有庫存, 不可以對重複建立同樣的產品/零件/物件.</font>';
+        $ajax_response->addCommand(new HtmlCommand('.message-for-product-goods', $message));
+        $ajax_response->addCommand(new InvokeCommand('#edit-field-product-goods-0-target-id', 'val', [""]));
+        $ajax_response->addCommand(new InvokeCommand('#edit-product-or-goods-name', 'val', [""]));
     }
-    
-    $ajax_response->addCommand(new InvokeCommand('#edit-product-or-goods-name', 'val', [$name]));
+
     return $ajax_response;
 }
 

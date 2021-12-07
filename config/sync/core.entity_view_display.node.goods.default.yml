@@ -1,0 +1,41 @@
+uuid: 2c14184f-6bf7-4506-905e-19ee09fe7ee4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.goods.field_goods_name
+    - field.field.node.goods.field_long_comment
+    - field.field.node.goods.field_product_model
+    - node.type.goods
+  module:
+    - user
+id: node.goods.default
+targetEntityType: node
+bundle: goods
+mode: default
+content:
+  field_goods_name:
+    weight: 0
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
+  field_long_comment:
+    weight: 2
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
+    region: content
+  field_product_model:
+    weight: 1
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
+hidden:
+  links: true

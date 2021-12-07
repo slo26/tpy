@@ -1,0 +1,29 @@
+uuid: 20e578bd-a149-489c-91f2-e5b759aaa5e8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_order_id
+    - node.type.purchase_order
+    - taxonomy.vocabulary.purchase_items
+id: taxonomy_term.purchase_items.field_order_id
+field_name: field_order_id
+entity_type: taxonomy_term
+bundle: purchase_items
+label: 採購編號
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      purchase_order: purchase_order
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

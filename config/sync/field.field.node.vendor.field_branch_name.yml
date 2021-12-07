@@ -1,0 +1,19 @@
+uuid: 41f2d8dd-4249-49b1-abe0-c790ad472def
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_branch_name
+    - node.type.vendor
+id: node.vendor.field_branch_name
+field_name: field_branch_name
+entity_type: node
+bundle: vendor
+label: 分行名稱
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

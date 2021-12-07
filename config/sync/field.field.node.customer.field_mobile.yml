@@ -1,0 +1,19 @@
+uuid: 51c8a7b2-c2b7-4095-a492-8950bebcce0b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_mobile
+    - node.type.customer
+id: node.customer.field_mobile
+field_name: field_mobile
+entity_type: node
+bundle: customer
+label: 聯絡人電話
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

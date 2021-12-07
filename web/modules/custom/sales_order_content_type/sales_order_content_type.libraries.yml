@@ -7,3 +7,4 @@ sales_order_content_type:
     - core/jquery
     - core/drupal
     - core/drupal.dropbutton
+    - core/drupal.dialog.ajax

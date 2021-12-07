@@ -1,0 +1,19 @@
+uuid: 5c89da8f-a598-4cde-b191-12f1e60b0db3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bank_name
+    - node.type.vendor
+id: node.vendor.field_bank_name
+field_name: field_bank_name
+entity_type: node
+bundle: vendor
+label: 銀行名稱
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

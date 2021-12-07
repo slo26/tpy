@@ -1,0 +1,19 @@
+uuid: 9eea5776-6a49-4162-b405-c805d5a97e6f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_directions
+    - node.type.product
+id: node.product.field_directions
+field_name: field_directions
+entity_type: node
+bundle: product
+label: 說明
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -6,6 +6,13 @@ sales_order_content_type.form:
   requirements:
     _permission: 'administer site configuration'
 
+sales_order_content_type.history_sell_item:
+  path: '/admin/view/{product_nid}/history-sell-item/{customer_nid}'
+  defaults:
+    _form: '\Drupal\sales_order_content_type\Form\OpenHistorySellItemDialogForm'
+  requirements:
+    _permission: 'administer site configuration'
+
 sales_order_content_type.open_modal_form:
   path: '/admin/config/modal_form'
   defaults:
