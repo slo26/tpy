@@ -76,6 +76,12 @@ function tara_preprocess_html(&$variables) {
   // Add variables for theme Settings
   $variables['css_extra'] = theme_get_setting('css_extra', 'tara');
   $variables['css_code'] = theme_get_setting('css_code', 'tara');
+  	//customized code by sean begin
+  	$node = \Drupal::routeMatch()->getParameter('node');
+	if ($node instanceof \Drupal\node\NodeInterface && $node->bundle() == "documentation" ) {
+		unset($variables['page']['sidebar_second']);
+	} 
+  	//customized code by sean end
 	// Add class to body for different page layout.
 	if (!empty($variables['page']['sidebar_first']) && !empty($variables['page']['sidebar_second'])) {
 		$variables['attributes']['class'][] = 'two-sidebar';
@@ -126,3 +132,4 @@ function tara_preprocess_breadcrumb(&$variables) {
 		$variables['#cache']['contexts'][] = 'url';
 	}
 }
+

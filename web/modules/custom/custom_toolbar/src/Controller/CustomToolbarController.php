@@ -23,13 +23,13 @@ class CustomToolbarController extends ControllerBase {
         $markup .= '<a href="/admin/structure/types/manage/product/fields/node.product.field_product_category/storage">';
         $markup .= '<span class="label">產品分類</span>';
         $settings = getFieldStorageSettingsAllowedValues('field_product_category', 'product');
-        $markup .= '<div class="description">以下是此下拉的設定:</br>' .  implode(", ", $settings) .'</div>';
+        $markup .= '<div class="description">以下是目前的設定:</br>' .  implode(", ", $settings) .'</div>';
         $markup .= '</a></li>';
         $markup .= '<li>';
         $markup .= '<a href="/admin/structure/types/manage/product/fields/node.product.field_color/storage">';
         $markup .= '<span class="label">產品顏色</span>';
         $settings = getFieldStorageSettingsAllowedValues('field_color', 'product');
-        $markup .= '<div class="description">以下是此下拉的設定:</br>' .  implode(", ", $settings) .'</div>';
+        $markup .= '<div class="description">以下是目前的設定:</br>' .  implode(", ", $settings) .'</div>';
         $markup .= '</a></li>';
         $markup .= '</ul></div></div>';
 
@@ -41,13 +41,13 @@ class CustomToolbarController extends ControllerBase {
         $markup .= '<a href="/admin/structure/types/manage/vendor/fields/node.vendor.field_country/storage">';
         $markup .= '<span class="label">國別</span>';
         $settings = getFieldStorageSettingsAllowedValues('field_country', 'vendor');
-        $markup .= '<div class="description">以下是此下拉的設定:</br>' .  implode(", ", $settings) .'</div>';
+        $markup .= '<div class="description">以下是目前的設定:</br>' .  implode(", ", $settings) .'</div>';
         $markup .= '</a></li>';
         $markup .= '<li>';
         $markup .= '<a href="/admin/structure/types/manage/customer/fields/node.customer.field_customer_type/storage">';
         $markup .= '<span class="label">客戶種類</span>';
         $settings = getFieldStorageSettingsAllowedValues('field_customer_type', 'customer');
-        $markup .= '<div class="description">以下是此下拉的設定:</br>' .  implode(", ", $settings) .'</div>';
+        $markup .= '<div class="description">以下是目前的設定:</br>' .  implode(", ", $settings) .'</div>';
         $markup .= '</a></li>';
         $markup .= '</ul></div></div>';
 
@@ -62,31 +62,31 @@ class CustomToolbarController extends ControllerBase {
         $markup .= '<a href="/admin/structure/types/manage/purchase_order/fields/node.purchase_order.field_logistics/storage">';
         $markup .= '<span class="label">物流</span>';
         $settings = getFieldStorageSettingsAllowedValues('field_logistics', 'purchase_order');
-        $markup .= '<div class="description">以下是此下拉的設定:</br>' .  implode(", ", $settings) .'</div>';
+        $markup .= '<div class="description">以下是目前的設定:</br>' .  implode(", ", $settings) .'</div>';
         $markup .= '</a></li>';
         $markup .= '<li>';
         $markup .= '<a href="/admin/structure/types/manage/sales_order/fields/node.sales_order.field_order_status/storage">';
         $markup .= '<span class="label">訂單狀態</span>';
         $settings = getFieldStorageSettingsAllowedValues('field_order_status', 'sales_order');
-        $markup .= '<div class="description">以下是此下拉的設定:</br>' .  implode(", ", $settings) .'</div>';
+        $markup .= '<div class="description">以下是目前的設定:</br>' .  implode(", ", $settings) .'</div>';
         $markup .= '</a></li>';
         $markup .= '<li>';
         $markup .= '<a href="/admin/structure/types/manage/purchase_order/fields/node.purchase_order.field_purchase_status/storage">';
         $markup .= '<span class="label">採購狀態</span>';
         $settings = getFieldStorageSettingsAllowedValues('field_purchase_status', 'purchase_order');
-        $markup .= '<div class="description">以下是此下拉的設定:</br>' .  implode(", ", $settings) .'</div>';
+        $markup .= '<div class="description">以下是目前的設定:</br>' .  implode(", ", $settings) .'</div>';
         $markup .= '</a></li>';
         $markup .= '<li>';
         $markup .= '<a href="/admin/structure/types/manage/customer/fields/node.customer.field_payment/storage">';
         $markup .= '<span class="label">付款方式</span>';
         $settings = getFieldStorageSettingsAllowedValues('field_payment', 'customer');
-        $markup .= '<div class="description">以下是此下拉的設定:</br>' .  implode(", ", $settings) .'</div>';
+        $markup .= '<div class="description">以下是目前的設定:</br>' .  implode(", ", $settings) .'</div>';
         $markup .= '</a></li>';
         $markup .= '<li>';
         $markup .= '<a href="/admin/structure/types/manage/customer/fields/node.customer.field_delivery/storage">';
         $markup .= '<span class="label">出貨方式</span>';
         $settings = getFieldStorageSettingsAllowedValues('field_delivery', 'customer');
-        $markup .= '<div class="description">以下是此下拉的設定:</br>' .  implode(", ", $settings) .'</div>';
+        $markup .= '<div class="description">以下是目前的設定:</br>' .  implode(", ", $settings) .'</div>';
         $markup .= '</a></li>';
         $markup .= '</ul></div></div>';
 
@@ -391,4 +391,5 @@ class CustomToolbarController extends ControllerBase {
         );
     }
 }
+
 

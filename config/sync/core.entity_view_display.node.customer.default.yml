@@ -10,6 +10,7 @@ dependencies:
     - field.field.node.customer.field_delivery
     - field.field.node.customer.field_email
     - field.field.node.customer.field_fax
+    - field.field.node.customer.field_long_comment
     - field.field.node.customer.field_mobile
     - field.field.node.customer.field_owner
     - field.field.node.customer.field_payment
@@ -80,6 +81,13 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     type: string
+    region: content
+  field_long_comment:
+    weight: 16
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: basic_string
     region: content
   field_mobile:
     weight: 7

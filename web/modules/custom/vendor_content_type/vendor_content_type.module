@@ -67,7 +67,7 @@ function vendor_content_type_form_alter(&$form, FormStateInterface &$form_state,
 			}
 			$form ['title']['widget'][0]['value']['#default_value'] = $vendor_number;
 		}
-        $form ['title']['#disabled'] = true;
+        //$form ['title']['#disabled'] = true;
 
 		/*-----------------付款資訊---------------------*/
 		$form['payment_info'] = array(
