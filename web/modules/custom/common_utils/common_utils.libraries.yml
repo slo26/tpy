@@ -3,6 +3,10 @@ common_utils:
   css:
     theme:
       css/common_utils.css: {}
+  js:
+    js/common_utils.js: {}
+    js/utility.js: {}
   dependencies:
     - core/jquery
     - core/drupal
+
