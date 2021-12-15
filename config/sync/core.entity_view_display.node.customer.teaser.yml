@@ -11,6 +11,7 @@ dependencies:
     - field.field.node.customer.field_delivery
     - field.field.node.customer.field_email
     - field.field.node.customer.field_fax
+    - field.field.node.customer.field_industry
     - field.field.node.customer.field_long_comment
     - field.field.node.customer.field_mobile
     - field.field.node.customer.field_owner
@@ -18,8 +19,10 @@ dependencies:
     - field.field.node.customer.field_payment_condition
     - field.field.node.customer.field_payment_due
     - field.field.node.customer.field_phone
+    - field.field.node.customer.field_sales
     - field.field.node.customer.field_total_employee
     - field.field.node.customer.field_uniform_number
+    - field.field.node.customer.field_uniform_number_address
     - field.field.node.customer.field_web_site
     - node.type.customer
   module:
@@ -42,6 +45,7 @@ hidden:
   field_delivery: true
   field_email: true
   field_fax: true
+  field_industry: true
   field_long_comment: true
   field_mobile: true
   field_owner: true
@@ -49,6 +53,8 @@ hidden:
   field_payment_condition: true
   field_payment_due: true
   field_phone: true
+  field_sales: true
   field_total_employee: true
   field_uniform_number: true
+  field_uniform_number_address: true
   field_web_site: true

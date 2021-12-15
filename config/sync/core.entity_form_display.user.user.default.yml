@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.user.user.field_full_name
     - field.field.user.user.user_picture
     - image.style.thumbnail
   module:
@@ -16,16 +17,22 @@ bundle: user
 mode: default
 content:
   account:
-    weight: -10
+    weight: 1
     region: content
+    settings: {  }
+    third_party_settings: {  }
   contact:
-    weight: 5
+    weight: 3
     region: content
-  language:
+    settings: {  }
+    third_party_settings: {  }
+  field_full_name:
     weight: 0
-    region: content
-  timezone:
-    weight: 6
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
     region: content
   user_picture:
     type: image_image
@@ -33,6 +40,8 @@ content:
       progress_indicator: throbber
       preview_image_style: thumbnail
     third_party_settings: {  }
-    weight: -1
+    weight: 2
     region: content
-hidden: {  }
+hidden:
+  language: true
+  timezone: true

@@ -12,6 +12,7 @@ dependencies:
     - field.field.node.sales_order.field_receiver
     - field.field.node.sales_order.field_sales_date
     - field.field.node.sales_order.field_sell_products
+    - field.field.node.sales_order.field_shipping_address
     - field.field.node.sales_order.field_shipping_number
     - node.type.sales_order
   module:
@@ -25,14 +26,14 @@ mode: default
 content:
   field_customer_entity:
     weight: 3
-    label: above
+    label: hidden
     settings:
       link: true
     third_party_settings: {  }
     type: entity_reference_label
     region: content
   field_date_actual_delivered:
-    weight: 9
+    weight: 10
     label: above
     settings:
       timezone_override: ''
@@ -41,7 +42,7 @@ content:
     type: datetime_default
     region: content
   field_date_expect_to_deliver:
-    weight: 8
+    weight: 9
     label: above
     settings:
       timezone_override: ''
@@ -57,7 +58,7 @@ content:
     type: list_default
     region: content
   field_logistics:
-    weight: 6
+    weight: 7
     label: above
     settings: {  }
     third_party_settings: {  }
@@ -80,7 +81,7 @@ content:
     region: content
   field_sales_date:
     weight: 0
-    label: above
+    label: hidden
     settings:
       timezone_override: ''
       format_type: html_date
@@ -95,8 +96,16 @@ content:
     third_party_settings: {  }
     type: entity_reference_label
     region: content
+  field_shipping_address:
+    weight: 6
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+    region: content
   field_shipping_number:
-    weight: 7
+    weight: 8
     label: above
     settings:
       link_to_entity: false

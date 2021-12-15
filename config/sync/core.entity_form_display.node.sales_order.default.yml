@@ -12,6 +12,7 @@ dependencies:
     - field.field.node.sales_order.field_receiver
     - field.field.node.sales_order.field_sales_date
     - field.field.node.sales_order.field_sell_products
+    - field.field.node.sales_order.field_shipping_address
     - field.field.node.sales_order.field_shipping_number
     - node.type.sales_order
   module:
@@ -74,6 +75,14 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: datetime_default
+    region: content
+  field_shipping_address:
+    weight: 4
+    settings:
+      size: 60
+      placeholder: '採用公司地址, 如果此欄位留空白'
+    third_party_settings: {  }
+    type: string_textfield
     region: content
   field_shipping_number:
     weight: 7

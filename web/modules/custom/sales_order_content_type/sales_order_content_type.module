@@ -8,6 +8,98 @@ use Drupal\Core\Ajax;
 use Drupal\Core\Ajax\OpenModalDialogCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 
+function sales_order_content_type_preprocess_node(&$variables) {
+	$variables['company'] = \Drupal::config('common_utils.settings')->get('company');
+	$variables['company_address'] = \Drupal::config('common_utils.settings')->get('company_address');
+	$variables['company_phone'] = \Drupal::config('common_utils.settings')->get('company_phone');
+	$variables['company_fax'] = \Drupal::config('common_utils.settings')->get('company_fax');
+	$node = \Drupal::routeMatch()->getParameter('node');
+    if ($node instanceof \Drupal\node\NodeInterface) {
+		if ($node->bundle() == 'sales_order') {
+			$variables['sales_order'] = ['#markup' => sales_order_table_generator_in_view($node)];
+		}
+	}
+}
+
+function sales_order_table_generator_in_view($node) {
+	$customer_nid = $node->field_customer_entity->target_id;
+	$customer = \Drupal\node\Entity\Node::load($customer_nid);
+	/***************table head***************/ 
+	{
+		$table_start = '<table id="sales-oder-table-header"><tbody>';
+		$table_body = '<tr id="sales-oder-table-header-tpy-name"><td colspan="4" align="center"><strong>' . \Drupal::config('common_utils.settings')->get('company') .'</strong></td></tr>';
+		$table_body .= '<tr id="sales-oder-table-header-tpy-add"><td colspan="4" align="center">' . \Drupal::config('common_utils.settings')->get('company_address') .'</td></tr>';
+		$table_body .= '<tr id="sales-oder-table-header-tpy-phone"><td colspan="4" align="center">Tel: ' . \Drupal::config('common_utils.settings')->get('company_phone') . '  Fax: ' . \Drupal::config('common_utils.settings')->get('company_fax') . '</td></tr>';
+		if ( $node->field_order_status->value == 'rate' ) {
+			$status = "報價單";
+		} else if ( $node->field_order_status->value == 'shipment' )  {
+			$status = "出貨單";
+		} else if ( $node->field_order_status->value == 'stock_up' ) {
+			$status = "備貨";
+		} else if ( $node->field_order_status->value == 'done' ) {
+			$status = "銷售完成";
+		} else if ( $node->field_order_status->value == 'drop' ) {
+			$status = "銷售不成立";
+		} else if ( $node->field_order_status->value == 'draft' ) {
+			$status = "草稿";
+		}
+		$table_body .= '<tr id="sales-oder-table-header-status"><td colspan="4" align="center"><strong><u>' . $status .'</u></strong></td></tr>';
+		$table_body .= '<tr id="sales-oder-table-header-sell-info"><td colspan="3" align="left">報價日期: ' . date('Y/m/d') .'</td><td align="left" width="200px">有效日期: </td></tr>';	
+		$table_body .= '<tr id="sales-oder-table-header-sell-info"><td colspan="3" align="left">客戶名稱: ' . $customer->field_customer_title->value . '</td><td align="left" width="200px">報價憑證: ' . $node->title->value . '</td></tr>'; 
+		$table_body .= '<tr id="sales-oder-table-header-sell-info"><td colspan="3" align="left">公司地址: ' . $customer->field_address->value . '</td><td align="left" width="200px">聯絡人: ' . $customer->field_contact_person->value . '</td></tr>'; 
+		$table_body .= '<tr id="sales-oder-table-header-sell-info"><td align="left">電話: ' . $customer->field_phone->value . '</td><td align="left">連絡人電話: ' . $customer->field_mobile->value . '</td><td>傳真: ' . $customer->field_fax->value . '</td><td align="left" width="200px">統一編號: ' . $customer->field_uniform_number->value . '</td></tr>'; 
+		$table_end = "</tbody></table>";
+		$table_head = $table_start . $table_body . $table_end;
+	}
+	
+	/***************table list***************/
+	{
+		$total_amount_before_tax = 0;
+		$table_start = '<table id="sales-oder-table-list"><tbody>';
+		$table_body = '<tr><th width="50px">欄號</th><th>產品型號</th><th>產品名稱</th><th width="90px">報價數量</th><th width="110px">稅前售價</th><th width="110px">稅前金額</th></tr>';
+		$tids = \Drupal::entityQuery("taxonomy_term")->condition("vid", "sell_items")
+					->condition('field_order_id', $node->nid->value)
+					->execute();
+		$index = 0;
+		foreach($tids as $tid) {
+			$item = \Drupal\taxonomy\Entity\Term::load($tid);
+			$product = \Drupal\node\Entity\Node::load($item->field_product_id->target_id);
+			$index++;
+			$table_body .= '<tr><td>' . $index . '</td><td>' . $product->title->value . '</td><td>' . $product->field_product_name->value . 
+							'</td><td align="right">' . number_format($item->field_quantity->value) . 
+							'</td><td  align="right">' . number_format($item->field_price->value) . 
+							'</td><td  align="right">' . number_format($item->field_total_amount->value) . '</td></tr>';
+			$total_amount_before_tax = $total_amount_before_tax + $item->field_total_amount->value;
+		}
+		$table_body .= '<tr class="sales-oder-table-list-bottom"><td colspan="6" align="center"> (以下空白) </td></tr>'; 
+		$table_end = "</tbody></table>"; 
+		$table_list = $table_start . $table_body . $table_end;
+	}
+	
+	/***************table footer***************/
+	{
+		$sales_tax = \Drupal::config('common_utils.settings')->get('sales_tax')/100;
+		$total_amount_after_tax = $total_amount_before_tax + ($total_amount_before_tax * $sales_tax);
+		$sales = \Drupal\user\Entity\User::load($customer->field_sales->target_id);
+
+		$table_start = '<table id="sales-oder-table-footer"><tbody>';
+		$table_body = '<tr><td align="left" width="110px">業務代表: </td><td align="left">' . $sales->field_full_name->value . 
+						'</td><td align="left" width="70px">幣別: </td><td align="left">' . '新台幣' . 
+						'</td><td align="left" width="110px">稅前合計: </td><td align="right" width="110px">' . number_format($total_amount_before_tax) .
+						'</td></tr>';
+		$table_body .= '<tr><td align="left" width="110px">付款條件:</td><td colspan="3" align="left">' . $customer->field_payment_condition->value . 
+						'</td><td align="left" width="110px">營業稅額: </td><td align="right" width="110px">' . number_format($total_amount_before_tax * $sales_tax) .
+						'</td></tr>'; 
+		$table_body .= '<tr><td align="left" width="110px"></td><td colspan="3" align="left"></td>' . 
+						'<td align="left" width="110px">報價總額: </td><td align="right" width="110px">' . number_format($total_amount_after_tax) . 
+						'</td></tr>'; 
+		$table_end = "</tbody></table>";
+		$table_footer = $table_start . $table_body . $table_end;
+	}
+	
+	return $table_head . $table_list . $table_footer;
+}
+
 function sales_order_content_type_node_presave(Drupal\Core\Entity\EntityInterface $node) {
 	if ( $node->type->target_id == "sales_order" ) {
 		$label = get_entity_storage_label($node, "field_order_status", $node->field_order_status->value);
@@ -188,6 +280,7 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 
 		$form['field_logistics']['#group'] = 'delivery_info';
 		$form['field_shipping_number']['#group'] = 'delivery_info';
+		$form['field_shipping_address']['#group'] = 'delivery_info';
 		$form['field_delivery']['#group'] = 'delivery_info';
 		$form['field_receiver']['#group'] = 'delivery_info';
 		$form['field_date_expect_to_deliver']['#group'] = 'delivery_info';
@@ -420,7 +513,13 @@ function ajax_order_status_changed_validation(array $form, FormStateInterface $f
 					}
 				}
 			}
-		}	
+		}
+		$shipping_address = $form_state->getValue(field_shipping_address)[0]['value'];
+		if ( empty($shipping_address) ) {
+			$customr_nid = $form_state->getValue('field_customer_entity')[0]['target_id'];
+			$customer = \Drupal\node\Entity\Node::load($customr_nid);
+			$ajax_response->addCommand(new InvokeCommand('#edit-field-shipping-address-0-value', 'val', [$customer->field_address->value]));	
+		}
 	} else if ( $selected_key == 'drop' ) {
 		$sell_items_tids = \Drupal::entityQuery("taxonomy_term")
 											->condition('vid', 'sell_items')
@@ -624,12 +723,12 @@ function purchase_items_table_generate($order_id) {
 						</ul>
 					</div>
 				</div>';
-		$table_body .= '<tr><td>' . $item->name->value . '</td><td>' . $product->title->value . '</td><td>' . $product->field_product_name->value . '</td><td>' . $storage->field_storage_name->value . '</td><td>' . $item->field_quantity->value . '</td><td>' . $item->field_price->value . '</td><td>' . $item->field_discount->value . '</td><td>' . $item->field_total_amount->value . '</td><td>' . $dropdown_button . '</td></tr>';
+		$table_body .= '<tr><td>' . $item->name->value . '</td><td>' . $product->title->value . '</td><td>' . $product->field_product_name->value . '</td><td>' . $storage->field_storage_name->value . '</td><td>' . number_format($item->field_quantity->value) . '</td><td>' . number_format($item->field_price->value) . '</td><td>' . $item->field_discount->value . '</td><td>' . number_format($item->field_total_amount->value) . '</td><td>' . $dropdown_button . '</td></tr>';
 		$total_quantity = $total_quantity + $item->field_quantity->value;
 		$sum = $sum + $item->field_price->value;
 		$total_cost = $total_cost + $item->field_total_amount->value;
 	}
-	$table_body .= '<tr><td><strong>總合</strong></td><td></td><td></td><td></td><td><strong>' . $total_quantity . '</strong></td><td><strong>$' . $sum . '</strong></td><td></td><td><strong>$' . $total_cost . '</strong></td><td></td></tr>';
+	$table_body .= '<tr><td><strong>總合</strong></td><td></td><td></td><td></td><td><strong>' . number_format($total_quantity) . '</strong></td><td><strong>$' . number_format($sum) . '</strong></td><td></td><td><strong>$' . number_format($total_cost) . '</strong></td><td></td></tr>';
 	$table_body_end = '</tbody>';
 
 	$table_body = $table_head . $table_body_begin . $table_body . $table_body_end;

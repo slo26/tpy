@@ -10,6 +10,7 @@ dependencies:
     - field.field.node.customer.field_delivery
     - field.field.node.customer.field_email
     - field.field.node.customer.field_fax
+    - field.field.node.customer.field_industry
     - field.field.node.customer.field_long_comment
     - field.field.node.customer.field_mobile
     - field.field.node.customer.field_owner
@@ -17,8 +18,10 @@ dependencies:
     - field.field.node.customer.field_payment_condition
     - field.field.node.customer.field_payment_due
     - field.field.node.customer.field_phone
+    - field.field.node.customer.field_sales
     - field.field.node.customer.field_total_employee
     - field.field.node.customer.field_uniform_number
+    - field.field.node.customer.field_uniform_number_address
     - field.field.node.customer.field_web_site
     - node.type.customer
 id: node.customer.default
@@ -27,7 +30,7 @@ bundle: customer
 mode: default
 content:
   field_address:
-    weight: 5
+    weight: 6
     settings:
       size: 60
       placeholder: ''
@@ -35,7 +38,7 @@ content:
     type: string_textfield
     region: content
   field_contact_person:
-    weight: 8
+    weight: 10
     settings:
       size: 60
       placeholder: ''
@@ -51,19 +54,19 @@ content:
     type: string_textfield
     region: content
   field_customer_type:
-    weight: 2
+    weight: 3
     settings: {  }
     third_party_settings: {  }
     type: options_select
     region: content
   field_delivery:
-    weight: 15
+    weight: 17
     settings: {  }
     third_party_settings: {  }
     type: options_select
     region: content
   field_email:
-    weight: 11
+    weight: 13
     settings:
       size: 60
       placeholder: ''
@@ -71,22 +74,6 @@ content:
     type: email_default
     region: content
   field_fax:
-    weight: 7
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-    type: string_textfield
-    region: content
-  field_long_comment:
-    weight: 26
-    settings:
-      rows: 5
-      placeholder: ''
-    third_party_settings: {  }
-    type: string_textarea
-    region: content
-  field_mobile:
     weight: 9
     settings:
       size: 60
@@ -94,8 +81,30 @@ content:
     third_party_settings: {  }
     type: string_textfield
     region: content
+  field_industry:
+    weight: 2
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_long_comment:
+    weight: 20
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textarea
+    region: content
+  field_mobile:
+    weight: 11
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
   field_owner:
-    weight: 4
+    weight: 5
     settings:
       size: 60
       placeholder: ''
@@ -103,13 +112,13 @@ content:
     type: string_textfield
     region: content
   field_payment:
-    weight: 12
+    weight: 14
     settings: {  }
     third_party_settings: {  }
     type: options_select
     region: content
   field_payment_condition:
-    weight: 13
+    weight: 15
     settings:
       size: 60
       placeholder: ''
@@ -117,29 +126,43 @@ content:
     type: string_textfield
     region: content
   field_payment_due:
-    weight: 14
-    settings:
-      placeholder: ''
-    third_party_settings: {  }
-    type: number
-    region: content
-  field_phone:
-    weight: 6
-    settings:
-      size: 60
-      placeholder: ''
-    third_party_settings: {  }
-    type: string_textfield
-    region: content
-  field_total_employee:
     weight: 16
     settings:
       placeholder: ''
     third_party_settings: {  }
     type: number
     region: content
+  field_phone:
+    weight: 8
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_sales:
+    weight: 19
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
+  field_total_employee:
+    weight: 18
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
   field_uniform_number:
-    weight: 3
+    weight: 4
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  field_uniform_number_address:
+    weight: 7
     settings:
       size: 60
       placeholder: ''
@@ -147,7 +170,7 @@ content:
     type: string_textfield
     region: content
   field_web_site:
-    weight: 10
+    weight: 12
     settings:
       size: 60
       placeholder: ''

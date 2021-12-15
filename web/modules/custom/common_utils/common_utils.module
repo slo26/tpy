@@ -105,3 +105,4 @@ function get_product_or_goods_name_by_nid($nid) {
     
     return "";
 }
+

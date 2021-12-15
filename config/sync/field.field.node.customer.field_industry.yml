@@ -1,0 +1,21 @@
+uuid: 3b4271e1-0655-43cb-8572-cc4ffa1b1935
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_industry
+    - node.type.customer
+  module:
+    - options
+id: node.customer.field_industry
+field_name: field_industry
+entity_type: node
+bundle: customer
+label: 產業類別
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

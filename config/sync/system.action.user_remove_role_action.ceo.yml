@@ -1,0 +1,14 @@
+uuid: bab2ea26-7629-462a-a58a-5dd283d0fb07
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.ceo
+  module:
+    - user
+id: user_remove_role_action.ceo
+label: 'Remove the CEO role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: ceo

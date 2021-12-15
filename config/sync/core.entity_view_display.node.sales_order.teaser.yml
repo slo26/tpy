@@ -13,6 +13,7 @@ dependencies:
     - field.field.node.sales_order.field_receiver
     - field.field.node.sales_order.field_sales_date
     - field.field.node.sales_order.field_sell_products
+    - field.field.node.sales_order.field_shipping_address
     - field.field.node.sales_order.field_shipping_number
     - node.type.sales_order
   module:
@@ -37,4 +38,5 @@ hidden:
   field_receiver: true
   field_sales_date: true
   field_sell_products: true
+  field_shipping_address: true
   field_shipping_number: true

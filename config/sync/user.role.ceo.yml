@@ -1,0 +1,9 @@
+uuid: edfa107c-3de2-43a4-81e8-badd278bb7e4
+langcode: en
+status: true
+dependencies: {  }
+id: ceo
+label: CEO
+weight: 6
+is_admin: null
+permissions: {  }

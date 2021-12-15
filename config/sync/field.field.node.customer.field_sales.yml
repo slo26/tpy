@@ -1,0 +1,25 @@
+uuid: ab6b0d95-2f40-4c89-8f6d-9307cbf01892
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_sales
+    - node.type.customer
+id: node.customer.field_sales
+field_name: field_sales
+entity_type: node
+bundle: customer
+label: 業務人員
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: sales_role_for_view
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference

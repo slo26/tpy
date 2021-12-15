@@ -55,3 +55,43 @@
     /*margin-top: 0.5em;*/
     margin-left: 1em;
 }
+
+table#sales-oder-table-header{
+    margin-bottom: 0.1em;
+    line-height: 1.1;
+    
+}
+
+table#sales-oder-table-footer td,
+table#sales-oder-table-header td{
+    border: 0;
+}
+
+tr.sales-oder-table-list-bottom td{
+    border-bottom: 1px solid black;
+}
+
+table#sales-oder-table-list{
+    line-height: 1.1;
+    margin-bottom: 0.1em;
+    font-size: 13px;
+}
+
+tr#sales-oder-table-header-tpy-name,
+tr#sales-oder-table-header-status {
+    font-size: 22px;
+}
+
+tr#sales-oder-table-header-sell-info,
+tr#sales-oder-table-header-tpy-phone,
+tr#sales-oder-table-header-tpy-add {
+    font-size: 13px;
+}
+
+table#sales-oder-table-footer{
+    line-height: 1.1;
+    font-size: 13px;
+}
+
+
+

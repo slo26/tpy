@@ -1,0 +1,39 @@
+uuid: e9506a3f-aca2-449f-afbe-e211bfcb33a8
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_industry
+field_name: field_industry
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: mid_market
+      label: 中盤商
+    -
+      value: system_integration
+      label: 系統整合
+    -
+      value: engineering_installation
+      label: 工程安裝
+    -
+      value: design_affairs
+      label: 設計事務
+    -
+      value: manufacturer
+      label: 製造商
+    -
+      value: hydropower_materials
+      label: 水電材料
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

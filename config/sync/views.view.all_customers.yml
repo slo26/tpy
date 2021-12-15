@@ -7,13 +7,11 @@ dependencies:
     - field.storage.node.field_contact_person
     - field.storage.node.field_customer_title
     - field.storage.node.field_customer_type
-    - field.storage.node.field_delivery
+    - field.storage.node.field_industry
     - field.storage.node.field_mobile
-    - field.storage.node.field_payment
-    - field.storage.node.field_payment_condition
-    - field.storage.node.field_payment_due
     - field.storage.node.field_phone
     - field.storage.node.field_uniform_number
+    - field.storage.user.field_full_name
     - node.type.customer
     - user.role.administrator
     - user.role.authenticated
@@ -204,7 +202,7 @@ display:
           click_sort_column: value
           type: string
           settings:
-            link_to_entity: true
+            link_to_entity: false
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -305,7 +303,7 @@ display:
             suffix: ''
             target: ''
             nl2br: false
-            max_length: 0
+            max_length: 10
             word_boundary: true
             ellipsis: true
             more_link: false
@@ -531,6 +529,68 @@ display:
           separator: ', '
           field_api_classes: false
           plugin_id: field
+        field_industry:
+          id: field_industry
+          table: node__field_industry
+          field: field_industry
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: 產業類別
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: list_default
+          settings: {  }
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          plugin_id: field
         field_customer_type:
           id: field_customer_type
           table: node__field_customer_type
@@ -593,76 +653,14 @@ display:
           separator: ', '
           field_api_classes: false
           plugin_id: field
-        field_payment:
-          id: field_payment
-          table: node__field_payment
-          field: field_payment
-          relationship: none
+        field_full_name:
+          id: field_full_name
+          table: user__field_full_name
+          field: field_full_name
+          relationship: field_sales
           group_type: group
           admin_label: ''
-          label: 付款方式
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: list_default
-          settings: {  }
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          plugin_id: field
-        field_payment_condition:
-          id: field_payment_condition
-          table: node__field_payment_condition
-          field: field_payment_condition
-          relationship: none
-          group_type: group
-          admin_label: ''
-          label: 付款條件
+          label: 業務人員
           exclude: false
           alter:
             alter_text: false
@@ -706,133 +704,7 @@ display:
           click_sort_column: value
           type: string
           settings:
-            link_to_entity: false
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          plugin_id: field
-        field_payment_due:
-          id: field_payment_due
-          table: node__field_payment_due
-          field: field_payment_due
-          relationship: none
-          group_type: group
-          admin_label: ''
-          label: 結帳日
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: number_integer
-          settings:
-            thousand_separator: ''
-            prefix_suffix: false
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          plugin_id: field
-        field_delivery:
-          id: field_delivery
-          table: node__field_delivery
-          field: field_delivery
-          relationship: none
-          group_type: group
-          admin_label: ''
-          label: 出貨方式
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: list_default
-          settings: {  }
+            link_to_entity: true
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -1161,6 +1033,97 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           plugin_id: string
+        field_full_name_value:
+          id: field_full_name_value
+          table: user__field_full_name
+          field: field_full_name_value
+          relationship: field_sales
+          group_type: group
+          admin_label: ''
+          operator: contains
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_full_name_value_op
+            label: 業務人員
+            description: ''
+            use_operator: false
+            operator: field_full_name_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: sales
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              employee: '0'
+              manager: '0'
+              sales: '0'
+              ceo: '0'
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          plugin_id: string
+        field_industry_value:
+          id: field_industry_value
+          table: node__field_industry
+          field: field_industry_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_industry_value_op
+            label: 產業類別
+            description: ''
+            use_operator: false
+            operator: field_industry_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: industry
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              employee: '0'
+              manager: '0'
+              sales: '0'
+              ceo: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          plugin_id: list_field
         field_customer_type_value:
           id: field_customer_type_value
           table: node__field_customer_type
@@ -1235,7 +1198,16 @@ display:
           plugin_id: result
       footer: {  }
       empty: {  }
-      relationships: {  }
+      relationships:
+        field_sales:
+          id: field_sales
+          table: node__field_sales
+          field: field_sales
+          relationship: none
+          group_type: group
+          admin_label: 'field_sales: User'
+          required: false
+          plugin_id: standard
       arguments: {  }
       display_extenders: {  }
       filter_groups:
@@ -1256,13 +1228,11 @@ display:
         - 'config:field.storage.node.field_contact_person'
         - 'config:field.storage.node.field_customer_title'
         - 'config:field.storage.node.field_customer_type'
-        - 'config:field.storage.node.field_delivery'
+        - 'config:field.storage.node.field_industry'
         - 'config:field.storage.node.field_mobile'
-        - 'config:field.storage.node.field_payment'
-        - 'config:field.storage.node.field_payment_condition'
-        - 'config:field.storage.node.field_payment_due'
         - 'config:field.storage.node.field_phone'
         - 'config:field.storage.node.field_uniform_number'
+        - 'config:field.storage.user.field_full_name'
   page_1:
     display_plugin: page
     id: page_1
@@ -1285,10 +1255,8 @@ display:
         - 'config:field.storage.node.field_contact_person'
         - 'config:field.storage.node.field_customer_title'
         - 'config:field.storage.node.field_customer_type'
-        - 'config:field.storage.node.field_delivery'
+        - 'config:field.storage.node.field_industry'
         - 'config:field.storage.node.field_mobile'
-        - 'config:field.storage.node.field_payment'
-        - 'config:field.storage.node.field_payment_condition'
-        - 'config:field.storage.node.field_payment_due'
         - 'config:field.storage.node.field_phone'
         - 'config:field.storage.node.field_uniform_number'
+        - 'config:field.storage.user.field_full_name'

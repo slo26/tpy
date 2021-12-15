@@ -2,7 +2,7 @@
 use \Drupal\Core\Form\FormStateInterface;
 
 function customer_content_type_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
-	if ( $form_id === 'node_customer_form' ) {
+	if ( $form_id === 'node_customer_form' || $form_id === 'node_customer_edit_form' ) {
 		$node = $form_state->getFormObject()->getEntity();
 		if ( $node->isNew() ) {
 			$customer_id = "CU-" . date("Ymd");
@@ -20,11 +20,17 @@ function customer_content_type_form_alter(&$form, FormStateInterface &$form_stat
 				if ( sizeof($check) == 0 ) {
 					break;
 				}
-			
 			}
 			$form ['title']['widget'][0]['value']['#default_value'] = $customer_id;
-
 		}
+		$form['contact_window'] = array(
+						'#type' => 'details',
+						'#title' => t('聯絡人資訊'),
+						'#weight' => 10,
+							'#open' => true,
+        );
+		$form['field_contact_person']['#group'] = 'contact_window';
+		$form['field_mobile']['#group'] = 'contact_window';
 	}
 }
 
@@ -46,4 +52,5 @@ function gen_cu_id($length = 6) {
     }
     return "CU" . $randomString;
 }
+
 

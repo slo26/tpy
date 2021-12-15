@@ -4,6 +4,8 @@ content_access_roles_gids:
   administrator: 3
   employee: 4
   manager: 5
+  sales: 6
+  ceo: 7
 _core:
   default_config_hash: 7LkiviGITIpniIOOIzpuxR7r4XzqqYN_cwu0fb0kx1M
 content_access_node_type:
