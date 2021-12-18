@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.sales_order.field_comments_for_print
     - field.field.node.sales_order.field_customer_entity
     - field.field.node.sales_order.field_date_actual_delivered
     - field.field.node.sales_order.field_date_expect_to_deliver
@@ -113,4 +114,5 @@ content:
     type: string
     region: content
 hidden:
+  field_comments_for_print: true
   links: true

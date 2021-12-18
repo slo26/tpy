@@ -6,6 +6,7 @@ global-styling:
       css/font-awesome.css: {}
     theme:
       css/style.css: {}
+      css/print.css: { media: print }
   js:
     js/tara.js: {}
   dependencies:

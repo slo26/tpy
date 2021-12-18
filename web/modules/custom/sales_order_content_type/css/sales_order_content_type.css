@@ -88,9 +88,19 @@ tr#sales-oder-table-header-tpy-add {
     font-size: 13px;
 }
 
+#sales-oder-table-comment,
 table#sales-oder-table-footer{
     line-height: 1.1;
     font-size: 13px;
+    margin-bottom: 0em;
+}
+
+#sales-oder-table-comment pre{
+    margin: 0;
+}
+
+#views-exposed-form-create-content-button {
+    float: right;
 }
 
 

@@ -1,9 +1,10 @@
 uuid: b6ce60cc-5fab-43c7-b9ff-878d15524994
 langcode: en
-status: true
+status: false
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
+    - field.field.node.sales_order.field_comments_for_print
     - field.field.node.sales_order.field_customer_entity
     - field.field.node.sales_order.field_date_actual_delivered
     - field.field.node.sales_order.field_date_expect_to_deliver
@@ -29,6 +30,7 @@ content:
     third_party_settings: {  }
     region: content
 hidden:
+  field_comments_for_print: true
   field_customer_entity: true
   field_date_actual_delivered: true
   field_date_expect_to_deliver: true

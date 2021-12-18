@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.sales_order.field_comments_for_print
     - field.field.node.sales_order.field_customer_entity
     - field.field.node.sales_order.field_date_actual_delivered
     - field.field.node.sales_order.field_date_expect_to_deliver
@@ -22,6 +23,12 @@ targetEntityType: node
 bundle: sales_order
 mode: default
 content:
+  field_comments_for_print:
+    weight: 26
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
   field_customer_entity:
     weight: 3
     settings:

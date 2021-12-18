@@ -1,0 +1,16 @@
+#sidebar-right,
+.scrolltop,
+#footer,
+#block-tara-local-tasks,
+#block-tara-page-title,
+#breadcrumb,
+.full-page-search,
+.main-menu,
+#header{
+    display: none;
+}
+
+@page {
+    size: auto;
+    margin:0;
+}

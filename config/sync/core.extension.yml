@@ -53,6 +53,7 @@ module:
   panelbutton: 0
   path: 0
   path_alias: 0
+  pdf_api: 0
   purchase_items: 0
   purchase_order: 0
   quickedit: 0

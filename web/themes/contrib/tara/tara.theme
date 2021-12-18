@@ -78,7 +78,8 @@ function tara_preprocess_html(&$variables) {
   $variables['css_code'] = theme_get_setting('css_code', 'tara');
   	//customized code by sean begin
   	$node = \Drupal::routeMatch()->getParameter('node');
-	if ($node instanceof \Drupal\node\NodeInterface && ( $node->bundle() == "documentation" || $node->bundle() == "sales_order" )) {
+	$no_sidebar_second = ["documentation", "sales_order", "purchase_order"];
+	if ($node instanceof \Drupal\node\NodeInterface && in_array($node->bundle(), $no_sidebar_second) ) {
 		unset($variables['page']['sidebar_second']);
 	} 
   	//customized code by sean end

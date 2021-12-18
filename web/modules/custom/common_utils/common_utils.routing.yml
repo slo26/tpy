@@ -4,4 +4,12 @@ common_utils.settings:
     _form: '\Drupal\common_utils\Form\CommonUtilsSettingsForm'
     _title: 'Common Utils Configuration'
   requirements:
-    _permission: 'administer site configuration'
+    _role: 'authenticated'
+
+common_utils.comment_selection_for_print:
+  path: '/admin/common_utils/comments-for-print'
+  defaults:
+    _form: '\Drupal\common_utils\Form\CommentSelectionForPrint'
+    _title: '列印單的備註選項'
+  requirements:
+          _role: 'authenticated'

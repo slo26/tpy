@@ -9,7 +9,7 @@ id: taxonomy_term.sell_items.field_comments
 field_name: field_comments
 entity_type: taxonomy_term
 bundle: sell_items
-label: comments
+label: 備註
 description: ''
 required: false
 translatable: false

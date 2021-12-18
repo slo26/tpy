@@ -23,7 +23,7 @@ node_tags: 0
 copyright_text: 1
 scrolltotop_on: 1
 css_extra: 1
-css_code: ".node-title {\r\n    display: none;\r\n}\r\n.feed-icon {\r\n    display:none;\r\n}"
+css_code: ".node-title,\r\n.feed-icon {\r\n    display:none;\r\n}"
 _core:
   default_config_hash: 6r9KA1Wa13n0_l8yU0AP5GKn49rkKotIYeyrdd22qac
 features:

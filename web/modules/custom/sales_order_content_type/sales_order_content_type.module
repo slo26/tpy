@@ -8,6 +8,20 @@ use Drupal\Core\Ajax;
 use Drupal\Core\Ajax\OpenModalDialogCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 
+function sales_order_content_type_form_views_exposed_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+        if ( $form['#id'] == 'views-exposed-form-all-sell-orders-page-1' ) {
+                $form['create_content'] = [
+                      '#type' => 'link',
+                      '#title' => '新增銷售單',
+                      '#url' => Url::fromUri("https://" . \Drupal::config('common_utils.settings')->get('hostname') . '/node/add/sales_order'),
+                      '#attributes' => [
+                        'id' => ['views-exposed-form-create-content-button'],
+                      ],
+                      '#weight' => 100,
+                ];
+        }
+    }
+
 function sales_order_content_type_preprocess_node(&$variables) {
 	$variables['company'] = \Drupal::config('common_utils.settings')->get('company');
 	$variables['company_address'] = \Drupal::config('common_utils.settings')->get('company_address');
@@ -45,8 +59,11 @@ function sales_order_table_generator_in_view($node) {
 		}
 		$table_body .= '<tr id="sales-oder-table-header-status"><td colspan="4" align="center"><strong><u>' . $status .'</u></strong></td></tr>';
 		$table_body .= '<tr id="sales-oder-table-header-sell-info"><td colspan="3" align="left">報價日期: ' . date('Y/m/d') .'</td><td align="left" width="200px">有效日期: </td></tr>';	
-		$table_body .= '<tr id="sales-oder-table-header-sell-info"><td colspan="3" align="left">客戶名稱: ' . $customer->field_customer_title->value . '</td><td align="left" width="200px">報價憑證: ' . $node->title->value . '</td></tr>'; 
+		$table_body .= '<tr id="sales-oder-table-header-sell-info"><td colspan="3" align="left">客戶名稱: <a href="/node/' . $customer_nid .'/edit" target="blank">' . $customer->field_customer_title->value . '</a></td><td align="left" width="200px">報價憑證: ' . $node->title->value . '</td></tr>'; 
 		$table_body .= '<tr id="sales-oder-table-header-sell-info"><td colspan="3" align="left">公司地址: ' . $customer->field_address->value . '</td><td align="left" width="200px">聯絡人: ' . $customer->field_contact_person->value . '</td></tr>'; 
+		if ( !empty($node->field_shipping_address->value) ) {
+			$table_body .= '<tr id="sales-oder-table-header-sell-info"><td colspan="4" align="left">發貨地址: ' . $node->field_shipping_address->value . '</td></tr>'; 
+		}
 		$table_body .= '<tr id="sales-oder-table-header-sell-info"><td align="left">電話: ' . $customer->field_phone->value . '</td><td align="left">連絡人電話: ' . $customer->field_mobile->value . '</td><td>傳真: ' . $customer->field_fax->value . '</td><td align="left" width="200px">統一編號: ' . $customer->field_uniform_number->value . '</td></tr>'; 
 		$table_end = "</tbody></table>";
 		$table_head = $table_start . $table_body . $table_end;
@@ -56,7 +73,7 @@ function sales_order_table_generator_in_view($node) {
 	{
 		$total_amount_before_tax = 0;
 		$table_start = '<table id="sales-oder-table-list"><tbody>';
-		$table_body = '<tr><th width="50px">欄號</th><th>產品型號</th><th>產品名稱</th><th width="90px">報價數量</th><th width="110px">稅前售價</th><th width="110px">稅前金額</th></tr>';
+		$table_body = '<tr><th width="50px">欄號</th><th>產品型號</th><th>產品名稱</th><th width="75px">報價數量</th><th width="85px">稅前售價</th><th width="85px">稅前金額</th></tr>';
 		$tids = \Drupal::entityQuery("taxonomy_term")->condition("vid", "sell_items")
 					->condition('field_order_id', $node->nid->value)
 					->execute();
@@ -65,10 +82,13 @@ function sales_order_table_generator_in_view($node) {
 			$item = \Drupal\taxonomy\Entity\Term::load($tid);
 			$product = \Drupal\node\Entity\Node::load($item->field_product_id->target_id);
 			$index++;
-			$table_body .= '<tr><td>' . $index . '</td><td>' . $product->title->value . '</td><td>' . $product->field_product_name->value . 
+			$table_body .= '<tr><td>' . $index . '</td><td><a href="/taxonomy/term/' .$tid . '/edit" target="blank">' . $product->title->value . '</a></td><td>' . $product->field_product_name->value . 
 							'</td><td align="right">' . number_format($item->field_quantity->value) . 
 							'</td><td  align="right">' . number_format($item->field_price->value) . 
 							'</td><td  align="right">' . number_format($item->field_total_amount->value) . '</td></tr>';
+			if ( !empty($item->field_comments->value) ) {
+				$table_body .= '<tr><td colspan="6" align="left">加註: ' . $item->field_comments->value . '</td></tr>';
+			}
 			$total_amount_before_tax = $total_amount_before_tax + $item->field_total_amount->value;
 		}
 		$table_body .= '<tr class="sales-oder-table-list-bottom"><td colspan="6" align="center"> (以下空白) </td></tr>'; 
@@ -96,8 +116,11 @@ function sales_order_table_generator_in_view($node) {
 		$table_end = "</tbody></table>";
 		$table_footer = $table_start . $table_body . $table_end;
 	}
+
+	$comment = \Drupal::config ('common_utils.comment_selection_for_print')->get($node->field_comments_for_print->value);
+	$comment = '<div id="sales-oder-table-comment"><pre>' . $comment . '</pre></div>';
 	
-	return $table_head . $table_list . $table_footer;
+	return $table_head . $table_list . $table_footer . $comment;
 }
 
 function sales_order_content_type_node_presave(Drupal\Core\Entity\EntityInterface $node) {
@@ -477,8 +500,46 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 				'#weight' => 32,
 			);
 		}
+
+		$form['comment_section'] = [
+			'#group' => 'advanced',
+			'#type' => 'details',
+			'#title' => t('備註'),
+			'#attributes' => [
+				'class' => ['node-form-options']
+			],
+			'#attached' => [
+				'library' => ['node/drupal.node'],
+			],
+			'#optional' => true,
+			'#open' => true,
+		];
+
+		$form['field_comments_for_print']['#group'] = 'comment_section';
+		$form['field_comments_for_print']['widget']['#ajax'] = array('callback' => 'ajax_load_print_comment','event' => 'change',);
+
+		$form['comment_section']['comment'] = array(
+			'#type' => 'markup',
+			'#markup' => '<div class="comment-print"></div>',
+			'#weight' => 30,
+        );
+
+		if ( !$node->isNew() ) {
+			$comment_value = \Drupal::config ('common_utils.comment_selection_for_print')->get($node->field_comments_for_print->value);
+			$form['comment_section']['comment']['#markup'] = '<div class="comment-print"><pre>' . $comment_value . '</pre><a href="/admin/common_utils/comments-for-print" target="blank">修改備註請點此連接</a></div>';
+		}
 	}
 }
+
+function ajax_load_print_comment(array $form, FormStateInterface $form_state) {
+	$comment_key = $form_state->getValue('field_comments_for_print')[0]['value'];
+	$comment_value = \Drupal::config ('common_utils.comment_selection_for_print')->get($comment_key);
+
+	$ajax_response = new AjaxResponse();
+	$ajax_response->addCommand(new HtmlCommand('.comment-print', '<pre>' . $comment_value . '</pre><<a href="/admin/common_utils/comments-for-print" target="blank">修改備註請點此連接</a>'));
+	return $ajax_response;
+}
+
 
 function ajax_order_status_changed_validation(array $form, FormStateInterface $form_state) {
 	$ajax_response = new AjaxResponse();

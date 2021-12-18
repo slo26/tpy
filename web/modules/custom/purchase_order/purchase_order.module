@@ -431,12 +431,12 @@ function items_table_generate($order_id) {
 						</ul>
 					</div>
 				</div>';
-		$table_body .= '<tr><td>' . $item->name->value . '</td><td>' . $product_or_goods->title->value . '</td><td>' . $name . '</td><td>' . $category . '</td><td>' . $item->field_quantity->value . '</td><td>' . $item->field_price->value . '</td><td>' . $item->field_total_amount->value . '</td><td>' . $dropdown_button . '</td></tr>';
+		$table_body .= '<tr><td>' . $item->name->value . '</td><td>' . $product_or_goods->title->value . '</td><td>' . $name . '</td><td>' . $category . '</td><td>' . number_format($item->field_quantity->value) . '</td><td>' . number_format($item->field_price->value) . '</td><td>' . number_format($item->field_total_amount->value) . '</td><td>' . $dropdown_button . '</td></tr>';
 		$total_quantity = $total_quantity + $item->field_quantity->value;
 		$sum = $sum + $item->field_price->value;
 		$total_cost = $total_cost + $item->field_total_amount->value;
 	}
-	$table_body .= '<tr><td><strong>總合</strong></td><td></td><td></td><td></td><td><strong>' . $total_quantity . '</strong></td><td><strong>$' . $sum . '</strong></td><td><strong>$' . $total_cost . '</strong></td><td></td></tr>';
+	$table_body .= '<tr><td><strong>總合</strong></td><td></td><td></td><td></td><td><strong>' . number_format($total_quantity) . '</strong></td><td><strong>$' . number_format($sum) . '</strong></td><td><strong>$' . number_format($total_cost) . '</strong></td><td></td></tr>';
 	$table_body_end = '</tbody>';
 
 	$table_body = $table_head . $table_body_begin . $table_body . $table_body_end;

@@ -49,6 +49,12 @@ class CustomToolbarController extends ControllerBase {
         $settings = getFieldStorageSettingsAllowedValues('field_customer_type', 'customer');
         $markup .= '<div class="description">以下是目前的設定:</br>' .  implode(", ", $settings) .'</div>';
         $markup .= '</a></li>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/config/common_utils">';
+        $markup .= '<span class="label">公司資訊</span>';
+        $markup .= '<div class="description">公司基本資料, 名稱, 地址, 電話, 網址, Email, 營業稅</div>';
+        $markup .= '</a></li>';
         $markup .= '</ul></div></div>';
 
         $markup .= '</div>';
@@ -87,6 +93,11 @@ class CustomToolbarController extends ControllerBase {
         $markup .= '<span class="label">出貨方式</span>';
         $settings = getFieldStorageSettingsAllowedValues('field_delivery', 'customer');
         $markup .= '<div class="description">以下是目前的設定:</br>' .  implode(", ", $settings) .'</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/common_utils/comments-for-print">';
+        $markup .= '<span class="label">列印備註</span>';
+        $markup .= '<div class="description">備註1, 備註2, 備註3, 備註4, 備註5, 備註6</div>';
         $markup .= '</a></li>';
         $markup .= '</ul></div></div>';
 
@@ -173,7 +184,6 @@ class CustomToolbarController extends ControllerBase {
         $markup .= '<a href="/admin/all-documents">';
         $markup .= '<span class="label">文件列表</span>';
         $markup .= '<div class="description">文件列表</div>';
-        $markup .= '</a></li>';
         $markup .= '</ul></div></div>';
 
         $markup .= '</div>';
