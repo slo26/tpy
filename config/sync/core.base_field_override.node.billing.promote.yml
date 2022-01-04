@@ -1,0 +1,22 @@
+uuid: 9ae6b2c5-6ba0-4321-bae2-3da1f74e4ab1
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.billing
+id: node.billing.promote
+field_name: promote
+entity_type: node
+bundle: billing
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

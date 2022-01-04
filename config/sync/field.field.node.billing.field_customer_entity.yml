@@ -1,0 +1,29 @@
+uuid: 719de24e-f924-4476-a71f-e10af52ba1e4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_customer_entity
+    - node.type.billing
+    - node.type.customer
+id: node.billing.field_customer_entity
+field_name: field_customer_entity
+entity_type: node
+bundle: billing
+label: 客戶
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      customer: customer
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

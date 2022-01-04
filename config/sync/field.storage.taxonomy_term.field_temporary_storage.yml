@@ -1,14 +1,16 @@
-uuid: 93287f1d-4f65-406a-a3ea-c5a7f78091d3
+uuid: fb2e455e-908f-4a86-b69b-95f082007d40
 langcode: en
 status: true
 dependencies:
   module:
+    - node
     - taxonomy
-id: taxonomy_term.field_is_packed
-field_name: field_is_packed
+id: taxonomy_term.field_temporary_storage
+field_name: field_temporary_storage
 entity_type: taxonomy_term
-type: boolean
-settings: {  }
+type: entity_reference
+settings:
+  target_type: node
 module: core
 locked: false
 cardinality: 1

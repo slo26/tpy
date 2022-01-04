@@ -1,0 +1,96 @@
+uuid: b826b0bd-d576-4374-b34b-d4f1af980599
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.billing.field_actual_received_payment
+    - field.field.node.billing.field_customer_entity
+    - field.field.node.billing.field_deposit
+    - field.field.node.billing.field_expected_receive_payment
+    - field.field.node.billing.field_order_id
+    - field.field.node.billing.field_tax
+    - field.field.node.billing.field_total_amount_with_tax
+    - field.field.node.billing.field_total_amount_without_tax
+    - node.type.billing
+  module:
+    - datetime
+id: node.billing.default
+targetEntityType: node
+bundle: billing
+mode: default
+content:
+  field_actual_received_payment:
+    weight: 8
+    settings: {  }
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  field_customer_entity:
+    weight: 2
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
+  field_deposit:
+    weight: 4
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  field_expected_receive_payment:
+    weight: 3
+    settings: {  }
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  field_order_id:
+    weight: 1
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: entity_reference_autocomplete
+    region: content
+  field_tax:
+    weight: 6
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  field_total_amount_with_tax:
+    weight: 7
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  field_total_amount_without_tax:
+    weight: 5
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  path: true
+  promote: true
+  status: true
+  sticky: true
+  uid: true

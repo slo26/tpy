@@ -1,0 +1,21 @@
+uuid: 5175dcc2-6d3f-4a19-b3ac-589d80498e2a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_end_date
+    - taxonomy.vocabulary.sale_bill_statement
+  module:
+    - datetime
+id: taxonomy_term.sale_bill_statement.field_end_date
+field_name: field_end_date
+entity_type: taxonomy_term
+bundle: sale_bill_statement
+label: 月結結束日
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

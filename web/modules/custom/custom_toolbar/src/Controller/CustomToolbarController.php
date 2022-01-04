@@ -109,6 +109,53 @@ class CustomToolbarController extends ControllerBase {
         );
     }
 
+    public function billStatement() {
+        $markup = '<div id="block-seven-content" class="block block-system block-system-main-block">';
+        $markup .= '<div class="clearfix">';
+
+        $markup .= '<div class="layout-column layout-column--half">';
+        $markup .= '<div class="panel">';
+        $markup .= '<h3 class="panel__title">銷售帳單</h3>';
+        $markup .= '<div class="panel__content">';
+        $markup .= '<ul class="admin-list">';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/billing/sale-billing-statement">';
+        $markup .= '<span class="label">建立應收對帳單</span>';
+        $markup .= '<div class="description">建立應收對帳單</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/sale-bill-statement">';
+        $markup .= '<span class="label">應收月結帳單列表</span>';
+        $markup .= '<div class="description">應收月結帳單列表</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/all-billing">';
+        $markup .= '<span class="label">銷售單帳單</span>';
+        $markup .= '<div class="description">銷售單帳單</div>';
+        $markup .= '</a></li>';
+        $markup .= '</ul></div></div>';        
+        $markup .= '</div>';
+
+        $markup .= '<div class="layout-column layout-column--half">';
+        $markup .= '<div class="panel">';
+        $markup .= '<h3 class="panel__title">採購帳單</h3>';
+        $markup .= '<div class="panel__content">';
+        $markup .= '<ul class="admin-list">';
+        $markup .= '<li>';
+        $markup .= '<a href="/node/add/purchase_order">';
+        $markup .= '<span class="label">建立付款對帳單</span>';
+        $markup .= '<div class="description">建立付款對帳單</div>';
+        $markup .= '</ul></div></div>';
+        $markup .= '</div>';
+
+        $markup .= '</div></div>';
+
+        return array(
+            '#type' => 'markup',
+            '#markup' => $markup,
+        );
+    }
+
     public function mainPanel() {
         $markup = '<div id="block-seven-content" class="block block-system block-system-main-block">';
         $markup .= '<div class="clearfix">';

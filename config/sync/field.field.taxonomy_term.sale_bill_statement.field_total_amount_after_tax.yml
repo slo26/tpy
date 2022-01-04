@@ -1,0 +1,23 @@
+uuid: e6201ea9-c370-42b6-92df-e551817aad2c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_total_amount_after_tax
+    - taxonomy.vocabulary.sale_bill_statement
+id: taxonomy_term.sale_bill_statement.field_total_amount_after_tax
+field_name: field_total_amount_after_tax
+entity_type: taxonomy_term
+bundle: sale_bill_statement
+label: 總金額(含稅)
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

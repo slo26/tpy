@@ -1,0 +1,23 @@
+uuid: 0015b2a8-fbdb-4368-a45e-98c11b601df2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_total_amount_without_tax
+    - node.type.billing
+id: node.billing.field_total_amount_without_tax
+field_name: field_total_amount_without_tax
+entity_type: node
+bundle: billing
+label: 未稅總價
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

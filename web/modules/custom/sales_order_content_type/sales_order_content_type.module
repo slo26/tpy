@@ -3,6 +3,7 @@ use \Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\RemoveCommand;
 use Drupal\Core\Url;
 use Drupal\Core\Ajax;
 use Drupal\Core\Ajax\OpenModalDialogCommand;
@@ -38,24 +39,27 @@ function sales_order_content_type_preprocess_node(&$variables) {
 function sales_order_table_generator_in_view($node) {
 	$customer_nid = $node->field_customer_entity->target_id;
 	$customer = \Drupal\node\Entity\Node::load($customer_nid);
+	$type = typeOfShipment($node);
 	/***************table head***************/ 
 	{
 		$table_start = '<table id="sales-oder-table-header"><tbody>';
 		$table_body = '<tr id="sales-oder-table-header-tpy-name"><td colspan="4" align="center"><strong>' . \Drupal::config('common_utils.settings')->get('company') .'</strong></td></tr>';
 		$table_body .= '<tr id="sales-oder-table-header-tpy-add"><td colspan="4" align="center">' . \Drupal::config('common_utils.settings')->get('company_address') .'</td></tr>';
 		$table_body .= '<tr id="sales-oder-table-header-tpy-phone"><td colspan="4" align="center">Tel: ' . \Drupal::config('common_utils.settings')->get('company_phone') . '  Fax: ' . \Drupal::config('common_utils.settings')->get('company_fax') . '</td></tr>';
-		if ( $node->field_order_status->value == 'rate' ) {
+		if ( $node->field_order_status->value == 'draft' ) {
+			$status = "草稿";
+		} else if ( $node->field_order_status->value == 'rate' ) {
 			$status = "報價單";
-		} else if ( $node->field_order_status->value == 'shipment' )  {
-			$status = "出貨單";
-		} else if ( $node->field_order_status->value == 'stock_up' ) {
-			$status = "備貨";
-		} else if ( $node->field_order_status->value == 'done' ) {
-			$status = "銷售完成";
+		} else if ( ($node->field_order_status->value == 'shipment') || ($node->field_order_status->value == 'done') ) {
+			if ( $type == 4 ) {
+				$status = "出貨單/銷貨轉寄庫單";
+			} else if ( $type == 1 ) {
+				$status = "出貨單";
+			}  else if ( $type == 3 ) {
+				$status = "銷貨轉寄庫單";
+			}
 		} else if ( $node->field_order_status->value == 'drop' ) {
 			$status = "銷售不成立";
-		} else if ( $node->field_order_status->value == 'draft' ) {
-			$status = "草稿";
 		}
 		$table_body .= '<tr id="sales-oder-table-header-status"><td colspan="4" align="center"><strong><u>' . $status .'</u></strong></td></tr>';
 		$table_body .= '<tr id="sales-oder-table-header-sell-info"><td colspan="3" align="left">報價日期: ' . date('Y/m/d') .'</td><td align="left" width="200px">有效日期: </td></tr>';	
@@ -71,54 +75,67 @@ function sales_order_table_generator_in_view($node) {
 	
 	/***************table list***************/
 	{
-		$total_amount_before_tax = 0;
-		$table_start = '<table id="sales-oder-table-list"><tbody>';
-		$table_body = '<tr><th width="50px">欄號</th><th>產品型號</th><th>產品名稱</th><th width="75px">報價數量</th><th width="85px">稅前售價</th><th width="85px">稅前金額</th></tr>';
-		$tids = \Drupal::entityQuery("taxonomy_term")->condition("vid", "sell_items")
-					->condition('field_order_id', $node->nid->value)
-					->execute();
-		$index = 0;
-		foreach($tids as $tid) {
-			$item = \Drupal\taxonomy\Entity\Term::load($tid);
-			$product = \Drupal\node\Entity\Node::load($item->field_product_id->target_id);
-			$index++;
-			$table_body .= '<tr><td>' . $index . '</td><td><a href="/taxonomy/term/' .$tid . '/edit" target="blank">' . $product->title->value . '</a></td><td>' . $product->field_product_name->value . 
-							'</td><td align="right">' . number_format($item->field_quantity->value) . 
-							'</td><td  align="right">' . number_format($item->field_price->value) . 
-							'</td><td  align="right">' . number_format($item->field_total_amount->value) . '</td></tr>';
-			if ( !empty($item->field_comments->value) ) {
-				$table_body .= '<tr><td colspan="6" align="left">加註: ' . $item->field_comments->value . '</td></tr>';
+		$table_list = "";
+		if ( ($node->field_order_status->value == 'shipment') || ($node->field_order_status->value == 'done') ) {
+			$table_list = shipping($node);
+		} else {
+			$total_amount_before_tax = 0;
+			$table_start = '<table id="sales-oder-table-list"><tbody>';
+			$table_body = '<tr><th width="50px">欄號</th><th>產品型號</th><th>產品名稱</th><th width="75px">報價數量</th><th width="85px">稅前售價</th><th width="85px">稅前金額</th></tr>';
+			$tids = \Drupal::entityQuery("taxonomy_term")->condition("vid", "sell_items")
+						->condition('field_order_id', $node->nid->value)
+						->execute();
+			$index = 0;
+			foreach($tids as $tid) {
+				$item = \Drupal\taxonomy\Entity\Term::load($tid);
+				$product = \Drupal\node\Entity\Node::load($item->field_product_id->target_id);
+				$index++;
+				$table_body .= '<tr><td>' . $index . '</td><td><a href="/taxonomy/term/' .$tid . '/edit" target="blank">' . $product->title->value . '</a></td><td>' . $product->field_product_name->value . 
+								'</td><td align="right">' . number_format($item->field_quantity->value) . 
+								'</td><td  align="right">' . number_format($item->field_price->value) . 
+								'</td><td  align="right">' . number_format($item->field_total_amount->value) . '</td></tr>';
+				if ( !empty($item->field_comments->value) ) {
+					$table_body .= '<tr><td colspan="6" align="left">加註: ' . $item->field_comments->value . '</td></tr>';
+				}
+				$total_amount_before_tax = $total_amount_before_tax + $item->field_total_amount->value;
 			}
-			$total_amount_before_tax = $total_amount_before_tax + $item->field_total_amount->value;
-		}
-		$table_body .= '<tr class="sales-oder-table-list-bottom"><td colspan="6" align="center"> (以下空白) </td></tr>'; 
-		$table_end = "</tbody></table>"; 
-		$table_list = $table_start . $table_body . $table_end;
+			$table_body .= '<tr class="sales-oder-table-list-bottom"><td colspan="6" align="center"> (以下空白) </td></tr>'; 
+			$table_end = "</tbody></table>"; 
+			$table_list = $table_start . $table_body . $table_end;
+		}	
 	}
 	
 	/***************table footer***************/
 	{
-		$sales_tax = \Drupal::config('common_utils.settings')->get('sales_tax')/100;
-		$total_amount_after_tax = $total_amount_before_tax + ($total_amount_before_tax * $sales_tax);
-		$sales = \Drupal\user\Entity\User::load($customer->field_sales->target_id);
+		$table_footer = "";
+		if ( ($node->field_order_status->value != 'shipment') && ($node->field_order_status->value != 'done') ) {
+			$sales_tax = \Drupal::config('common_utils.settings')->get('sales_tax')/100;
+			$total_amount_after_tax = $total_amount_before_tax + ($total_amount_before_tax * $sales_tax);
+			$sales = \Drupal\user\Entity\User::load($customer->field_sales->target_id);
 
-		$table_start = '<table id="sales-oder-table-footer"><tbody>';
-		$table_body = '<tr><td align="left" width="110px">業務代表: </td><td align="left">' . $sales->field_full_name->value . 
-						'</td><td align="left" width="70px">幣別: </td><td align="left">' . '新台幣' . 
-						'</td><td align="left" width="110px">稅前合計: </td><td align="right" width="110px">' . number_format($total_amount_before_tax) .
-						'</td></tr>';
-		$table_body .= '<tr><td align="left" width="110px">付款條件:</td><td colspan="3" align="left">' . $customer->field_payment_condition->value . 
-						'</td><td align="left" width="110px">營業稅額: </td><td align="right" width="110px">' . number_format($total_amount_before_tax * $sales_tax) .
-						'</td></tr>'; 
-		$table_body .= '<tr><td align="left" width="110px"></td><td colspan="3" align="left"></td>' . 
-						'<td align="left" width="110px">報價總額: </td><td align="right" width="110px">' . number_format($total_amount_after_tax) . 
-						'</td></tr>'; 
-		$table_end = "</tbody></table>";
-		$table_footer = $table_start . $table_body . $table_end;
+			$table_start = '<table id="sales-oder-table-footer"><tbody>';
+			$table_body = '<tr><td align="left" width="110px">業務代表: </td><td align="left">' . $sales->field_full_name->value . 
+							'</td><td align="left" width="70px">幣別: </td><td align="left">' . '新台幣' . 
+							'</td><td align="left" width="110px">稅前合計: </td><td align="right" width="110px">' . number_format($total_amount_before_tax) .
+							'</td></tr>';
+			$table_body .= '<tr><td align="left" width="110px">付款條件:</td><td colspan="3" align="left">' . $customer->field_payment_condition->value . 
+							'</td><td align="left" width="110px">營業稅額: </td><td align="right" width="110px">' . number_format($total_amount_before_tax * $sales_tax) .
+							'</td></tr>'; 
+			$table_body .= '<tr><td align="left" width="110px"></td><td colspan="3" align="left"></td>' . 
+							'<td align="left" width="110px">報價總額: </td><td align="right" width="110px">' . number_format($total_amount_after_tax) . 
+							'</td></tr>'; 
+			$table_end = "</tbody></table>";
+			$table_footer = $table_start . $table_body . $table_end;
+		}
 	}
 
-	$comment = \Drupal::config ('common_utils.comment_selection_for_print')->get($node->field_comments_for_print->value);
-	$comment = '<div id="sales-oder-table-comment"><pre>' . $comment . '</pre></div>';
+	if ( !empty($node->field_comments_for_print->value) ) {
+		$comment = \Drupal::config ('common_utils.comment_selection_for_print')->get($node->field_comments_for_print->value);
+		$comment = '<div id="sales-oder-table-comment"><pre>' . $comment . '</pre></div>';
+	} else {
+		$comment = "";
+	}
+	
 	
 	return $table_head . $table_list . $table_footer . $comment;
 }
@@ -127,6 +144,16 @@ function sales_order_content_type_node_presave(Drupal\Core\Entity\EntityInterfac
 	if ( $node->type->target_id == "sales_order" ) {
 		$label = get_entity_storage_label($node, "field_order_status", $node->field_order_status->value);
 		$node->set('revision_log', "$label 狀態儲存.");
+
+		if ( $node->field_order_status->value == "rate" ) {
+			$node->set('field_appraise_date', date('Y-m-d', time()));
+		} else if ( $node->field_order_status->value == "shipment" ) {
+			$node->set('field_shipping_date', date('Y-m-d', time()));
+		} else if ( $node->field_order_status->value == "done" ) {
+			$node->set('field_completed_date', date('Y-m-d', time()));
+		} else if ( $node->field_order_status->value == "return" ) {
+			$node->set('field_return_date', date('Y-m-d', time()));
+		}
 	}
 }
 
@@ -143,21 +170,58 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 		$node = $form_state->getFormObject()->getEntity();
 		/*-----------------訂單資訊---------------------*/
 		$form['order_info'] = array(
+						'#group' => 'advanced',
 						'#type' => 'details',
 						'#title' => t('訂單資訊'),
-						'#weight' => -1,
-							'#open' => true,
+						'#attributes' => [
+							'class' => ['node-form-options']
+						],
+						'#attached' => [
+							'library' => ['node/drupal.node'],
+						],
+						'#weight' => -50,
+						'#open' => true,
+						'#open' => true,
         );
 		$form['title']['#group'] = 'order_info';
-		$form['field_sales_date']['#group'] = 'order_info';
 		$form['field_order_status']['#group'] = 'order_info';
-
 		$form['order_info']['sell_order_status_message'] = array(
 			'#type' => 'markup',
 			'#markup' => '<div class="sell-order-status-message"></div>',
-            '#weight' => 3,
+            '#weight' => 19,
         );
-
+		
+		$form['field_created_date']['#group'] = 'order_info';
+		if ($form['field_created_date']['widget'][0]['value']['#default_value'] == '') {
+			$form['field_created_date']['#access'] = FALSE;
+		} else {
+			$form['field_created_date']['widget'][0]['value']['#description'] = $form['field_created_date']['widget'][0]['value']['#default_value']->format('Y/m/d');
+		}
+		$form['field_appraise_date']['#group'] = 'order_info';
+		if ($form['field_appraise_date']['widget'][0]['value']['#default_value'] == '') {
+			$form['field_appraise_date']['#access'] = FALSE;
+		} else {
+			$form['field_appraise_date']['widget'][0]['value']['#description'] = $form['field_appraise_date']['widget'][0]['value']['#default_value']->format('Y/m/d');
+		}
+		$form['field_shipping_date']['#group'] = 'order_info';
+		if ($form['field_shipping_date']['widget'][0]['value']['#default_value'] == '') {
+			$form['field_shipping_date']['#access'] = FALSE;
+        } else {
+          	$form['field_shipping_date']['widget'][0]['value']['#description'] = $form['field_shipping_date']['widget'][0]['value']['#default_value']->format('Y/m/d');
+        }
+		$form['field_completed_date']['#group'] = 'order_info';
+		if ($form['field_completed_date']['widget'][0]['value']['#default_value'] == '') {
+			$form['field_completed_date']['#access'] = FALSE;
+        } else {
+          	$form['field_completed_date']['widget'][0]['value']['#description'] = $form['field_completed_date']['widget'][0]['value']['#default_value']->format('Y/m/d');
+        }
+		$form['field_return_date']['#group'] = 'order_info';
+		if ($form['field_return_date']['widget'][0]['value']['#default_value'] == '') {
+			$form['field_return_date']['#access'] = FALSE;
+        } else {
+        	$form['field_return_date']['widget'][0]['value']['#description'] = $form['field_return_date']['widget'][0]['value']['#default_value']->format('Y/m/d');
+        }
+		
 		if ( $node->isNew() ) {
 			$sales_order_id = "SO-" . date("Ymd");
 			while (true) {
@@ -192,6 +256,70 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 			'wrapper' => 'ajax-change',
 		];
 
+		/******************帳單資訊**********************/
+		$form['billing_info'] = array(
+						'#group' => 'advanced',
+						'#type' => 'details',
+						'#title' => t('帳單資訊'),
+						'#attributes' => [
+							'class' => ['node-form-options']
+						],
+						'#attached' => [
+							'library' => ['node/drupal.node'],
+						],
+						'#weight' => -49,
+						'#open' => true,
+						'#open' => true,
+        );
+		$form['billing_info']['deposit'] = array('#type' => 'markup',
+			'#markup' => '<div class="deposite"></div>',
+		);
+		$form['billing_info']['total_amount_without_tax'] = array('#type' => 'markup',
+			'#markup' => '<div class="total-amount-without-tax"></div>',
+		);
+		$form['billing_info']['tax'] = array('#type' => 'markup',
+			'#markup' => '<div class="tax"></div>',
+		);
+		$form['billing_info']['total_amount_with_tax'] = array('#type' => 'markup',
+			'#markup' => '<div class="total-amount-with-tax"></div>',
+		);
+		$form['billing_info']['remain_amount'] = array('#type' => 'markup',
+			'#markup' => '<div class="remain-amount"></div>',
+		);
+		$form['billing_info']['expected_recevied_payment'] = array('#type' => 'markup',
+			'#markup' => '<div class="expected-recevied-payment"></div>',
+		);
+
+		$bill_nids = \Drupal::entityQuery("node")->condition('type', 'billing')->condition('field_order_id', $node->id())->execute();
+		foreach($bill_nids as $bill_nid) {
+			$bill = \Drupal\node\Entity\Node::load($bill_nid);
+			$form['billing_info']['deposit']['#markup'] = '<div class="deposite">' . t('訂金  $') . number_format($bill->field_deposit->value) . '</div>';
+			$form['billing_info']['total_amount_without_tax']['#markup'] = '<div class="total-amount-without-tax">' . t('未含稅總價  $') . $bill->field_total_amount_without_tax->value . '</div>';
+			$form['billing_info']['tax']['#markup'] = '<div class="tax">' . t('稅金  $') . $bill->field_tax->value . '</div>';
+			$form['billing_info']['total_amount_with_tax']['#markup'] = '<div class="total-amount-with-tax">' . t('含稅總價  $') . $bill->field_total_amount_with_tax->value . '</div>';
+			$form['billing_info']['remain_amount']['#markup'] = '<div class="remain-amount">' . t('剩餘末支付含稅總價  $') . ($bill->field_total_amount_with_tax->value - $bill->field_deposit->value) . '</div>';
+			$form['billing_info']['expected_recevied_payment']['#markup'] = '<div class="expected-recevied-payment">' . t('預計收款日期  ') . $bill->field_expected_receive_payment->value . '</div>';
+		}
+		$form['billing_info']['bill_link'] = array('#type' => 'markup','#markup' => '<div class="bill-link"></div>');
+		if ( !empty($node->field_bill->target_id) ) {
+			$form['billing_info']['bill_link']['#markup'] = '<div class="bill-link"><a target="_blank" href="/node/' . $node->field_bill->target_id . '">帳單己建立, 連接到帳單</a></div>';
+		} else {
+			$form['billing_info']['generate_bill'] = array(
+				'#type' => 'submit',
+				'#value' => t('產生銷售帳單'),
+				'#attributes' => [
+					'class' => [
+						'use-ajax',
+					],
+				],
+				'#ajax' => [
+					'callback' => 'generate_bill_callback',
+					'event' => 'click',
+				],
+				'#prefix' => '<div class="generate-bill">',
+				'#suffix' => '</div>',
+			);
+		}
 		/*-----------------客戶資訊---------------------*/
 		$form['customer_info'] = array(
 						'#type' => 'details',
@@ -306,8 +434,6 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 		$form['field_shipping_address']['#group'] = 'delivery_info';
 		$form['field_delivery']['#group'] = 'delivery_info';
 		$form['field_receiver']['#group'] = 'delivery_info';
-		$form['field_date_expect_to_deliver']['#group'] = 'delivery_info';
-		$form['field_date_actual_delivered']['#group'] = 'delivery_info';
 
 		/*-----------------新增訂單項目---------------------*/
 		$form['item_section'] = array(
@@ -474,6 +600,11 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 
 		if ( !$node->isNew() ) {
 			$form['sell_item_table']['#prefix'] = purchase_items_table_generate($node->id());
+			$form['to_sell_item_list'] = array(
+				'#prefix' => '<div class="to-sell-item-list"><a href="/admin/sell-items?title=' . $node->title->value .'" target="_blank">連接到此銷售訂單列表</a>',
+				'#suffix' => '</div>',
+				'#weight' => 32,
+			);
 		}
 
 		$form['regenerate_table'] = array(
@@ -493,18 +624,11 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 			'#suffix' => '</div>',
         );
 
-		if ( !$node->isNew() ) {
-			$form['to_sell_item_list'] = array(
-				'#prefix' => '<div class="to-sell-item-list"><a href="/admin/sell-items?title=' . $node->title->value .'" target="_blank">連接到此銷售訂單列表</a>',
-				'#suffix' => '</div>',
-				'#weight' => 32,
-			);
-		}
 
 		$form['comment_section'] = [
 			'#group' => 'advanced',
 			'#type' => 'details',
-			'#title' => t('備註'),
+			'#title' => t('額外選項'),
 			'#attributes' => [
 				'class' => ['node-form-options']
 			],
@@ -521,22 +645,29 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 		$form['comment_section']['comment'] = array(
 			'#type' => 'markup',
 			'#markup' => '<div class="comment-print"></div>',
-			'#weight' => 30,
+			'#weight' => 8,
         );
+		$form['field_rich_comment']['#group'] = 'comment_section';
 
 		if ( !$node->isNew() ) {
-			$comment_value = \Drupal::config ('common_utils.comment_selection_for_print')->get($node->field_comments_for_print->value);
-			$form['comment_section']['comment']['#markup'] = '<div class="comment-print"><pre>' . $comment_value . '</pre><a href="/admin/common_utils/comments-for-print" target="blank">修改備註請點此連接</a></div>';
+			if ( !empty($node->field_comments_for_print->value) ) {
+				$comment_value = \Drupal::config ('common_utils.comment_selection_for_print')->get($node->field_comments_for_print->value);
+				$form['comment_section']['comment']['#markup'] = '<div class="comment-print"><pre>' . $comment_value . '</pre><a href="/admin/common_utils/comments-for-print" target="blank">修改備註請點此連接</a></div>';
+			}		
 		}
 	}
 }
 
 function ajax_load_print_comment(array $form, FormStateInterface $form_state) {
-	$comment_key = $form_state->getValue('field_comments_for_print')[0]['value'];
-	$comment_value = \Drupal::config ('common_utils.comment_selection_for_print')->get($comment_key);
-
 	$ajax_response = new AjaxResponse();
-	$ajax_response->addCommand(new HtmlCommand('.comment-print', '<pre>' . $comment_value . '</pre><<a href="/admin/common_utils/comments-for-print" target="blank">修改備註請點此連接</a>'));
+	$comment_key = $form_state->getValue('field_comments_for_print')[0]['value'];
+	if ( !empty($comment_key) ) {
+		$comment_value = \Drupal::config ('common_utils.comment_selection_for_print')->get($comment_key);
+		$ajax_response->addCommand(new HtmlCommand('.comment-print', '<pre>' . $comment_value . '</pre><a href="/admin/common_utils/comments-for-print" target="blank">修改備註請點此連接</a>'));
+	} else {
+		$ajax_response->addCommand(new HtmlCommand('.comment-print', ''));
+	}
+
 	return $ajax_response;
 }
 
@@ -550,15 +681,51 @@ function ajax_order_status_changed_validation(array $form, FormStateInterface $f
 	$message = '<div class="sell-order-status-message"></div>';
 	$ajax_response->addCommand(new HtmlCommand('.sell-order-status-message', $message));
 	if ( $selected_key == 'shipment' || $selected_key == 'done' ) {
+		$shipping_address = $form_state->getValue(field_shipping_address)[0]['value'];
+		if ( empty($shipping_address) ) {
+			$customr_nid = $form_state->getValue('field_customer_entity')[0]['target_id'];
+			$customer = \Drupal\node\Entity\Node::load($customr_nid);
+			$ajax_response->addCommand(new InvokeCommand('#edit-field-shipping-address-0-value', 'val', [$customer->field_address->value]));	
+		}
+		if ( $selected_key == 'done' ) {
+			$current_user = \Drupal::currentUser();
+			$roles = $current_user->getRoles();
+			if ( !in_array('manager', $roles) ) {
+				$message = '<div class="sell-order-status-message"><font color="red">你沒有足夠的權限選擇' . $selected_value . '選項</font></div>';
+				$ajax_response->addCommand(new HtmlCommand('.sell-order-status-message', $message));
+				$ajax_response->addCommand(new InvokeCommand('#edit-field-order-status', 'val', [$node->field_order_status->value]));	
+				return $ajax_response;
+			}
+			$billing_nids = \Drupal::entityQuery("node")
+                    					->condition('type', 'billing')
+										->condition('field_order_id', $node->id())
+                    					->execute();
+			if ( count($billing_nids) == 0 ) {
+				$message = '<div class="sell-order-status-message"><font color="red">此銷售單沒有建立帳單收款, 無法選擇' . $selected_value . '選項</font></div>';
+				$ajax_response->addCommand(new HtmlCommand('.sell-order-status-message', $message));
+				$ajax_response->addCommand(new InvokeCommand('#edit-field-order-status', 'val', [$node->field_order_status->value]));
+				return $ajax_response;
+			} else {
+				foreach ($billing_nids as $billing_nid) {
+					$bill = \Drupal\node\Entity\Node::load($billing_nid);
+					if ( empty($bill->field_actual_received_payment->value) ) {
+						$message = '<div class="sell-order-status-message"><font color="red">此銷售單的帳單收款還未完成, 無法選擇' . $selected_value . '選項</font></div>';
+						$ajax_response->addCommand(new HtmlCommand('.sell-order-status-message', $message));
+						$ajax_response->addCommand(new InvokeCommand('#edit-field-order-status', 'val', [$node->field_order_status->value]));
+						return $ajax_response;
+					}
+				}
+			}
+		}
 		if ( $node->isNew() ) {
 			$message = '<div class="sell-order-status-message"><font color="red">此新銷售單還未被建立及儲存, 無法選擇' . $selected_value . '選項</font></div>';
 			$ajax_response->addCommand(new HtmlCommand('.sell-order-status-message', $message));
 			$ajax_response->addCommand(new InvokeCommand('#edit-field-order-status', 'val', [$node->field_order_status->value]));
 		} else {
 			$sell_items_tids = \Drupal::entityQuery("taxonomy_term")
-											->condition('vid', 'sell_items')
-											->condition('field_order_id', $node->id())
-											->execute();
+									->condition('vid', 'sell_items')
+									->condition('field_order_id', $node->id())
+									->execute();
 			if ( count($sell_items_tids) == 0 ) {
 				$message = '<div class="sell-order-status-message"><font color="red">此銷售單沒有任何訂單項目, 無法選擇' . $selected_value . '選項</font></div>';
 				$ajax_response->addCommand(new HtmlCommand('.sell-order-status-message', $message));
@@ -566,30 +733,24 @@ function ajax_order_status_changed_validation(array $form, FormStateInterface $f
 			} else {
 				foreach($sell_items_tids as $sell_items_tid) {
 					$sell_item = \Drupal\taxonomy\Entity\Term::load($sell_items_tid);
-					if ( $sell_item->field_is_packed->value == false ) {
-						$message = '<div class="sell-order-status-message"><font color="red">此銷售單還有一或多個訂單項目還沒打包, 無法選擇' . $selected_value . '選項</font></div>';
+					if ( empty($sell_item->field_requisition_status->value) ) {
+						$message = '<div class="sell-order-status-message"><font color="red">此銷售單還有一或多個訂單項目還沒打包出貨或轉寄倉, 無法選擇' . $selected_value . '選項</font></div>';
 						$ajax_response->addCommand(new HtmlCommand('.sell-order-status-message', $message));
 						$ajax_response->addCommand(new InvokeCommand('#edit-field-order-status', 'val', [$node->field_order_status->value]));
 						break;
 					}
 				}
 			}
-		}
-		$shipping_address = $form_state->getValue(field_shipping_address)[0]['value'];
-		if ( empty($shipping_address) ) {
-			$customr_nid = $form_state->getValue('field_customer_entity')[0]['target_id'];
-			$customer = \Drupal\node\Entity\Node::load($customr_nid);
-			$ajax_response->addCommand(new InvokeCommand('#edit-field-shipping-address-0-value', 'val', [$customer->field_address->value]));	
-		}
-	} else if ( $selected_key == 'drop' ) {
+		}	
+	} else if ( $selected_key == 'drop' || $selected_key == 'return' ) {
 		$sell_items_tids = \Drupal::entityQuery("taxonomy_term")
 											->condition('vid', 'sell_items')
 											->condition('field_order_id', $node->id())
 											->execute();
 		foreach($sell_items_tids as $sell_items_tid) {
 			$sell_item = \Drupal\taxonomy\Entity\Term::load($sell_items_tid);
-			if ( $sell_item->field_is_packed->value == true ) {
-				$message = '<div class="sell-order-status-message"><font color="red">此銷售單有一或多個訂單項目己被打包, 請將這些項目拆封並退回倉庫, 無法選擇' . $selected_value . '選項</font></div>';
+			if ( !empty($sell_item->field_requisition_status->value) ) {
+				$message = '<div class="sell-order-status-message"><font color="red">此銷售單有一或多個訂單項目己被打包出貨或寄倉, 請將這些項目拆封,並退回原倉庫並手動在系統上做退倉動作, 無法選擇' . $selected_value . '選項</font></div>';
 				$ajax_response->addCommand(new HtmlCommand('.sell-order-status-message', $message));
 				$ajax_response->addCommand(new InvokeCommand('#edit-field-order-status', 'val', [$node->field_order_status->value]));
 				break;
@@ -635,7 +796,7 @@ function ajax_product_loading(array $form, FormStateInterface $form_state) {
 		
 		$form['storage']['#options'] = $storage_list;
 		$form['storage']['#attributes'] = ['class' => 'edit-storage'];
-		$form['storage']['#default_value'] = '';
+		$form['storage']['#default_value'] = '_none';
 		$ajax_response->addCommand(new InvokeCommand('#edit-product-name', 'val', [$product->field_product_name->value]));
 		$ajax_response->addCommand(new ReplaceCommand('#edit-storage-select', $form['storage']));
 		$ajax_response->addCommand(new InvokeCommand('#edit-price', 'val', [$product->field_retail_price->value]));
@@ -716,7 +877,31 @@ function create_single_item_callback(array $form, FormStateInterface $form_state
 			$item->set('field_discount', $form_state->getValue('discount'));
 			$item->set('field_total_amount', $form_state->getValue('total_amount'));
 			$item->save();
-			$form['field_sell_products']['widget'][0]['target_id']['#default_value'] = $item->id();
+			$connection = \Drupal::database();
+			$obj = $connection->query("SELECT MAX(delta) as num FROM {node__field_sell_products} Where 
+															entity_id = :nid", [':nid' => $entity->id()])->fetchAll();
+			$num = 0;
+			if ( count($obj) > 0 ) {
+				$num = $obj[0]->num;
+			}
+			$connection->insert('node__field_sell_products')->fields([
+                    'bundle' => $entity->bundle(),
+                    'entity_id' => $entity->id(),
+                    'revision_id' => $entity->vid->value,
+                    'langcode' => 'en',
+                    'delta' => $num + 1,
+                    'field_sell_products_target_id' => $item->id()])->execute();
+			$connection->insert('node_revision__field_sell_products')->fields([
+                    'bundle' => $entity->bundle(),
+                    'entity_id' => $entity->id(),
+                    'revision_id' => $entity->vid->value,
+                    'langcode' => 'en',
+                    'delta' => $num + 1,
+            	    'field_sell_products_target_id' => $item->id()])->execute();
+			\Drupal::service('cache.entity')->invalidateAll();
+			\Drupal::service('cache.data')->invalidateAll();
+			\Drupal::service('cache.render')->invalidateAll();
+			//$form['field_sell_products']['widget'][0]['target_id']['#default_value'] = $item->id();
 			$status = '<font color="blue">新增成功!</font>';
 
 			$table = purchase_items_table_generate($entity->id());
@@ -732,8 +917,8 @@ function create_single_item_callback(array $form, FormStateInterface $form_state
 	$response->addCommand(new HtmlCommand('.add-item-status-message', $status));
 	$response->addCommand(new InvokeCommand('#edit-list-product', 'val', [""]));
 	$response->addCommand(new InvokeCommand('#edit-product-name', 'val', [""]));
-	$form['storage']['#options'] = array('none' => '- None-');
-	$form['storage']['#default_value'] = 'none';
+	$form['storage']['#options'] = array('_none' => '- None -');
+	$form['storage']['#default_value'] = '_none';
 	$response->addCommand(new ReplaceCommand('#edit-storage-select', $form['storage']));
 	$response->addCommand(new InvokeCommand('#edit-price', 'val', [""]));
 	$response->addCommand(new InvokeCommand('#edit-discount', 'val', [""]));
@@ -798,6 +983,54 @@ function purchase_items_table_generate($order_id) {
 	return $table;
 }
 
+function generate_bill_callback(array $form, FormStateInterface $form_state) {
+	$response = new AjaxResponse();
+	$entity = $form_state->getFormObject()->getEntity();
+	$entity = \Drupal\node\Entity\Node::load($entity->id());
+	if ( !empty($entity->id()) ) {
+		$query = \Drupal::entityQuery("node")
+                    					->condition('type', 'billing')
+										->condition('field_order_id', $entity->field_order_id->target_id)
+                    					->execute();
+		if ( count($query) == 0 ) {
+			$bill = \Drupal\node\Entity\Node::create(['type' => "billing",]);
+			$bill->set('title', generate_unique_id_for_bill());
+			$bill->field_order_id->target_id = $entity->id();
+			$bill->field_customer_entity->target_id = $entity->field_customer_entity->target_id;		
+			$bill->save();
+			//$bill = \Drupal\node\Entity\Node::load($bill->id());
+			$connection = \Drupal::database();
+			$connection->insert('node__field_bill')->fields([
+															'bundle' => $entity->bundle(),
+															'entity_id' => $entity->id(),
+															'revision_id' => $entity->vid->value,
+															'langcode' => 'en',
+															'delta' => 1,
+															'field_bill_target_id' => $bill->nid->value])->execute();
+			$connection->insert('node_revision__field_bill')->fields([
+															'bundle' => $entity->bundle(),
+															'entity_id' => $entity->id(),
+															'revision_id' => $entity->vid->value,
+															'langcode' => 'en',
+															'delta' => 1,
+															'field_bill_target_id' => $bill->nid->value])->execute();
+			\Drupal::service('cache.entity')->invalidateAll();
+			\Drupal::service('cache.data')->invalidateAll();
+			\Drupal::service('cache.render')->invalidateAll();
+
+			$response->addCommand(new HtmlCommand('.deposite', t('訂金  $') . number_format($bill->field_deposit->value)));
+			$response->addCommand(new HtmlCommand('.total-amount-without-tax', t('未含稅總價  $') . $bill->field_total_amount_without_tax->value));
+			$response->addCommand(new HtmlCommand('.tax', t('稅金  $') . $bill->field_tax->value));
+			$response->addCommand(new HtmlCommand('.total-amount-with-tax', t('含稅總價  $') . $bill->field_total_amount_with_tax->value));
+			$response->addCommand(new HtmlCommand('.remain-amount', t('剩餘末支付含稅總價  $') . ($bill->field_total_amount_with_tax->value - $bill->field_deposit->value)));
+			$response->addCommand(new HtmlCommand('.bill-link', '<a target="_blank" href="/node/' . $bill->id() . '">帳單己建立, 連接到帳單</a>'));
+			$response->addCommand(new RemoveCommand('.generate-bill'));
+		}
+	}
+	
+	return $response;
+}
+
 function table_regenerate_callback(array $form, FormStateInterface $form_state) {
 	$response = new AjaxResponse();
 	$entity = $form_state->getFormObject()->getEntity();
@@ -827,3 +1060,45 @@ function table_regenerate_callback(array $form, FormStateInterface $form_state) 
     return $response;
 }*/
 
+function shipping($node) {
+	$table_start = '<table id="sales-oder-table-list"><tbody>';
+	$table_body = '<tr><th width="50px">欄號</th><th>產品型號</th><th>產品名稱</th><th width="70px">數量</th><th width="95px">出貨狀態</th><th width="105px">出貨倉庫</th><th width="115px">寄貨倉庫</th></tr>';
+	$tids = \Drupal::entityQuery("taxonomy_term")->condition("vid", "sell_items")
+				->condition('field_order_id', $node->nid->value)
+				->execute();
+	$index = 0;
+	foreach($tids as $tid) {
+		$item = \Drupal\taxonomy\Entity\Term::load($tid);
+		$product = \Drupal\node\Entity\Node::load($item->field_product_id->target_id);
+		$index++;
+		$table_body .= '<tr><td>' . $index . '</td><td><a href="/taxonomy/term/' .$tid . '/edit" target="blank">' . $product->title->value . '</a></td><td>' . $product->field_product_name->value . 
+						'</td><td align="right">' . number_format($item->field_quantity->value) . 
+						'</td><td  align="right">' . get_entity_storage_label($item, "field_requisition_status", $item->field_requisition_status->value) . 
+						'</td><td  align="right">' . get_storage_name_by_nid($item->field_storage->target_id) . 
+						'</td><td  align="right">' . get_storage_name_by_nid($item->field_temporary_storage->target_id) .'</td></tr>'
+						;
+		if ( !empty($item->field_comments->value) ) {
+			$table_body .= '<tr><td colspan="7" align="left">加註: ' . $item->field_comments->value . '</td></tr>';
+		}
+	}
+	$table_body .= '<tr class="sales-oder-table-list-bottom"><td colspan="7" align="center"> (以下空白) </td></tr>'; 
+	$table_end = "</tbody></table>"; 
+	$table_list = $table_start . $table_body . $table_end;
+	return $table_list;
+}
+
+function typeOfShipment($node) {
+	$type = 0;
+	$tids = \Drupal::entityQuery("taxonomy_term")->condition("vid", "sell_items")
+					->condition('field_order_id', $node->nid->value)
+					->execute();
+	foreach($tids as $tid) {
+		$item = \Drupal\taxonomy\Entity\Term::load($tid);
+		if ( ($type == 0 || $type == 3) && $item->field_requisition_status->value == "packed" ) {
+			$type = $type + 1;
+		} else if ( ($type == 0 || $type == 1) && $item->field_requisition_status->value == "transferred" ) {
+			$type = $type + 3;
+		}
+	}
+	return $type;
+}

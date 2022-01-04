@@ -1,0 +1,27 @@
+uuid: 92de72a3-a925-483b-8850-eeda28be1a9f
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - taxonomy
+id: taxonomy_term.field_requisition_status
+field_name: field_requisition_status
+entity_type: taxonomy_term
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: packed
+      label: 包裝出貨
+    -
+      value: transferred
+      label: 轉寄倉
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -8,7 +8,7 @@ third_party_settings:
   menu_ui:
     available_menus: {  }
     parent: ''
-name: 採購
+name: 採購單
 type: purchase_order
 description: 'Purchase Order'
 help: ''

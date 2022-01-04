@@ -1,0 +1,21 @@
+uuid: aea5b4f3-adda-475f-9b26-d7501061e2e7
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_requisition_status
+    - taxonomy.vocabulary.sell_items
+  module:
+    - options
+id: taxonomy_term.sell_items.field_requisition_status
+field_name: field_requisition_status
+entity_type: taxonomy_term
+bundle: sell_items
+label: 狀態
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

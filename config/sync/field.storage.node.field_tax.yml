@@ -1,0 +1,20 @@
+uuid: 4d30a4a9-1f60-431e-a0c6-ec71a48af2fe
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_tax
+field_name: field_tax
+entity_type: node
+type: decimal
+settings:
+  precision: 10
+  scale: 2
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

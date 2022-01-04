@@ -2,6 +2,7 @@
 use \Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\CssCommand;
 use Drupal\Core\Url;
 
 /**
@@ -12,7 +13,7 @@ function sell_items_entity_operation(\Drupal\Core\Entity\EntityInterface $entity
     if ( $entity->getEntityTypeId() == 'taxonomy_term' && $entity->bundle() === 'sell_items' ) {
         $roles = \Drupal::currentUser()->getRoles();
         $operations['has_packed'] = [
-                'title' => t('以包裝'),
+                'title' => t('包裝出貨'),
                 'weight' => '100',
                 'url' => Url::fromRoute('sell_items.has_packed',  ['taxonomy_term' => $entity->id()]),
         ];
@@ -35,53 +36,67 @@ function sell_items_taxonomy_term_presave($term) {
         }
 
         $original_term = $term->original;
-        if ( $term->field_is_packed->value == true && $original_term->field_is_packed->value == false ) {
-            $stock_up_nids = \Drupal::entityQuery("node")
-                        ->condition('type', 'stock_up')
-                        ->condition('field_product_goods', $term->field_product_id->target_id)
-                        ->condition('field_storage_id', $term->field_storage->target_id)
-                        ->execute();
-            foreach($stock_up_nids as $stock_up_nid) {
-                $stock_up = \Drupal\node\Entity\Node::load($stock_up_nid);
-                if ( $stock_up->field_stock->value >= $term->field_quantity->value ) {
-                    $remain_num = $stock_up->field_stock->value - $term->field_quantity->value;
-                    $stock_up->set('field_stock', $remain_num);
-                    $stock_up->save();
-                    $message = get_product_name_by_nid($term->field_product_id->target_id) . " 儲存在 " . get_storage_name_by_nid($term->field_storage->target_id) . " 的庫存剩餘 " . $remain_num; 
-                    \Drupal::messenger()->addMessage($message);
-                } else {
-                    $message = get_product_name_by_nid($term->field_product_id->target_id) . " 儲存在 " . get_storage_name_by_nid($term->field_storage->target_id) . " 的庫存剩餘 " . $remain_num . " 不足, 儲存失敗"; 
-                    \Drupal::messenger()->addMessage($message, 'error');
-                    $term->set('field_is_packed', false);
-                    //throw new \Exception($message);
-                }
-            }
-        } else if ( $term->field_is_packed->value == false && $original_term->field_is_packed->value == true ) {
-            $stock_up_nids = \Drupal::entityQuery("node")
-                        ->condition('type', 'stock_up')
-                        ->condition('field_product_goods', $term->field_product_id->target_id)
-                        ->condition('field_storage_id', $term->field_storage->target_id)
-                        ->execute();
-            foreach($stock_up_nids as $stock_up_nid) {
-                $stock_up = \Drupal\node\Entity\Node::load($stock_up_nid);
-                $remain_num = $stock_up->field_stock->value + $term->field_quantity->value;
-                $stock_up->set('field_stock', $remain_num);
-                $stock_up->save();
-                $message = "數量" . $remain_num . "歸回以包裝前."; 
-                \Drupal::messenger()->addMessage($message);
-                break;
-            }
+        //1. history status 沒有, current status 沒有
+        //2. history status 沒有, current status 有
+        //3. history status 有， current status 沒有
+        //4. history status 有， current status 有
+        if ( empty($original_term->field_requisition_status->value) && empty($term->field_requisition_status->value) ) {
+        } else if ( empty($original_term->field_requisition_status->value) && !empty($term->field_requisition_status->value) ) {
+            update_inventory($term);
+        } else if ( !empty($original_term->field_requisition_status->value) && empty($term->field_requisition_status->value) ) {
+            revert_inventory($original_term);
+        } else if ( !empty($original_term->field_requisition_status->value) && !empty($term->field_requisition_status->value)  ){
+            revert_inventory($original_term);
+            update_inventory($term);
         }
 	}
 }
 
+function sell_items_taxonomy_term_delete($term) {
+    if ($term->bundle() === "sell_items") {
+        if ( !empty($term->field_requisition_status->value) ) {
+            revert_inventory($term);
+        }
+        \Drupal::messenger()->addMessage($term->name->value . "成功刪除.", "status");
+
+        //remove from 銷售單
+        $order_nid = $term->field_order_id->target_id;
+        $order = \Drupal\node\Entity\Node::load($order_nid);
+        $order_vid = $order->vid->value;
+
+        $connection = \Drupal::database();
+        $connection->delete('node__field_sell_products')
+                            ->condition("entity_id", $order_nid)
+                            ->condition("revision_id", $order_vid)
+                            ->condition("field_sell_products_target_id", $term->id())
+                            ->execute();
+        $connection->delete('node_revision__field_sell_products')
+                            ->condition("entity_id", $order_nid)
+                            ->condition("revision_id", $order_vid)
+                            ->condition("field_sell_products_target_id", $term->id())
+                            ->execute();
+        \Drupal::service('cache.entity')->invalidateAll();
+        \Drupal::service('cache.data')->invalidateAll();
+        \Drupal::service('cache.render')->invalidateAll();
+    }
+}
+
 function sell_items_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
     if ($form_id === 'taxonomy_term_sell_items_form' ) {
+
         $term = $form_state->getFormObject()->getEntity();
         if ( $term->isNew() ) {
             $form ['name']['widget'][0]['value']['#default_value'] = gen_sell_item_id();
-			$form ['name']['widget'][0]['value']['#disabled'] = true;
         }
+        $form ['name']['widget'][0]['value']['#disabled'] = true;
+        $form ['field_order_id']['#disabled'] = true;
+        $form ['field_product_id']['#disabled'] = true;
+
+
+        $form['field_requisition_status']['widget']['#ajax'] = [
+			'callback' => 'ajax_requisition_status_changed',
+			'event' => 'change',
+		];
 
         $form['field_order_id']['widget'][0]['target_id']['#ajax'] = array(
                 'callback' => 'ajax_order_id_was_input',
@@ -106,7 +121,19 @@ function sell_items_form_alter(&$form, FormStateInterface &$form_state, $form_id
             'callback' => 'ajax_sell_items_calculate_price',
 			'event' => 'change',
         );
+        $form['#validate'][] = 'sell_items_form_validate';
     }
+}
+
+function sell_items_form_validate($form, &$form_state) {
+    if ( $form_state->getValue('field_requisition_status')[0]['value'] == "transferred" && empty($form_state->getValue('field_temporary_storage')) ) {
+        $form_state->setError($form , t('無法儲存, 寄存倉庫沒選.'));
+    }
+}
+
+function ajax_requisition_status_changed(array $form, FormStateInterface $form_state) {
+    $ajax_response = new AjaxResponse();
+    return $ajax_response;
 }
 
 function ajax_sell_items_calculate_price(array $form, FormStateInterface $form_state) {
@@ -159,4 +186,78 @@ function gen_sell_item_id($order_id = null) {
         $replace = substr($order_id, 0, 7);
         return str_replace($replace, "P-", $order_id) . "-" . (count($total)+1);
     }
+}
+
+function revert_inventory($original) {
+    $inventory_nids = \Drupal::entityQuery("node")
+                                        ->condition('type', 'stock_up')
+                                        ->condition('field_product_goods', $original->field_product_id->target_id)
+                                        ->condition('field_storage_id', $original->field_storage->target_id)
+                                        ->execute();
+    foreach($inventory_nids as $inventory_nid) {
+        $material = \Drupal\node\Entity\Node::load($inventory_nid);
+        $quantity = $material->field_stock->value + $original->field_quantity->value;
+        $material->set('field_stock', $quantity);
+        $material->save();
+        $message = get_product_name_by_nid($original->field_product_id->target_id) . "退回倉庫 儲存在 " . get_storage_name_by_nid($original->field_storage->target_id) . " 的庫存數量 " . $quantity; 
+        \Drupal::messenger()->addMessage($message);
+        break;
+    }
+    if ( $original->field_requisition_status->value == "transferred" ) {
+        $inventory_nids = \Drupal::entityQuery("node")
+                                        ->condition('type', 'stock_up')
+                                        ->condition('field_product_goods', $original->field_product_id->target_id)
+                                        ->condition('field_storage_id', $original->field_temporary_storage->target_id)
+                                        ->execute();
+        foreach($inventory_nids as $inventory_nid) {
+            $temp_inventory = \Drupal\node\Entity\Node::load($inventory_nid);
+            $num = $temp_inventory->field_stock->value - $original->field_quantity->value;
+            $temp_inventory->set('field_stock', $num);
+            $temp_inventory->save();
+            $message = get_product_name_by_nid($original->field_product_id->target_id) . " 寄存在 " . get_storage_name_by_nid($original->field_temporary_storage->target_id) . "退回原倉庫, 剩餘數量 " . $num; 
+            \Drupal::messenger()->addMessage($message);
+            break;
+        }
+    }
+}
+
+function update_inventory($term) {
+    $inventory_nids = \Drupal::entityQuery("node")
+                                        ->condition('type', 'stock_up')
+                                        ->condition('field_product_goods', $term->field_product_id->target_id)
+                                        ->condition('field_storage_id', $term->field_storage->target_id)
+                                        ->execute();
+    foreach($inventory_nids as $inventory_nid) {
+        $material = \Drupal\node\Entity\Node::load($inventory_nid);
+        if ( $material->field_stock->value >= $term->field_quantity->value ) {
+            $remain_num = $material->field_stock->value - $term->field_quantity->value;
+            $material->set('field_stock', $remain_num);
+            $material->save();
+            $message = get_product_name_by_nid($term->field_product_id->target_id) . " 儲存在 " . get_storage_name_by_nid($term->field_storage->target_id) . " 的庫存剩餘 " . $remain_num; 
+            \Drupal::messenger()->addMessage($message);
+            if ( $term->field_requisition_status->value == "transferred" ) {
+                $inventory_nids = \Drupal::entityQuery("node")
+                                        ->condition('type', 'stock_up')
+                                        ->condition('field_product_goods', $term->field_product_id->target_id)
+                                        ->condition('field_storage_id', $term->field_temporary_storage->target_id)
+                                        ->execute();
+                foreach($inventory_nids as $inventory_nid) {
+                    $temp_inventory = \Drupal\node\Entity\Node::load($inventory_nid);
+                    $num = $temp_inventory->field_stock->value + $term->field_quantity->value;
+                    $temp_inventory->set('field_stock', $num);
+                    $temp_inventory->save();
+                    $message = get_product_name_by_nid($term->field_product_id->target_id) . " 寄存在 " . get_storage_name_by_nid($term->field_temporary_storage->target_id) . " 的庫存數量 " . $num; 
+                    \Drupal::messenger()->addMessage($message);
+                    break;
+                }
+                $temp_inventory->save();
+            }
+        } else {
+            $message = get_product_name_by_nid($term->field_product_id->target_id) . " 儲存在 " . get_storage_name_by_nid($term->field_storage->target_id) . " 的庫存剩餘 " . $remain_num . " 不足, 儲存失敗"; 
+            \Drupal::messenger()->addMessage($message, 'error');
+            $term->set('field_requisition_status', "");
+            //throw new \Exception($message);
+        }
+        break;
+    } 
 }

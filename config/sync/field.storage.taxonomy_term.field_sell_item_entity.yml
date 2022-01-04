@@ -1,0 +1,19 @@
+uuid: 01a0646f-cde3-4970-9b2e-81a0788dda67
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.field_sell_item_entity
+field_name: field_sell_item_entity
+entity_type: taxonomy_term
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

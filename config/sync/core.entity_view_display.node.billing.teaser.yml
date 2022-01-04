@@ -1,0 +1,36 @@
+uuid: ed5b62b5-b8ae-444d-8975-0b7a74111373
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.billing.field_actual_received_payment
+    - field.field.node.billing.field_customer_entity
+    - field.field.node.billing.field_deposit
+    - field.field.node.billing.field_expected_receive_payment
+    - field.field.node.billing.field_order_id
+    - field.field.node.billing.field_tax
+    - field.field.node.billing.field_total_amount_with_tax
+    - field.field.node.billing.field_total_amount_without_tax
+    - node.type.billing
+  module:
+    - user
+id: node.billing.teaser
+targetEntityType: node
+bundle: billing
+mode: teaser
+content:
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+    region: content
+hidden:
+  field_actual_received_payment: true
+  field_customer_entity: true
+  field_deposit: true
+  field_expected_receive_payment: true
+  field_order_id: true
+  field_tax: true
+  field_total_amount_with_tax: true
+  field_total_amount_without_tax: true

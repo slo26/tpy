@@ -1,0 +1,29 @@
+uuid: 482ce4df-42b3-4729-9f74-5f6e08210d6e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_order_id
+    - node.type.billing
+    - node.type.sales_order
+id: node.billing.field_order_id
+field_name: field_order_id
+entity_type: node
+bundle: billing
+label: 銷售單號碼
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      sales_order: sales_order
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

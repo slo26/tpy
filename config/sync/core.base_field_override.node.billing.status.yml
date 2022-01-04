@@ -1,0 +1,22 @@
+uuid: 2a6545b5-c2e7-4d9a-b1fe-0db06eb23f24
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.billing
+id: node.billing.status
+field_name: status
+entity_type: node
+bundle: billing
+label: Published
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

@@ -1,0 +1,17 @@
+uuid: 64822ee7-b1ba-4eca-8b08-06e6aac70a3b
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 銷售帳單
+type: billing
+description: Billing
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false

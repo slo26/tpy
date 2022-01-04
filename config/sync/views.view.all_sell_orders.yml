@@ -3,14 +3,15 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.storage.node.field_appraise_date
+    - field.storage.node.field_bill
+    - field.storage.node.field_completed_date
     - field.storage.node.field_customer_title
-    - field.storage.node.field_date_actual_delivered
-    - field.storage.node.field_date_expect_to_deliver
     - field.storage.node.field_delivery
     - field.storage.node.field_logistics
     - field.storage.node.field_order_status
-    - field.storage.node.field_receiver
-    - field.storage.node.field_sales_date
+    - field.storage.node.field_return_date
+    - field.storage.node.field_shipping_date
     - field.storage.node.field_shipping_number
     - node.type.sales_order
     - user.role.administrator
@@ -22,7 +23,7 @@ dependencies:
     - options
     - user
 id: all_sell_orders
-label: 訂單列表
+label: 銷售單列表
 module: views
 description: ''
 tag: ''
@@ -86,6 +87,119 @@ display:
           quantity: 9
       style:
         type: table
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: true
+          override: true
+          sticky: false
+          caption: ''
+          summary: ''
+          description: ''
+          columns:
+            title: title
+            field_customer_title: field_customer_title
+            field_delivery: field_delivery
+            field_logistics: field_logistics
+            field_shipping_number: field_shipping_number
+            field_appraise_date: field_appraise_date
+            field_shipping_date: field_shipping_date
+            field_completed_date: field_completed_date
+            field_return_date: field_return_date
+            nothing: nothing
+            field_bill: field_bill
+            field_order_status: field_order_status
+            operations: operations
+          info:
+            title:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_customer_title:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_delivery:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_logistics:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_shipping_number:
+              sortable: false
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_appraise_date:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_shipping_date:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_completed_date:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_return_date:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            nothing:
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_bill:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            field_order_status:
+              sortable: true
+              default_sort_order: asc
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+            operations:
+              align: ''
+              separator: ''
+              empty_column: false
+              responsive: ''
+          default: '-1'
+          empty_table: false
       row:
         type: fields
       fields:
@@ -96,7 +210,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: 訂單編號
+          label: 銷售單編號
           exclude: false
           alter:
             alter_text: false
@@ -217,14 +331,14 @@ display:
           separator: ', '
           field_api_classes: false
           plugin_id: field
-        field_sales_date:
-          id: field_sales_date
-          table: node__field_sales_date
-          field: field_sales_date
+        field_delivery:
+          id: field_delivery
+          table: node__field_delivery
+          field: field_delivery
           relationship: none
           group_type: group
           admin_label: ''
-          label: 訂單日期
+          label: 出貨方式
           exclude: false
           alter:
             alter_text: false
@@ -266,10 +380,8 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: value
-          type: datetime_default
-          settings:
-            timezone_override: ''
-            format_type: html_date
+          type: list_default
+          settings: {  }
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -406,139 +518,14 @@ display:
           separator: ', '
           field_api_classes: false
           plugin_id: field
-        field_receiver:
-          id: field_receiver
-          table: node__field_receiver
-          field: field_receiver
+        field_appraise_date:
+          id: field_appraise_date
+          table: node__field_appraise_date
+          field: field_appraise_date
           relationship: none
           group_type: group
           admin_label: ''
-          label: 收件人
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: string
-          settings:
-            link_to_entity: false
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          plugin_id: field
-        field_delivery:
-          id: field_delivery
-          table: node__field_delivery
-          field: field_delivery
-          relationship: none
-          group_type: group
-          admin_label: ''
-          label: 出貨方式
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: list_default
-          settings: {  }
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          plugin_id: field
-        field_date_expect_to_deliver:
-          id: field_date_expect_to_deliver
-          table: node__field_date_expect_to_deliver
-          field: field_date_expect_to_deliver
-          relationship: none
-          group_type: group
-          admin_label: ''
-          label: 預計出貨日
+          label: 估價日期
           exclude: false
           alter:
             alter_text: false
@@ -585,6 +572,310 @@ display:
             timezone_override: ''
             format_type: html_date
           group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          plugin_id: field
+        field_shipping_date:
+          id: field_shipping_date
+          table: node__field_shipping_date
+          field: field_shipping_date
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: 出貨日期
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: datetime_default
+          settings:
+            timezone_override: ''
+            format_type: html_date
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          plugin_id: field
+        field_completed_date:
+          id: field_completed_date
+          table: node__field_completed_date
+          field: field_completed_date
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: 銷售完成日期
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: datetime_default
+          settings:
+            timezone_override: ''
+            format_type: html_date
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          plugin_id: field
+        field_return_date:
+          id: field_return_date
+          table: node__field_return_date
+          field: field_return_date
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: 銷售退貨日期
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: datetime_default
+          settings:
+            timezone_override: ''
+            format_type: html_date
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          plugin_id: field
+        nothing:
+          id: nothing
+          table: views
+          field: nothing
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: 產品銷售
+          exclude: false
+          alter:
+            alter_text: true
+            text: 連接
+            make_link: true
+            path: '/admin/sell-items?title={{title}}'
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: _blank
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: false
+          plugin_id: custom
+        field_bill:
+          id: field_bill
+          table: node__field_bill
+          field: field_bill
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: 帳單
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: target_id
+          type: entity_reference_label
+          settings:
+            link: true
+          group_column: target_id
           group_columns: {  }
           group_rows: true
           delta_limit: 0
@@ -657,119 +948,6 @@ display:
           separator: ', '
           field_api_classes: false
           plugin_id: field
-        field_date_actual_delivered:
-          id: field_date_actual_delivered
-          table: node__field_date_actual_delivered
-          field: field_date_actual_delivered
-          relationship: none
-          group_type: group
-          admin_label: ''
-          label: 實際出貨日
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: datetime_default
-          settings:
-            timezone_override: ''
-            format_type: html_date
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          plugin_id: field
-        nothing:
-          id: nothing
-          table: views
-          field: nothing
-          relationship: none
-          group_type: group
-          admin_label: ''
-          label: 連接
-          exclude: false
-          alter:
-            alter_text: true
-            text: 產品銷售列表
-            make_link: true
-            path: '/admin/sell-items?title={{title}}'
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: _blank
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: false
-          plugin_id: custom
         operations:
           id: operations
           table: node
@@ -864,6 +1042,210 @@ display:
           entity_type: node
           entity_field: type
           plugin_id: bundle
+        field_appraise_date_value:
+          id: field_appraise_date_value
+          table: node__field_appraise_date
+          field: field_appraise_date_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: between
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: date
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_appraise_date_value_op
+            label: 估價期間
+            description: ''
+            use_operator: false
+            operator: field_appraise_date_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: appraise_date
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              employee: '0'
+              manager: '0'
+              sales: '0'
+              ceo: '0'
+            placeholder: ''
+            min_placeholder: 'Ex. 2021-12-01'
+            max_placeholder: 'Ex. 2021-12-31'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          plugin_id: datetime
+        field_shipping_date_value:
+          id: field_shipping_date_value
+          table: node__field_shipping_date
+          field: field_shipping_date_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: between
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: date
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_shipping_date_value_op
+            label: 出貨期間
+            description: ''
+            use_operator: false
+            operator: field_shipping_date_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: shipping_date
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              employee: '0'
+              manager: '0'
+              sales: '0'
+              ceo: '0'
+            placeholder: ''
+            min_placeholder: 'Ex. 2021-12-01'
+            max_placeholder: 'Ex. 2021-12-31'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          plugin_id: datetime
+        field_completed_date_value:
+          id: field_completed_date_value
+          table: node__field_completed_date
+          field: field_completed_date_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: between
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: date
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_completed_date_value_op
+            label: 銷售完成期間
+            description: ''
+            use_operator: false
+            operator: field_completed_date_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: completed_date
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              employee: '0'
+              manager: '0'
+              sales: '0'
+              ceo: '0'
+            placeholder: ''
+            min_placeholder: 'Ex. 2021-12-01'
+            max_placeholder: 'Ex. 2021-12-31'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          plugin_id: datetime
+        field_return_date_value:
+          id: field_return_date_value
+          table: node__field_return_date
+          field: field_return_date_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: between
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: date
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_return_date_value_op
+            label: 銷售退貨期間
+            description: ''
+            use_operator: false
+            operator: field_return_date_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: return_date
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              employee: '0'
+              manager: '0'
+              sales: '0'
+              ceo: '0'
+            placeholder: ''
+            min_placeholder: 'Ex. 2021-12-01'
+            max_placeholder: 'Ex. 2021-12-31'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          plugin_id: datetime
         title:
           id: title
           table: node_field_data
@@ -877,13 +1259,13 @@ display:
           exposed: true
           expose:
             operator_id: title_op
-            label: 銷售編號
+            label: 銷售單編號
             description: ''
             use_operator: false
             operator: title_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: title
+            identifier: sell-no
             required: false
             remember: false
             multiple: false
@@ -893,6 +1275,8 @@ display:
               administrator: '0'
               employee: '0'
               manager: '0'
+              sales: '0'
+              ceo: '0'
             placeholder: ''
           is_grouped: false
           group_info:
@@ -909,11 +1293,11 @@ display:
           entity_type: node
           entity_field: title
           plugin_id: string
-        field_receiver_value:
-          id: field_receiver_value
-          table: node__field_receiver
-          field: field_receiver_value
-          relationship: none
+        field_customer_title_value:
+          id: field_customer_title_value
+          table: node__field_customer_title
+          field: field_customer_title_value
+          relationship: field_customer_entity
           group_type: group
           admin_label: ''
           operator: contains
@@ -921,14 +1305,14 @@ display:
           group: 1
           exposed: true
           expose:
-            operator_id: field_receiver_value_op
-            label: 收件人
+            operator_id: field_customer_title_value_op
+            label: 客戶名稱
             description: ''
             use_operator: false
-            operator: field_receiver_value_op
+            operator: field_customer_title_value_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: receiver
+            identifier: customer_title
             required: false
             remember: false
             multiple: false
@@ -938,49 +1322,8 @@ display:
               administrator: '0'
               employee: '0'
               manager: '0'
-            placeholder: ''
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          plugin_id: string
-        field_shipping_number_value:
-          id: field_shipping_number_value
-          table: node__field_shipping_number
-          field: field_shipping_number_value
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: contains
-          value: ''
-          group: 1
-          exposed: true
-          expose:
-            operator_id: field_shipping_number_value_op
-            label: 貨運號碼
-            description: ''
-            use_operator: false
-            operator: field_shipping_number_value_op
-            operator_limit_selection: false
-            operator_list: {  }
-            identifier: shipping_number
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-              employee: '0'
-              manager: '0'
+              sales: '0'
+              ceo: '0'
             placeholder: ''
           is_grouped: false
           group_info:
@@ -1054,7 +1397,7 @@ display:
             operator_id: field_order_status_value_op
             label: 訂單狀態
             description: ''
-            use_operator: false
+            use_operator: true
             operator: field_order_status_value_op
             operator_limit_selection: false
             operator_list: {  }
@@ -1068,6 +1411,8 @@ display:
               administrator: '0'
               employee: '0'
               manager: '0'
+              sales: '0'
+              ceo: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -1099,7 +1444,7 @@ display:
           expose:
             label: ''
           granularity: second
-      title: 訂單列表
+      title: 銷售單列表
       header:
         result:
           id: result
@@ -1129,6 +1474,8 @@ display:
         operator: AND
         groups:
           1: AND
+      css_class: ''
+      group_by: false
     cache_metadata:
       max-age: -1
       contexts:
@@ -1139,14 +1486,15 @@ display:
         - 'user.node_grants:view'
         - user.roles
       tags:
+        - 'config:field.storage.node.field_appraise_date'
+        - 'config:field.storage.node.field_bill'
+        - 'config:field.storage.node.field_completed_date'
         - 'config:field.storage.node.field_customer_title'
-        - 'config:field.storage.node.field_date_actual_delivered'
-        - 'config:field.storage.node.field_date_expect_to_deliver'
         - 'config:field.storage.node.field_delivery'
         - 'config:field.storage.node.field_logistics'
         - 'config:field.storage.node.field_order_status'
-        - 'config:field.storage.node.field_receiver'
-        - 'config:field.storage.node.field_sales_date'
+        - 'config:field.storage.node.field_return_date'
+        - 'config:field.storage.node.field_shipping_date'
         - 'config:field.storage.node.field_shipping_number'
   page_1:
     display_plugin: page
@@ -1156,6 +1504,7 @@ display:
     display_options:
       display_extenders: {  }
       path: admin/all-sell-orders
+      exposed_block: false
     cache_metadata:
       max-age: -1
       contexts:
@@ -1166,12 +1515,13 @@ display:
         - 'user.node_grants:view'
         - user.roles
       tags:
+        - 'config:field.storage.node.field_appraise_date'
+        - 'config:field.storage.node.field_bill'
+        - 'config:field.storage.node.field_completed_date'
         - 'config:field.storage.node.field_customer_title'
-        - 'config:field.storage.node.field_date_actual_delivered'
-        - 'config:field.storage.node.field_date_expect_to_deliver'
         - 'config:field.storage.node.field_delivery'
         - 'config:field.storage.node.field_logistics'
         - 'config:field.storage.node.field_order_status'
-        - 'config:field.storage.node.field_receiver'
-        - 'config:field.storage.node.field_sales_date'
+        - 'config:field.storage.node.field_return_date'
+        - 'config:field.storage.node.field_shipping_date'
         - 'config:field.storage.node.field_shipping_number'

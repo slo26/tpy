@@ -1,0 +1,20 @@
+uuid: e92725b7-d033-4efe-ab61-c22e1d17e448
+langcode: en
+status: true
+dependencies:
+  module:
+    - datetime
+    - node
+id: node.field_expected_receive_payment
+field_name: field_expected_receive_payment
+entity_type: node
+type: datetime
+settings:
+  datetime_type: date
+module: datetime
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

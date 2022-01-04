@@ -1,0 +1,23 @@
+uuid: fab45972-6dcc-442f-b525-baa485aa1224
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_bill_statement_completed
+    - taxonomy.vocabulary.sale_bill_statement
+id: taxonomy_term.sale_bill_statement.field_bill_statement_completed
+field_name: field_bill_statement_completed
+entity_type: taxonomy_term
+bundle: sale_bill_statement
+label: 對帳單結案
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'True'
+  off_label: 'False'
+field_type: boolean

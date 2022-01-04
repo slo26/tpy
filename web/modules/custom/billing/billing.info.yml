@@ -1,0 +1,7 @@
+name: Billing
+type: module
+description: This module is to handle Sales Billing
+core_version_requirement: ^8 || ^9
+package: tpy 
+
+

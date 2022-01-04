@@ -1,0 +1,20 @@
+uuid: c8758967-eda6-405d-b60a-650c135b78bb
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_total_amount_without_tax
+field_name: field_total_amount_without_tax
+entity_type: node
+type: decimal
+settings:
+  precision: 10
+  scale: 2
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

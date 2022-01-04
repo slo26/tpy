@@ -1,0 +1,21 @@
+uuid: 066e50d2-307a-49f5-a14a-76f542641df9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_expected_receive_payment
+    - node.type.billing
+  module:
+    - datetime
+id: node.billing.field_expected_receive_payment
+field_name: field_expected_receive_payment
+entity_type: node
+bundle: billing
+label: 預計收款日期
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

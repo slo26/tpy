@@ -3,34 +3,57 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.sales_order.field_appraise_date
+    - field.field.node.sales_order.field_bill
     - field.field.node.sales_order.field_comments_for_print
+    - field.field.node.sales_order.field_completed_date
+    - field.field.node.sales_order.field_created_date
     - field.field.node.sales_order.field_customer_entity
-    - field.field.node.sales_order.field_date_actual_delivered
-    - field.field.node.sales_order.field_date_expect_to_deliver
     - field.field.node.sales_order.field_delivery
     - field.field.node.sales_order.field_logistics
     - field.field.node.sales_order.field_order_status
     - field.field.node.sales_order.field_receiver
-    - field.field.node.sales_order.field_sales_date
+    - field.field.node.sales_order.field_return_date
+    - field.field.node.sales_order.field_rich_comment
     - field.field.node.sales_order.field_sell_products
     - field.field.node.sales_order.field_shipping_address
+    - field.field.node.sales_order.field_shipping_date
     - field.field.node.sales_order.field_shipping_number
     - node.type.sales_order
   module:
     - datetime
+    - text
 id: node.sales_order.default
 targetEntityType: node
 bundle: sales_order
 mode: default
 content:
+  field_appraise_date:
+    type: datetime_default
+    weight: 10
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   field_comments_for_print:
-    weight: 26
+    weight: 7
     settings: {  }
     third_party_settings: {  }
     type: options_select
     region: content
+  field_completed_date:
+    type: datetime_default
+    weight: 12
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_created_date:
+    weight: 9
+    settings: {  }
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
   field_customer_entity:
-    weight: 3
+    weight: 1
     settings:
       match_operator: CONTAINS
       match_limit: 10
@@ -39,60 +62,62 @@ content:
     third_party_settings: {  }
     type: entity_reference_autocomplete
     region: content
-  field_date_actual_delivered:
-    weight: 9
-    settings: {  }
-    third_party_settings: {  }
-    type: datetime_default
-    region: content
-  field_date_expect_to_deliver:
-    weight: 8
-    settings: {  }
-    third_party_settings: {  }
-    type: datetime_default
-    region: content
   field_delivery:
-    weight: 5
+    weight: 4
     settings: {  }
     third_party_settings: {  }
     type: options_select
     region: content
   field_logistics:
-    weight: 6
+    weight: 5
     settings: {  }
     third_party_settings: {  }
     type: options_select
     region: content
   field_order_status:
-    weight: 2
+    weight: 14
     settings: {  }
     third_party_settings: {  }
     type: options_select
     region: content
   field_receiver:
-    weight: 4
+    weight: 2
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
     type: string_textfield
     region: content
-  field_sales_date:
-    weight: 0
+  field_return_date:
+    type: datetime_default
+    weight: 13
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: datetime_default
+  field_rich_comment:
+    weight: 8
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea
     region: content
   field_shipping_address:
-    weight: 4
+    weight: 3
     settings:
       size: 60
       placeholder: '採用公司地址, 如果此欄位留空白'
     third_party_settings: {  }
     type: string_textfield
     region: content
+  field_shipping_date:
+    type: datetime_default
+    weight: 11
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   field_shipping_number:
-    weight: 7
+    weight: 6
     settings:
       size: 60
       placeholder: ''
@@ -101,7 +126,7 @@ content:
     region: content
   title:
     type: string_textfield
-    weight: 1
+    weight: 0
     region: content
     settings:
       size: 60
@@ -109,6 +134,7 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
+  field_bill: true
   field_sell_products: true
   path: true
   promote: true

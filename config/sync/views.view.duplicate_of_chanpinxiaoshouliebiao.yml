@@ -5,13 +5,14 @@ dependencies:
   config:
     - field.storage.node.field_customer_title
     - field.storage.taxonomy_term.field_discount
-    - field.storage.taxonomy_term.field_is_packed
     - field.storage.taxonomy_term.field_price
     - field.storage.taxonomy_term.field_quantity
+    - field.storage.taxonomy_term.field_requisition_status
     - field.storage.taxonomy_term.field_total_amount
     - taxonomy.vocabulary.sell_items
   module:
     - node
+    - options
     - rest
     - serialization
     - taxonomy
@@ -437,14 +438,14 @@ display:
           separator: ', '
           field_api_classes: false
           plugin_id: field
-        field_is_packed:
-          id: field_is_packed
-          table: taxonomy_term__field_is_packed
-          field: field_is_packed
+        field_requisition_status:
+          id: field_requisition_status
+          table: taxonomy_term__field_requisition_status
+          field: field_requisition_status
           relationship: none
           group_type: group
           admin_label: ''
-          label: 以包裝
+          label: 狀態
           exclude: false
           alter:
             alter_text: false
@@ -486,11 +487,8 @@ display:
           empty_zero: false
           hide_alter_empty: true
           click_sort_column: value
-          type: boolean
-          settings:
-            format: custom
-            format_custom_true: 是
-            format_custom_false: 無
+          type: list_default
+          settings: {  }
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -941,9 +939,9 @@ display:
       tags:
         - 'config:field.storage.node.field_customer_title'
         - 'config:field.storage.taxonomy_term.field_discount'
-        - 'config:field.storage.taxonomy_term.field_is_packed'
         - 'config:field.storage.taxonomy_term.field_price'
         - 'config:field.storage.taxonomy_term.field_quantity'
+        - 'config:field.storage.taxonomy_term.field_requisition_status'
         - 'config:field.storage.taxonomy_term.field_total_amount'
   rest_export_1:
     display_plugin: rest_export
@@ -979,7 +977,7 @@ display:
       tags:
         - 'config:field.storage.node.field_customer_title'
         - 'config:field.storage.taxonomy_term.field_discount'
-        - 'config:field.storage.taxonomy_term.field_is_packed'
         - 'config:field.storage.taxonomy_term.field_price'
         - 'config:field.storage.taxonomy_term.field_quantity'
+        - 'config:field.storage.taxonomy_term.field_requisition_status'
         - 'config:field.storage.taxonomy_term.field_total_amount'

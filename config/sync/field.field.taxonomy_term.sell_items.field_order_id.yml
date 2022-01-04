@@ -10,9 +10,9 @@ id: taxonomy_term.sell_items.field_order_id
 field_name: field_order_id
 entity_type: taxonomy_term
 bundle: sell_items
-label: 訂單編號
+label: 銷售單號碼
 description: ''
-required: false
+required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''

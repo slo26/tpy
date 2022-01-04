@@ -1,0 +1,20 @@
+uuid: 91291fd1-0d81-44e4-b6a8-ec0811e436f3
+langcode: en
+status: true
+dependencies:
+  module:
+    - taxonomy
+id: taxonomy_term.field_remain_amount
+field_name: field_remain_amount
+entity_type: taxonomy_term
+type: decimal
+settings:
+  precision: 10
+  scale: 2
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

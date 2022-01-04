@@ -46,6 +46,14 @@ custom_toolbar.main:
   requirements:
     _role: 'authenticated'
 
+custom_toolbar.billing:
+  path: '/admin/billing'
+  defaults:
+    _controller: '\Drupal\custom_toolbar\Controller\CustomToolbarController::billStatement'
+    _title: '帳單'
+  requirements:
+    _role: 'authenticated'
+
 custom_toolbar.dropdown_setting:
   path: '/admin/dropdown-setting'
   defaults:
@@ -53,3 +61,12 @@ custom_toolbar.dropdown_setting:
     _title: '下拉選項設定修改'
   requirements:
     _role: 'authenticated'
+
+custom_toolbar.documents_export:
+  path: '/admin/billing/sale-billing-statement'
+  defaults:
+    _form: 'Drupal\custom_toolbar\Form\GenerateMonthlySaleBillingStatement'
+    _title: '產生應收月結對帳單'
+  requirements:
+    _permission: 'authenticated'
+

@@ -1,0 +1,18 @@
+uuid: dbc80ff0-7674-476a-b680-1dab1ef59674
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.billing
+id: node.billing.title
+field_name: title
+entity_type: node
+bundle: billing
+label: 帳單號碼
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

@@ -1,0 +1,21 @@
+uuid: 1e32ec1c-b41d-444b-be5f-720ee3b942f4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_begin_date
+    - taxonomy.vocabulary.sale_bill_statement
+  module:
+    - datetime
+id: taxonomy_term.sale_bill_statement.field_begin_date
+field_name: field_begin_date
+entity_type: taxonomy_term
+bundle: sale_bill_statement
+label: 月結起始日
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

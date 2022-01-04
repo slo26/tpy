@@ -1,0 +1,29 @@
+uuid: abe465e1-1c6f-412c-931e-68ecd3375715
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_sell_item_entity
+    - taxonomy.vocabulary.sale_bill_statement
+    - taxonomy.vocabulary.sell_items
+id: taxonomy_term.sale_bill_statement.field_sell_item_entity
+field_name: field_sell_item_entity
+entity_type: taxonomy_term
+bundle: sale_bill_statement
+label: 銷售產品單
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      sell_items: sell_items
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

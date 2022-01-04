@@ -5,28 +5,31 @@ dependencies:
   config:
     - field.field.taxonomy_term.sell_items.field_comments
     - field.field.taxonomy_term.sell_items.field_discount
-    - field.field.taxonomy_term.sell_items.field_is_packed
     - field.field.taxonomy_term.sell_items.field_order_id
     - field.field.taxonomy_term.sell_items.field_price
     - field.field.taxonomy_term.sell_items.field_product_id
     - field.field.taxonomy_term.sell_items.field_quantity
+    - field.field.taxonomy_term.sell_items.field_requisition_status
     - field.field.taxonomy_term.sell_items.field_storage
+    - field.field.taxonomy_term.sell_items.field_temporary_storage
     - field.field.taxonomy_term.sell_items.field_total_amount
     - taxonomy.vocabulary.sell_items
+  module:
+    - options
 id: taxonomy_term.sell_items.default
 targetEntityType: taxonomy_term
 bundle: sell_items
 mode: default
 content:
   field_comments:
-    weight: 8
+    weight: 10
     label: above
     settings: {  }
     third_party_settings: {  }
     type: basic_string
     region: content
   field_discount:
-    weight: 6
+    weight: 8
     label: above
     settings:
       thousand_separator: ''
@@ -35,16 +38,6 @@ content:
       prefix_suffix: true
     third_party_settings: {  }
     type: number_decimal
-    region: content
-  field_is_packed:
-    weight: 3
-    label: above
-    settings:
-      format: default
-      format_custom_false: ''
-      format_custom_true: ''
-    third_party_settings: {  }
-    type: boolean
     region: content
   field_order_id:
     weight: 0
@@ -55,7 +48,7 @@ content:
     type: entity_reference_label
     region: content
   field_price:
-    weight: 5
+    weight: 7
     label: above
     settings:
       thousand_separator: ''
@@ -74,13 +67,20 @@ content:
     type: entity_reference_label
     region: content
   field_quantity:
-    weight: 4
+    weight: 6
     label: above
     settings:
       thousand_separator: ''
       prefix_suffix: true
     third_party_settings: {  }
     type: number_integer
+    region: content
+  field_requisition_status:
+    weight: 4
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: list_default
     region: content
   field_storage:
     weight: 2
@@ -90,8 +90,16 @@ content:
     third_party_settings: {  }
     type: entity_reference_label
     region: content
+  field_temporary_storage:
+    weight: 3
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+    region: content
   field_total_amount:
-    weight: 7
+    weight: 9
     label: above
     settings:
       thousand_separator: ''

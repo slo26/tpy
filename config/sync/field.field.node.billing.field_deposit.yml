@@ -1,0 +1,23 @@
+uuid: 7e696a41-3730-41b4-8af0-0ded939b3074
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_deposit
+    - node.type.billing
+id: node.billing.field_deposit
+field_name: field_deposit
+entity_type: node
+bundle: billing
+label: 訂金
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

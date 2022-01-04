@@ -16,19 +16,19 @@ settings:
       label: 草稿
     -
       value: rate
-      label: 估價
-    -
-      value: stock_up
-      label: 備貨
+      label: 銷售估價
     -
       value: shipment
-      label: 出貨
+      label: 銷售出貨
     -
       value: done
-      label: 完成
+      label: 銷售完成
     -
       value: drop
-      label: 不成立
+      label: 銷售不成立
+    -
+      value: return
+      label: 銷售退貨
   allowed_values_function: ''
 module: options
 locked: false

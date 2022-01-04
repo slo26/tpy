@@ -6,6 +6,14 @@ dependencies:
     - filter.format.basic_html
   module:
     - ckeditor
+    - editor_file
+third_party_settings:
+  editor_file:
+    status: true
+    scheme: private
+    directory: inline-files
+    extensions: txt
+    max_size: ''
 _core:
   default_config_hash: AqlPmO16LvJI4D0Ih6u4GFQIzqr5OnLgAUSjcUGWk2g
 format: basic_html
@@ -43,13 +51,48 @@ settings:
           items:
             - Source
   plugins:
+    language:
+      language_list: un
     stylescombo:
       styles: ''
+    font:
+      font_names: ''
+      font_sizes: ''
+    codesnippet:
+      highlight_style: arta
+      highlight_languages:
+        apache: apache
+        bash: bash
+        cs: cs
+        cpp: cpp
+        coffeescript: coffeescript
+        css: css
+        diff: diff
+        html: html
+        http: http
+        ini: ini
+        java: java
+        javascript: javascript
+        json: json
+        makefile: makefile
+        markdown: markdown
+        nginx: nginx
+        objectivec: objectivec
+        perl: perl
+        php: php
+        python: python
+        ruby: ruby
+        sql: sql
+        vbscript: vbscript
+        xhtml: xhtml
+        xml: xml
+    colorbutton:
+      colors: ''
 image_upload:
   status: true
   scheme: public
   directory: inline-images
-  max_size: ''
+  max_size: '10 MB'
   max_dimensions:
-    width: 0
-    height: 0
+    width: null
+    height: null

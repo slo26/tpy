@@ -4,17 +4,21 @@ status: false
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
+    - field.field.node.sales_order.field_appraise_date
+    - field.field.node.sales_order.field_bill
     - field.field.node.sales_order.field_comments_for_print
+    - field.field.node.sales_order.field_completed_date
+    - field.field.node.sales_order.field_created_date
     - field.field.node.sales_order.field_customer_entity
-    - field.field.node.sales_order.field_date_actual_delivered
-    - field.field.node.sales_order.field_date_expect_to_deliver
     - field.field.node.sales_order.field_delivery
     - field.field.node.sales_order.field_logistics
     - field.field.node.sales_order.field_order_status
     - field.field.node.sales_order.field_receiver
-    - field.field.node.sales_order.field_sales_date
+    - field.field.node.sales_order.field_return_date
+    - field.field.node.sales_order.field_rich_comment
     - field.field.node.sales_order.field_sell_products
     - field.field.node.sales_order.field_shipping_address
+    - field.field.node.sales_order.field_shipping_date
     - field.field.node.sales_order.field_shipping_number
     - node.type.sales_order
   module:
@@ -30,15 +34,19 @@ content:
     third_party_settings: {  }
     region: content
 hidden:
+  field_appraise_date: true
+  field_bill: true
   field_comments_for_print: true
+  field_completed_date: true
+  field_created_date: true
   field_customer_entity: true
-  field_date_actual_delivered: true
-  field_date_expect_to_deliver: true
   field_delivery: true
   field_logistics: true
   field_order_status: true
   field_receiver: true
-  field_sales_date: true
+  field_return_date: true
+  field_rich_comment: true
   field_sell_products: true
   field_shipping_address: true
+  field_shipping_date: true
   field_shipping_number: true

@@ -1,0 +1,8 @@
+uuid: 8efaece9-11d5-4654-8712-0e470ed1943e
+langcode: en
+status: true
+dependencies: {  }
+name: 'Sale Bill Statement'
+vid: sale_bill_statement
+description: 應收對帳單
+weight: 0

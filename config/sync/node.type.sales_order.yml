@@ -8,7 +8,7 @@ third_party_settings:
   menu_ui:
     available_menus: {  }
     parent: ''
-name: 銷售
+name: 銷售單
 type: sales_order
 description: 'Sales order'
 help: ''

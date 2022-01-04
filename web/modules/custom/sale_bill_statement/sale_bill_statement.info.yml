@@ -1,0 +1,7 @@
+name: Sale Bill Statement 
+type: module
+description: This module is to handle all items in Sale Bill Statement
+core_version_requirement: ^8 || ^9
+package: tpy
+
+

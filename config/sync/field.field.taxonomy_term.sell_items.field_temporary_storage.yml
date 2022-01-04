@@ -1,0 +1,29 @@
+uuid: 1cf57da2-1de4-4fd1-b54e-370b7d3b1687
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_temporary_storage
+    - node.type.storage
+    - taxonomy.vocabulary.sell_items
+id: taxonomy_term.sell_items.field_temporary_storage
+field_name: field_temporary_storage
+entity_type: taxonomy_term
+bundle: sell_items
+label: 寄存倉庫
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      storage: storage
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

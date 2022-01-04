@@ -110,12 +110,12 @@ class OpenHistorySellItemDialogForm extends FormBase {
         $table = '<div id="open-history-sell-item"></div>';
         if ( sizeof($json) > 0 ) {
             $table = '<div id="open-history-sell-item"><table>-BODY-</table></div>';
-            $table_head = "<thead><tr><td>產品訂單編號</td><td>銷售編號</td><td>產品型號</td><td>客戶名稱</td><td>以包裝</td><td>數量</td><td>單價</td><td>折扣(%)</td><td>總價</td></tr></thead>";
+            $table_head = "<thead><tr><td>產品訂單編號</td><td>銷售編號</td><td>產品型號</td><td>客戶名稱</td><td>狀態</td><td>數量</td><td>單價</td><td>折扣(%)</td><td>總價</td></tr></thead>";
             $table_body_begin = '<tbody>';
             $table_body = '';
             for($i=0; $i < count($json); $i++) {
                 $row = $json[$i];
-                $table_body .= '<tr><td>' . $row->{"name"} . '</td><td>' . $row->{"title"} . '</td><td>' . $row->{"title_1"} . '</td><td>' . $row->{"field_customer_title"} . '</td><td>' . $row->{"field_is_packed"} . '</td><td>' . $row->{"field_quantity"} . '</td><td>' . $row->{"field_price"} . '</td><td>' . $row->{"field_discount"} . '</td><td>' . $row->{"field_total_amount"}. '</td></tr>';
+                $table_body .= '<tr><td>' . $row->{"name"} . '</td><td>' . $row->{"title"} . '</td><td>' . $row->{"title_1"} . '</td><td>' . $row->{"field_customer_title"} . '</td><td>' . $row->{"field_requisition_status"} . '</td><td>' . $row->{"field_quantity"} . '</td><td>' . $row->{"field_price"} . '</td><td>' . $row->{"field_discount"} . '</td><td>' . $row->{"field_total_amount"}. '</td></tr>';
             }
             $table_body_end = '</tbody>';
             $table_body = $table_head . $table_body_begin . $table_body . $table_body_end;
@@ -124,4 +124,5 @@ class OpenHistorySellItemDialogForm extends FormBase {
         return $table;
     }
 }
+
 

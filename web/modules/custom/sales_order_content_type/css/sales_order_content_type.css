@@ -96,12 +96,76 @@ table#sales-oder-table-footer{
 }
 
 #sales-oder-table-comment pre{
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
     margin: 0;
+    border: 0px;
 }
 
 #views-exposed-form-create-content-button {
     float: right;
 }
 
+#edit-field-created-date-0-value, 
+#edit-field-return-date-0-value, 
+#edit-field-completed-date-0-value,
+#edit-field-appraise-date-0-value,
+#edit-field-shipping-date-0-value,
+#cke_1_bottom, #edit-field-rich-comment-0-format, 
+.form-item-field-rich-comment-0-format {
+    display:none;
+}
 
+#edit-field-created-date-0-value--description,
+#edit-field-return-date-0-value--description, 
+#edit-field-completed-date-0-value--description,
+#edit-field-appraise-date-0-value--description,
+#edit-field-shipping-date-0-value--description {
+    margin-bottom:5px;
+}
 
+.js-form-item-sell-no {
+    clear:both;
+}
+
+div.js-form-item-return-date-max label,
+div.js-form-item-completed-date-max label,
+div.js-form-item-shipping-date-max label,
+div.js-form-item-appraise-date-max label,
+div.js-form-item-return-date-min label,
+div.js-form-item-completed-date-min label,
+div.js-form-item-shipping-date-min label,
+div.js-form-item-appraise-date-min label {
+    text-indent: -9999px;
+    line-height: 0;
+}
+
+div.js-form-item-return-date-min label:after,
+div.js-form-item-completed-date-min label:after,
+div.js-form-item-shipping-date-min label:after,
+div.js-form-item-appraise-date-min label:after {
+    content: "起始日";
+    text-indent: 0;
+    display: block;
+    line-height: initial;
+}
+
+div.js-form-item-return-date-max label:after,
+div.js-form-item-completed-date-max label:after,
+div.js-form-item-shipping-date-max label:after,
+div.js-form-item-appraise-date-max label:after {
+    content: "結速日";
+    text-indent: 0;
+    display: block;
+    line-height: initial;
+}
+
+div.deposite, 
+div.total-amount-without-tax,
+div.tax,
+div.total-amount-with-tax,
+div.remain-amount,
+div.expected-recevied-payment {
+    padding-bottom:7px;
+}

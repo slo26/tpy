@@ -1,0 +1,16 @@
+<?php
+use \Drupal\Core\Form\FormStateInterface;
+
+function sale_bill_statement_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
+    if ($form_id === 'taxonomy_term_sale_bill_statement_form' ) {
+        $form ['name']['widget'][0]['value']['#disabled'] = true;
+        $form ['field_customer_entity']['#disabled'] = true;
+        $form ['field_bill_statement_year_month']['#disabled'] = true;
+        $form ['field_end_date']['#disabled'] = true;
+        $form ['field_begin_date']['#disabled'] = true;
+        $form ['field_total_amount_after_tax']['#disabled'] = true;
+        $form ['field_total_amount_before_tax']['#disabled'] = true;
+        $form ['field_sell_entity']['#disabled'] = true;
+        $form ['field_sell_item_entity']['#disabled'] = true;
+    }
+}

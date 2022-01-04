@@ -1,0 +1,21 @@
+uuid: c4c460e6-626d-439a-bec7-62fefe14fa7a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_appraise_date
+    - node.type.sales_order
+  module:
+    - datetime
+id: node.sales_order.field_appraise_date
+field_name: field_appraise_date
+entity_type: node
+bundle: sales_order
+label: 估價日期
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime
