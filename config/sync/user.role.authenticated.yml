@@ -66,6 +66,7 @@ permissions:
   - 'skip comment approval'
   - 'use advanced search'
   - 'use ckeditor_uploadimage'
+  - 'use text format comment'
   - 'use text format full_html'
   - 'view all revisions'
   - 'view any unpublished content'

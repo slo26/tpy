@@ -4,15 +4,20 @@ status: true
 dependencies:
   config:
     - field.field.node.billing.field_actual_received_payment
+    - field.field.node.billing.field_bill_type
     - field.field.node.billing.field_customer_entity
     - field.field.node.billing.field_deposit
     - field.field.node.billing.field_expected_receive_payment
     - field.field.node.billing.field_order_id
+    - field.field.node.billing.field_receipt_number
     - field.field.node.billing.field_tax
+    - field.field.node.billing.field_tax_rate
     - field.field.node.billing.field_total_amount_with_tax
     - field.field.node.billing.field_total_amount_without_tax
+    - field.field.node.billing.field_write_off_amount
     - node.type.billing
   module:
+    - content_moderation
     - datetime
 id: node.billing.default
 targetEntityType: node
@@ -20,13 +25,19 @@ bundle: billing
 mode: default
 content:
   field_actual_received_payment:
-    weight: 8
+    weight: 11
     settings: {  }
     third_party_settings: {  }
     type: datetime_default
     region: content
+  field_bill_type:
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
+    type: options_select
+    region: content
   field_customer_entity:
-    weight: 2
+    weight: 3
     settings:
       match_operator: CONTAINS
       match_limit: 10
@@ -36,20 +47,20 @@ content:
     type: entity_reference_autocomplete
     region: content
   field_deposit:
-    weight: 4
+    weight: 8
     settings:
       placeholder: ''
     third_party_settings: {  }
     type: number
     region: content
   field_expected_receive_payment:
-    weight: 3
+    weight: 10
     settings: {  }
     third_party_settings: {  }
     type: datetime_default
     region: content
   field_order_id:
-    weight: 1
+    weight: 2
     settings:
       match_operator: CONTAINS
       match_limit: 10
@@ -58,8 +69,22 @@ content:
     third_party_settings: {  }
     type: entity_reference_autocomplete
     region: content
+  field_receipt_number:
+    weight: 12
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
   field_tax:
     weight: 6
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  field_tax_rate:
+    weight: 4
     settings:
       placeholder: ''
     third_party_settings: {  }
@@ -79,9 +104,22 @@ content:
     third_party_settings: {  }
     type: number
     region: content
+  field_write_off_amount:
+    weight: 9
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+    type: number
+    region: content
+  moderation_state:
+    type: moderation_state_default
+    weight: 13
+    settings: {  }
+    region: content
+    third_party_settings: {  }
   title:
     type: string_textfield
-    weight: 0
+    weight: 1
     region: content
     settings:
       size: 60

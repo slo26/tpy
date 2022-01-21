@@ -1,0 +1,23 @@
+uuid: 0e512d1b-9d18-417d-b354-89483e2b24ec
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_tax_rate
+    - node.type.billing
+id: node.billing.field_tax_rate
+field_name: field_tax_rate
+entity_type: node
+bundle: billing
+label: 營業稅率
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: 0
+  max: null
+  prefix: ''
+  suffix: '%'
+field_type: integer

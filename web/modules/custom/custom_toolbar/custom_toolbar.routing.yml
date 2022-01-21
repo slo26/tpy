@@ -70,3 +70,17 @@ custom_toolbar.documents_export:
   requirements:
     _permission: 'authenticated'
 
+custom_toolbar.show_bill_statement:
+  path: '/admin/view/{customer_nid}/show-bill-statement/{begin_date}/{end_date}'
+  defaults:
+    _form: '\Drupal\custom_toolbar\Form\ShowBillStatementDialogForm'
+  requirements:
+    _permission: 'authenticated'
+
+custom_toolbar.show_detail_monthly_bill_statement:
+  path: '/admin/bill/monthly-detail-bill-statementForm/{customer_nid}/{begin_date}/{end_date}'
+  defaults:
+    _form: 'Drupal\custom_toolbar\Form\MonthlyDetailBillStatementForm'
+    _title: '月份應收帳款明細表'
+  requirements:
+    _permission: 'authenticated'

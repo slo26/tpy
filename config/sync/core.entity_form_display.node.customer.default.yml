@@ -183,7 +183,7 @@ content:
     region: content
     settings:
       size: 60
-      placeholder: 客戶編號
+      placeholder: CU-
     third_party_settings: {  }
 hidden:
   created: true

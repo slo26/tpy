@@ -1,0 +1,27 @@
+uuid: 325f7911-8f0d-4c5d-8065-9e6b9a1ff94c
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_bill_type
+field_name: field_bill_type
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: sell
+      label: 銷售
+    -
+      value: return
+      label: 退貨
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

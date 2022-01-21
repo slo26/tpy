@@ -1,5 +1,6 @@
 module:
   admin_toolbar: 0
+  allowed_formats: 0
   anchor_link: 0
   automated_cron: 0
   bef_select: 0
@@ -56,6 +57,7 @@ module:
   path: 0
   path_alias: 0
   pdf_api: 0
+  product: 0
   purchase_items: 0
   purchase_order: 0
   quickedit: 0
@@ -63,7 +65,6 @@ module:
   render_view: 0
   rest: 0
   restui: 0
-  sale_bill_statement: 0
   sales_order_content_type: 0
   search: 0
   sell_items: 0
@@ -80,6 +81,7 @@ module:
   user: 0
   vendor_content_type: 0
   view_unpublished: 0
+  views_simple_math_field: 0
   views_ui: 0
   workbench: 0
   workflows: 0

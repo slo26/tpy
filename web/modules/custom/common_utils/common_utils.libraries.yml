@@ -9,4 +9,12 @@ common_utils:
   dependencies:
     - core/jquery
     - core/drupal
+    - common_utils/common_utility
 
+common_utility:
+  js:
+    js/utility.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
+    - core/drupalSettings

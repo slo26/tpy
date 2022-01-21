@@ -1,0 +1,9 @@
+#block-seven-page-title,
+.breadcrumb {
+    display: none;
+}
+
+@page {
+    size: auto;
+    margin:0;
+}

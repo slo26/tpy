@@ -13,14 +13,18 @@ dependencies:
     - field.field.node.sales_order.field_logistics
     - field.field.node.sales_order.field_order_status
     - field.field.node.sales_order.field_receiver
+    - field.field.node.sales_order.field_return_completed
     - field.field.node.sales_order.field_return_date
+    - field.field.node.sales_order.field_return_sale_entity
     - field.field.node.sales_order.field_rich_comment
     - field.field.node.sales_order.field_sell_products
     - field.field.node.sales_order.field_shipping_address
     - field.field.node.sales_order.field_shipping_date
     - field.field.node.sales_order.field_shipping_number
     - node.type.sales_order
+    - workflows.workflow.editorial
   module:
+    - content_moderation
     - datetime
     - text
 id: node.sales_order.default
@@ -74,12 +78,6 @@ content:
     third_party_settings: {  }
     type: options_select
     region: content
-  field_order_status:
-    weight: 14
-    settings: {  }
-    third_party_settings: {  }
-    type: options_select
-    region: content
   field_receiver:
     weight: 2
     settings:
@@ -87,6 +85,12 @@ content:
       placeholder: ''
     third_party_settings: {  }
     type: string_textfield
+    region: content
+  field_return_completed:
+    weight: 14
+    settings: {  }
+    third_party_settings: {  }
+    type: datetime_default
     region: content
   field_return_date:
     type: datetime_default
@@ -124,6 +128,12 @@ content:
     third_party_settings: {  }
     type: string_textfield
     region: content
+  moderation_state:
+    type: moderation_state_default
+    weight: 15
+    settings: {  }
+    region: content
+    third_party_settings: {  }
   title:
     type: string_textfield
     weight: 0
@@ -135,6 +145,8 @@ content:
 hidden:
   created: true
   field_bill: true
+  field_order_status: true
+  field_return_sale_entity: true
   field_sell_products: true
   path: true
   promote: true

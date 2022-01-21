@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.storage.node.field_actual_received_payment
+    - field.storage.node.field_bill_type
     - field.storage.node.field_customer_entity
     - field.storage.node.field_customer_title
     - field.storage.node.field_deposit
@@ -13,12 +14,15 @@ dependencies:
     - field.storage.node.field_tax
     - field.storage.node.field_total_amount_with_tax
     - field.storage.node.field_total_amount_without_tax
+    - field.storage.node.field_write_off_amount
     - node.type.billing
     - user.role.authenticated
   module:
     - datetime
     - node
+    - options
     - user
+    - views_simple_math_field
 id: all_billing
 label: 帳單列表
 module: views
@@ -186,6 +190,68 @@ display:
         options:
           view_mode: teaser
       fields:
+        field_bill_type:
+          id: field_bill_type
+          table: node__field_bill_type
+          field: field_bill_type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: 帳單種類
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: list_default
+          settings: {  }
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          plugin_id: field
         title:
           id: title
           table: node_field_data
@@ -321,7 +387,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: 客戶
+          label: 客戶碼號
           exclude: false
           alter:
             alter_text: false
@@ -429,72 +495,6 @@ display:
           type: string
           settings:
             link_to_entity: false
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          plugin_id: field
-        field_deposit:
-          id: field_deposit
-          table: node__field_deposit
-          field: field_deposit
-          relationship: none
-          group_type: group
-          admin_label: ''
-          label: 訂金
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: number_decimal
-          settings:
-            thousand_separator: ','
-            prefix_suffix: false
-            decimal_separator: .
-            scale: 2
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -704,6 +704,210 @@ display:
           separator: ', '
           field_api_classes: false
           plugin_id: field
+        field_deposit:
+          id: field_deposit
+          table: node__field_deposit
+          field: field_deposit
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: 訂金
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: number_decimal
+          settings:
+            thousand_separator: ','
+            prefix_suffix: false
+            decimal_separator: .
+            scale: 2
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          plugin_id: field
+        field_write_off_amount:
+          id: field_write_off_amount
+          table: node__field_write_off_amount
+          field: field_write_off_amount
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: 沖銷金額
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: number_decimal
+          settings:
+            thousand_separator: ','
+            prefix_suffix: false
+            decimal_separator: .
+            scale: 2
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          plugin_id: field
+        field_views_simple_math_field:
+          id: field_views_simple_math_field
+          table: views_simple_math_field
+          field: field_views_simple_math_field
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: 餘額
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          set_precision: 0
+          precision: '0'
+          decimal: .
+          separator: ','
+          format_plural: 0
+          format_plural_string: !!binary MQNAY291bnQ=
+          prefix: $
+          suffix: ''
+          fieldset_one:
+            data_field:
+              field_total_amount_with_tax: field_total_amount_with_tax
+              field_deposit: field_deposit
+              field_write_off_amount: field_write_off_amount
+              title: 0
+              field_order_id: 0
+              field_customer_entity: 0
+              field_customer_title: 0
+              field_total_amount_without_tax: 0
+              field_tax: 0
+              field_expected_receive_payment: 0
+              field_actual_received_payment: 0
+              operations: 0
+            formula: ' @field_total_amount_with_tax - @field_deposit - @field_write_off_amount'
+          plugin_id: field_views_simple_math_field
         field_expected_receive_payment:
           id: field_expected_receive_payment
           table: node__field_expected_receive_payment
@@ -896,6 +1100,109 @@ display:
           expose:
             operator_limit_selection: false
             operator_list: {  }
+          group: 1
+        field_expected_receive_payment_value:
+          id: field_expected_receive_payment_value
+          table: node__field_expected_receive_payment
+          field: field_expected_receive_payment_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: between
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: date
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_expected_receive_payment_value_op
+            label: 預計收款期間
+            description: ''
+            use_operator: false
+            operator: field_expected_receive_payment_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_expected_receive_payment_value
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              employee: '0'
+              manager: '0'
+              sales: '0'
+              ceo: '0'
+            placeholder: ''
+            min_placeholder: 'Ex. 2022-01-01'
+            max_placeholder: 'Ex. 2022-01-25'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          plugin_id: datetime
+        field_actual_received_payment_value:
+          id: field_actual_received_payment_value
+          table: node__field_actual_received_payment
+          field: field_actual_received_payment_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: '='
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: date
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_actual_received_payment_value_op
+            label: 實際收款日期
+            description: ''
+            use_operator: true
+            operator: field_actual_received_payment_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_actual_received_payment_value
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              employee: '0'
+              manager: '0'
+              sales: '0'
+              ceo: '0'
+            placeholder: 'Ex. 2022-01-25'
+            min_placeholder: 'Ex. 2022-01-01'
+            max_placeholder: 'Ex. 2022-01-25'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          plugin_id: datetime
         field_customer_title_value:
           id: field_customer_title_value
           table: node__field_customer_title
@@ -903,7 +1210,7 @@ display:
           relationship: field_customer_entity
           group_type: group
           admin_label: ''
-          operator: '!='
+          operator: contains
           value: ''
           group: 1
           exposed: true
@@ -988,26 +1295,26 @@ display:
           entity_type: node
           entity_field: title
           plugin_id: string
-        field_expected_receive_payment_value:
-          id: field_expected_receive_payment_value
-          table: node__field_expected_receive_payment
-          field: field_expected_receive_payment_value
+        field_bill_type_value:
+          id: field_bill_type_value
+          table: node__field_bill_type
+          field: field_bill_type_value
           relationship: none
           group_type: group
           admin_label: ''
-          operator: '='
-          value: ''
+          operator: or
+          value: {  }
           group: 1
           exposed: true
           expose:
-            operator_id: field_expected_receive_payment_value_op
-            label: 預計收款月份
+            operator_id: field_bill_type_value_op
+            label: 帳單種類
             description: ''
             use_operator: false
-            operator: field_expected_receive_payment_value_op
+            operator: field_bill_type_value_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: expected_receive_payment
+            identifier: field_bill_type_value
             required: false
             remember: false
             multiple: false
@@ -1019,7 +1326,7 @@ display:
               manager: '0'
               sales: '0'
               ceo: '0'
-            placeholder: 2022-01
+            reduce: false
           is_grouped: false
           group_info:
             label: ''
@@ -1032,7 +1339,8 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          plugin_id: string
+          reduce_duplicates: false
+          plugin_id: list_field
       sorts:
         created:
           id: created
@@ -1084,6 +1392,11 @@ display:
           plugin_id: standard
       arguments: {  }
       display_extenders: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
+      group_by: false
     cache_metadata:
       max-age: -1
       contexts:
@@ -1095,6 +1408,7 @@ display:
         - user.roles
       tags:
         - 'config:field.storage.node.field_actual_received_payment'
+        - 'config:field.storage.node.field_bill_type'
         - 'config:field.storage.node.field_customer_entity'
         - 'config:field.storage.node.field_customer_title'
         - 'config:field.storage.node.field_deposit'
@@ -1103,6 +1417,7 @@ display:
         - 'config:field.storage.node.field_tax'
         - 'config:field.storage.node.field_total_amount_with_tax'
         - 'config:field.storage.node.field_total_amount_without_tax'
+        - 'config:field.storage.node.field_write_off_amount'
   page_1:
     display_plugin: page
     id: page_1
@@ -1122,6 +1437,7 @@ display:
         - user.roles
       tags:
         - 'config:field.storage.node.field_actual_received_payment'
+        - 'config:field.storage.node.field_bill_type'
         - 'config:field.storage.node.field_customer_entity'
         - 'config:field.storage.node.field_customer_title'
         - 'config:field.storage.node.field_deposit'
@@ -1130,3 +1446,4 @@ display:
         - 'config:field.storage.node.field_tax'
         - 'config:field.storage.node.field_total_amount_with_tax'
         - 'config:field.storage.node.field_total_amount_without_tax'
+        - 'config:field.storage.node.field_write_off_amount'

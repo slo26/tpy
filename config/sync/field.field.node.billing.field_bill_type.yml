@@ -1,0 +1,23 @@
+uuid: e0dbd5b4-6729-4f11-bdb7-e877de511795
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bill_type
+    - node.type.billing
+  module:
+    - options
+id: node.billing.field_bill_type
+field_name: field_bill_type
+entity_type: node
+bundle: billing
+label: 帳單種類
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: sell
+default_value_callback: ''
+settings: {  }
+field_type: list_string

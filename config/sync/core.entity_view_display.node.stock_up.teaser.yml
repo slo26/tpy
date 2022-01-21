@@ -7,6 +7,7 @@ dependencies:
     - field.field.node.stock_up.field_product_goods
     - field.field.node.stock_up.field_stock
     - field.field.node.stock_up.field_storage_id
+    - field.field.node.stock_up.field_unit
     - node.type.stock_up
   module:
     - user
@@ -24,3 +25,4 @@ hidden:
   field_product_goods: true
   field_stock: true
   field_storage_id: true
+  field_unit: true

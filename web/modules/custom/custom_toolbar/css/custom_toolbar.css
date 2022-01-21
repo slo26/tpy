@@ -1,0 +1,77 @@
+.form-item-begin-date {
+	float:left;
+}
+
+.form-item-end-date {
+	display: inline-table;
+	padding-left: 5px;
+}
+
+.bill-statement-customer-number {
+	display: inline-flex;
+}
+
+#edit-generate {
+	vertical-align: bottom;
+	margin-bottom: 15px;
+}
+
+.show-bill-statement-dialog-form {
+	background-color: #F2F4F4;
+}
+
+#monthly-detail-bill-s1,
+#monthly-detail-bill-s2,
+#monthly-detail-bill-s3,
+#monthly-detail-bill-s4 {
+	margin-bottom: 0.1em;
+    line-height: 1.1;
+}
+
+#monthly-detail-bill-s1-tpy,
+#monthly-detail-bill-s1-title {
+	font-size: 22px;
+}
+
+#monthly-detail-bill-s1-tpy td, 
+#monthly-detail-bill-s1-addr td, 
+#monthly-detail-bill-s1-phone td,
+#monthly-detail-bill-s1-title td {
+	text-align: center;
+	padding: 3px;
+}
+
+#monthly-detail-bill-s1-tpy, 
+#monthly-detail-bill-s1-addr, 
+#monthly-detail-bill-s1-phone,
+#monthly-detail-bill-s1-title,
+#monthly-detail-bill-s2 tbody tr,
+#monthly-detail-bill-s4 tbody tr{
+	border-bottom: 0px;
+}
+
+#monthly-detail-bill-s2 tbody tr td,
+#monthly-detail-bill-s4 tbody tr td{
+	padding: 3px;
+}
+
+#monthly-detail-bill-s3 tbody tr td,
+#monthly-detail-bill-s3 tbody tr th {
+	padding: 5px;
+}
+
+#monthly-detail-bill-s3-begin, 
+#monthly-detail-bill-s3-mid {
+	/*border-top: 1px solid;*/
+	border-bottom: 0px;
+}
+
+#monthly-detail-bill-s3-end {
+	border-top: 1px solid;
+	border-bottom: 0px solid;
+}
+
+#monthly-detail-bill-s3-end td {
+	text-align: center;
+}
+

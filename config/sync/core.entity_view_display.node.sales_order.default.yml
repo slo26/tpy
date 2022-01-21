@@ -13,7 +13,9 @@ dependencies:
     - field.field.node.sales_order.field_logistics
     - field.field.node.sales_order.field_order_status
     - field.field.node.sales_order.field_receiver
+    - field.field.node.sales_order.field_return_completed
     - field.field.node.sales_order.field_return_date
+    - field.field.node.sales_order.field_return_sale_entity
     - field.field.node.sales_order.field_rich_comment
     - field.field.node.sales_order.field_sell_products
     - field.field.node.sales_order.field_shipping_address
@@ -30,17 +32,22 @@ targetEntityType: node
 bundle: sales_order
 mode: default
 content:
+  content_moderation_control:
+    weight: 0
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   field_appraise_date:
-    weight: 12
+    weight: 10
     label: above
     settings:
-      format_type: medium
       timezone_override: ''
+      format_type: html_date
     third_party_settings: {  }
     type: datetime_default
     region: content
   field_bill:
-    weight: 18
+    weight: 15
     label: above
     settings:
       link: true
@@ -48,20 +55,20 @@ content:
     type: entity_reference_label
     region: content
   field_completed_date:
-    weight: 14
+    weight: 12
     label: above
     settings:
-      format_type: medium
       timezone_override: ''
+      format_type: html_date
     third_party_settings: {  }
     type: datetime_default
     region: content
   field_created_date:
-    weight: 16
+    weight: 14
     label: above
     settings:
-      format_type: medium
       timezone_override: ''
+      format_type: html_date
     third_party_settings: {  }
     type: datetime_default
     region: content
@@ -102,17 +109,34 @@ content:
     third_party_settings: {  }
     type: string
     region: content
-  field_return_date:
-    weight: 15
+  field_return_completed:
+    weight: 16
     label: above
     settings:
-      format_type: medium
       timezone_override: ''
+      format_type: html_date
     third_party_settings: {  }
     type: datetime_default
     region: content
+  field_return_date:
+    weight: 13
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: html_date
+    third_party_settings: {  }
+    type: datetime_default
+    region: content
+  field_return_sale_entity:
+    type: entity_reference_label
+    weight: 17
+    region: content
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
   field_rich_comment:
-    weight: 11
+    weight: 9
     label: above
     settings: {  }
     third_party_settings: {  }
@@ -135,11 +159,11 @@ content:
     type: string
     region: content
   field_shipping_date:
-    weight: 13
+    weight: 11
     label: above
     settings:
-      format_type: medium
       timezone_override: ''
+      format_type: html_date
     third_party_settings: {  }
     type: datetime_default
     region: content

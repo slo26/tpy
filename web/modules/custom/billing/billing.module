@@ -1,5 +1,9 @@
 <?php
 use \Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax;
 
 function billing_node_presave(Drupal\Core\Entity\EntityInterface $node) {
     if ( $node->type->target_id == "billing" ) {
@@ -20,10 +24,14 @@ function billing_node_presave(Drupal\Core\Entity\EntityInterface $node) {
 				$total_amount = $total_amount + $obj[$i]->field_total_amount_value;
 			}										
 		}
-        $tax = \Drupal::config('common_utils.settings')->get('sales_tax')/100;
-		$node->set('field_total_amount_without_tax', $total_amount);
-        $node->set('field_tax', $total_amount * $tax);
-        $node->set('field_total_amount_with_tax', $total_amount + ($total_amount * $tax));
+        if ( $node->field_bill_type->value == "return" ) {
+            $total_amount = $total_amount * -1;
+        }
+        //$tax = \Drupal::config('common_utils.settings')->get('sales_tax')/100;
+        $tax = $node->field_tax_rate->value/100;
+		$node->set('field_total_amount_without_tax', round($total_amount));
+        $node->set('field_tax', round($total_amount * $tax));
+        $node->set('field_total_amount_with_tax', round($total_amount + ($total_amount * $tax)));
     }
 }
 
@@ -34,10 +42,54 @@ function billing_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
             $unique_id = generate_unique_id_for_bill();
             $form ['title']['widget'][0]['value']['#default_value'] = $unique_id;
         }
+        $form ['field_bill_type']['#disabled'] = true;
         $form ['title']['#disabled'] = true;
         $form ['field_order_id']['#disabled'] = true;
         $form ['field_customer_entity']['#disabled'] = true;
+        $form ['field_total_amount_with_tax']['#disabled'] = true;
+        $form ['field_tax']['#disabled'] = true;
+        $form ['field_total_amount_without_tax']['#disabled'] = true;
+
+        $remain_to_pay = $node->field_total_amount_with_tax->value - $node->field_deposit->value - $node->field_write_off_amount->value;
+        $form['remain_to_pay'] = array(
+            '#title' => 剩餘未繳含稅總金額,
+            '#type' => 'textfield',
+            '#default_value' => number_format($remain_to_pay),
+            '#size' => 8,
+			'#weight' => 9,
+			'#prefix' => '<div class="remain-to-pay">',
+			'#suffix' => '</div>',
+            '#disabled' => true,
+        );
+
+        $label = "";
+        if ( $node->field_bill_type->value == "return" ) {
+            $form['field_expected_receive_payment']['widget'][0]['value']['#title'] = '預計退款日期';
+            $form['field_actual_received_payment']['widget'][0]['value']['#title'] = '實際退款日期';
+            $form['field_write_off_amount']['widget'][0]['value']['#title'] = '沖銷退款金額';
+            $form['field_receipt_number']['#access'] = FALSE;
+            $form['field_deposit']['#access'] = FALSE;
+            $form['remain_to_pay']['#title'] = '剩餘未退含稅總金額';
+        }
+
+        $form['field_deposit']['widget'][0]['value']['#ajax'] = array(
+                'callback' => 'ajax_calculate_remain_to_pay_amount',
+				'event' => 'change',
+        );
+
+        $form['field_write_off_amount']['widget'][0]['value']['#ajax'] = array(
+                'callback' => 'ajax_calculate_remain_to_pay_amount',
+				'event' => 'change',
+        );
     }
+}
+
+function ajax_calculate_remain_to_pay_amount(array $form, FormStateInterface $form_state) {
+	$ajax_response = new AjaxResponse();
+    $remain_to_pay = calculate_remain_to_pay_amount($form_state);
+
+    $ajax_response->addCommand(new InvokeCommand('#edit-remain-to-pay', 'val', [$remain_to_pay]));	
+	return $ajax_response;
 }
 
 function billing_node_delete(Drupal\Core\Entity\EntityInterface $node) {
@@ -81,3 +133,11 @@ function generate_unique_id_for_bill() {
     }
     return $unique_id;
 } 
+
+function calculate_remain_to_pay_amount($form_state) {
+    $total_amount_with_tax = $form_state->getValue('field_total_amount_with_tax')[0]['value']; 
+    $deposit = $form_state->getValue('field_deposit')[0]['value'];
+    $write_off_amount = $form_state->getValue('field_write_off_amount')[0]['value'];
+    $remain_to_pay = $total_amount_with_tax - $deposit - $write_off_amount;
+    return $remain_to_pay;
+}

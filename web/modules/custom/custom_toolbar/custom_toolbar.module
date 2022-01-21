@@ -1,0 +1,6 @@
+<?php
+
+function custom_toolbar_preprocess_html(&$variables) {
+    //Add JS and CSS library
+    $variables['#attached']['library'][] = 'custom_toolbar/custom_toolbar';
+}

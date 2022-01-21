@@ -2,62 +2,127 @@ uuid: fd837ef2-6d8f-46b7-b069-a537fe9be055
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.sales_order
   module:
     - content_moderation
 _core:
   default_config_hash: Ln7YAg2WXZ-5wn9ib-v9qOKFxF2YZLnwSKtX-V455hE
 id: editorial
-label: Sell
+label: 銷售/銷退
 type: content_moderation
 type_settings:
   states:
     archived:
       label: Archived
-      weight: 5
+      weight: 3
       published: false
       default_revision: true
-    draft:
-      label: Draft
+    done:
       published: false
       default_revision: false
+      label: 銷售完成
+      weight: -2
+    draft:
+      published: false
+      default_revision: false
+      label: 草稿
       weight: -5
+    drop:
+      published: false
+      default_revision: false
+      label: 銷售不成立
+      weight: -1
     published:
       label: Published
       published: true
       default_revision: true
-      weight: 0
-  transitions:
-    archive:
-      label: Archive
-      from:
-        - published
-      to: archived
       weight: 2
-    archived_draft:
-      label: 'Restore to Draft'
-      from:
-        - archived
-      to: draft
-      weight: 3
-    archived_published:
-      label: Restore
-      from:
-        - archived
-      to: published
-      weight: 4
+    rate:
+      published: false
+      default_revision: false
+      label: 銷售估價
+      weight: -4
+    return:
+      published: false
+      default_revision: false
+      label: 銷售退貨
+      weight: 0
+    return_completed:
+      published: false
+      default_revision: false
+      label: 銷退完成
+      weight: 1
+    shipment:
+      published: false
+      default_revision: false
+      label: 銷售出貨
+      weight: -3
+  transitions:
     create_new_draft:
       label: 'Create New Draft'
       to: draft
+      weight: -4
+      from:
+        - draft
+        - rate
+        - return
+        - shipment
+    draft_rate:
+      label: 草稿-銷售估價
+      from:
+        - draft
+      to: rate
+      weight: -3
+    draft_shipment:
+      label: 草稿-銷售出貨
+      from:
+        - draft
+      to: shipment
+      weight: -2
+    rate_rate:
+      label: 銷售估價-銷售估價
+      from:
+        - rate
+      to: rate
       weight: 0
+    rate_shipment:
+      label: 銷售估價-銷售出貨
       from:
-        - draft
-        - published
-    publish:
-      label: Publish
-      to: published
+        - rate
+      to: shipment
+      weight: -1
+    return_completed_return_completed:
+      label: 銷退完成-銷退完成
+      from:
+        - return_completed
+      to: return_completed
+      weight: 5
+    return_return:
+      label: 銷售退貨-銷售退貨
+      from:
+        - return
+      to: return
+      weight: 4
+    return_return_completed:
+      label: 銷售退貨-銷退完成
+      from:
+        - return
+      to: return_completed
+      weight: 3
+    shipment_done:
+      label: 銷售出貨-銷售完成
+      from:
+        - shipment
+      to: done
       weight: 1
+    shipment_shipment:
+      label: ' 銷售出貨- 銷售出貨'
       from:
-        - draft
-        - published
-  entity_types: {  }
+        - shipment
+      to: shipment
+      weight: 2
+  entity_types:
+    node:
+      - sales_order
   default_moderation_state: draft

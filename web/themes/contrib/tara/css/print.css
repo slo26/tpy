@@ -6,7 +6,8 @@
 #breadcrumb,
 .full-page-search,
 .main-menu,
-#header{
+#header,
+#block-seven-page-title {
     display: none;
 }
 

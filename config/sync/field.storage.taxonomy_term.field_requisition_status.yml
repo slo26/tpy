@@ -13,10 +13,13 @@ settings:
   allowed_values:
     -
       value: packed
-      label: 包裝出貨
+      label: 領料並包裝出貨
     -
       value: transferred
       label: 轉寄倉
+    -
+      value: returned_to_inventory
+      label: 退貨並退入倉
   allowed_values_function: ''
 module: options
 locked: false

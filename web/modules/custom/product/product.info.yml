@@ -1,0 +1,7 @@
+name: Product
+type: module
+description: This module is to handle all Products activies
+core_version_requirement: ^8 || ^9
+package: tpy 
+
+

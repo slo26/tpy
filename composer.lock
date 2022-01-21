@@ -4,8 +4,50 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2a844f3d8b7ce32c8da442dd85baf621",
+    "content-hash": "99c0af22014e868d45e4df1a494955e6",
     "packages": [
+        {
+            "name": "andileco/eval-math",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/andileco/eval-math.git",
+                "reference": "1777246a1a624985c3a7c4193fd358e72f4cf232"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/andileco/eval-math/zipball/1777246a1a624985c3a7c4193fd358e72f4cf232",
+                "reference": "1777246a1a624985c3a7c4193fd358e72f4cf232",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.6 || ^7 || ^8.0"
+            },
+            "require-dev": {
+                "php-coveralls/php-coveralls": "^2",
+                "phpunit/phpunit": "^5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Andileco\\Util\\EvalMath\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "description": "EvalMath",
+            "keywords": [
+                "EvalMath"
+            ],
+            "time": "2021-12-13T20:40:58+00:00"
+        },
         {
             "name": "asm89/stack-cors",
             "version": "1.3.0",
@@ -1413,6 +1455,54 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/admin_toolbar",
                 "issues": "https://www.drupal.org/project/issues/admin_toolbar"
+            }
+        },
+        {
+            "name": "drupal/allowed_formats",
+            "version": "1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/allowed_formats.git",
+                "reference": "8.x-1.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/allowed_formats-8.x-1.3.zip",
+                "reference": "8.x-1.3",
+                "shasum": "4c3c036d7b41428d6e22b61f1219de0ab012feec"
+            },
+            "require": {
+                "drupal/core": "^8.7.7 || ^9"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.3",
+                    "datestamp": "1592909219",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "floretan",
+                    "homepage": "https://www.drupal.org/user/66163"
+                },
+                {
+                    "name": "nord102",
+                    "homepage": "https://www.drupal.org/user/3471419"
+                }
+            ],
+            "description": "Limit which text formats are available for each field instance.",
+            "homepage": "https://www.drupal.org/project/allowed_formats",
+            "support": {
+                "source": "https://git.drupalcode.org/project/allowed_formats"
             }
         },
         {
@@ -2940,6 +3030,56 @@
             "homepage": "https://www.drupal.org/project/view_unpublished",
             "support": {
                 "source": "https://git.drupalcode.org/project/view_unpublished"
+            }
+        },
+        {
+            "name": "drupal/views_simple_math_field",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/views_simple_math_field.git",
+                "reference": "3.0.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/views_simple_math_field-3.0.0.zip",
+                "reference": "3.0.0",
+                "shasum": "f869c056b614e6f28f74c8b321bbdaf565e24745"
+            },
+            "require": {
+                "andileco/eval-math": "^3.0.0",
+                "drupal/core": "^8.7|^9.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "3.0.0",
+                    "datestamp": "1639501553",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Beakerboy",
+                    "homepage": "https://www.drupal.org/user/1700098"
+                },
+                {
+                    "name": "andileco",
+                    "homepage": "https://www.drupal.org/user/2054544"
+                }
+            ],
+            "description": "Math operations over selected fields",
+            "homepage": "https://www.drupal.org/project/views_simple_math_field",
+            "support": {
+                "source": "http://cgit.drupalcode.org/views_simple_math_field",
+                "issues": "https://www.drupal.org/project/issues/views_simple_math_field"
             }
         },
         {

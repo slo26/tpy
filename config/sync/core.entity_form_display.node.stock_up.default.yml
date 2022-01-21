@@ -6,6 +6,7 @@ dependencies:
     - field.field.node.stock_up.field_product_goods
     - field.field.node.stock_up.field_stock
     - field.field.node.stock_up.field_storage_id
+    - field.field.node.stock_up.field_unit
     - node.type.stock_up
 id: node.stock_up.default
 targetEntityType: node
@@ -34,6 +35,14 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: options_select
+    region: content
+  field_unit:
+    weight: 26
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
     region: content
 hidden:
   created: true

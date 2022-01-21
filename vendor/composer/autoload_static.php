@@ -229,6 +229,7 @@ class ComposerStaticInit9ef2c6da7dd8d243a15187a92a323bca
         'A' => 
         array (
             'Asm89\\Stack\\' => 12,
+            'Andileco\\Util\\EvalMath\\' => 23,
         ),
     );
 
@@ -709,6 +710,10 @@ class ComposerStaticInit9ef2c6da7dd8d243a15187a92a323bca
         'Asm89\\Stack\\' => 
         array (
             0 => __DIR__ . '/..' . '/asm89/stack-cors/src/Asm89/Stack',
+        ),
+        'Andileco\\Util\\EvalMath\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/andileco/eval-math/src',
         ),
     );
 

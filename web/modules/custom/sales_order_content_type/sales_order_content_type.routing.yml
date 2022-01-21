@@ -1,4 +1,4 @@
-sales_order_content_type.form:
+isales_order_content_type.form:
   path: '/admin/config/example_form'
   defaults:
     _form: 'Drupal\sales_order_content_type\Form\AddItemToOrderModalForm'
@@ -22,3 +22,4 @@ sales_order_content_type.open_modal_form:
     _permission: 'administer site configuration'
   options:
     _admin_route: TRUE
+

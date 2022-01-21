@@ -1,0 +1,23 @@
+uuid: 59259601-fa20-4d4b-8f6b-aa8d33c3f3b5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_sell_type
+    - taxonomy.vocabulary.sell_items
+  module:
+    - options
+id: taxonomy_term.sell_items.field_sell_type
+field_name: field_sell_type
+entity_type: taxonomy_term
+bundle: sell_items
+label: 銷售種類
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: sell
+default_value_callback: ''
+settings: {  }
+field_type: list_string

@@ -73,8 +73,8 @@ class CustomToolbarController extends ControllerBase {
         $markup .= '<li>';
         $markup .= '<a href="/admin/structure/types/manage/sales_order/fields/node.sales_order.field_order_status/storage">';
         $markup .= '<span class="label">訂單狀態</span>';
-        $settings = getFieldStorageSettingsAllowedValues('field_order_status', 'sales_order');
-        $markup .= '<div class="description">以下是目前的設定:</br>' .  implode(", ", $settings) .'</div>';
+        //$settings = getFieldStorageSettingsAllowedValues('field_order_status', 'sales_order');
+        //$markup .= '<div class="description">以下是目前的設定:</br>' .  implode(", ", $settings) .'</div>';
         $markup .= '</a></li>';
         $markup .= '<li>';
         $markup .= '<a href="/admin/structure/types/manage/purchase_order/fields/node.purchase_order.field_purchase_status/storage">';
@@ -122,11 +122,6 @@ class CustomToolbarController extends ControllerBase {
         $markup .= '<a href="/admin/billing/sale-billing-statement">';
         $markup .= '<span class="label">建立應收對帳單</span>';
         $markup .= '<div class="description">建立應收對帳單</div>';
-        $markup .= '</a></li>';
-        $markup .= '<li>';
-        $markup .= '<a href="/admin/sale-bill-statement">';
-        $markup .= '<span class="label">應收月結帳單列表</span>';
-        $markup .= '<div class="description">應收月結帳單列表</div>';
         $markup .= '</a></li>';
         $markup .= '<li>';
         $markup .= '<a href="/admin/all-billing">';

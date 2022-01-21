@@ -1,0 +1,8 @@
+custom_toolbar:
+  version: VERSION
+  css:
+    theme:
+      css/custom_toolbar.css: {}
+      css/print.css: { media: print }
+  dependencies:
+    - common_utils/common_utility

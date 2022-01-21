@@ -8,6 +8,7 @@ dependencies:
     - field.storage.taxonomy_term.field_price
     - field.storage.taxonomy_term.field_quantity
     - field.storage.taxonomy_term.field_requisition_status
+    - field.storage.taxonomy_term.field_sell_type
     - field.storage.taxonomy_term.field_storage
     - field.storage.taxonomy_term.field_temporary_storage
     - field.storage.taxonomy_term.field_total_amount
@@ -191,6 +192,68 @@ display:
       row:
         type: fields
       fields:
+        field_sell_type:
+          id: field_sell_type
+          table: taxonomy_term__field_sell_type
+          field: field_sell_type
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: 銷售種類
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: list_default
+          settings: {  }
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          plugin_id: field
         name:
           id: name
           table: taxonomy_term_field_data
@@ -965,6 +1028,52 @@ display:
             operator_limit_selection: false
             operator_list: {  }
           group: 1
+        field_sell_type_value:
+          id: field_sell_type_value
+          table: taxonomy_term__field_sell_type
+          field: field_sell_type_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_sell_type_value_op
+            label: 銷售種類
+            description: ''
+            use_operator: false
+            operator: field_sell_type_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_sell_type_value
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              employee: '0'
+              manager: '0'
+              sales: '0'
+              ceo: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          plugin_id: list_field
         title:
           id: title
           table: node_field_data
@@ -1223,6 +1332,7 @@ display:
         - 'config:field.storage.taxonomy_term.field_price'
         - 'config:field.storage.taxonomy_term.field_quantity'
         - 'config:field.storage.taxonomy_term.field_requisition_status'
+        - 'config:field.storage.taxonomy_term.field_sell_type'
         - 'config:field.storage.taxonomy_term.field_storage'
         - 'config:field.storage.taxonomy_term.field_temporary_storage'
         - 'config:field.storage.taxonomy_term.field_total_amount'
@@ -1248,6 +1358,7 @@ display:
         - 'config:field.storage.taxonomy_term.field_price'
         - 'config:field.storage.taxonomy_term.field_quantity'
         - 'config:field.storage.taxonomy_term.field_requisition_status'
+        - 'config:field.storage.taxonomy_term.field_sell_type'
         - 'config:field.storage.taxonomy_term.field_storage'
         - 'config:field.storage.taxonomy_term.field_temporary_storage'
         - 'config:field.storage.taxonomy_term.field_total_amount'

@@ -1,0 +1,20 @@
+uuid: 9e4189eb-eb0d-4588-8cab-092b0a084805
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_write_off_amount
+field_name: field_write_off_amount
+entity_type: node
+type: decimal
+settings:
+  precision: 10
+  scale: 2
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

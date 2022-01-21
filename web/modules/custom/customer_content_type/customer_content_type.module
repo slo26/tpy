@@ -1,5 +1,9 @@
 <?php
 use \Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax;
 
 function customer_content_type_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
 	if ( $form_id === 'node_customer_form' || $form_id === 'node_customer_edit_form' ) {
@@ -23,6 +27,17 @@ function customer_content_type_form_alter(&$form, FormStateInterface &$form_stat
 			}
 			$form ['title']['widget'][0]['value']['#default_value'] = $customer_id;
 		}
+		$form['title']['widget'][0]['value']['#ajax'] = array(
+                'callback' => 'ajax_check_customer_unique_id',
+				'event' => 'change',
+        );
+
+        $form['title_message'] = array(
+			'#type' => 'markup',
+			'#markup' => '<div class="title-message"></div>',
+            '#weight' => 0,
+        );
+
 		$form['contact_window'] = array(
 						'#type' => 'details',
 						'#title' => t('聯絡人資訊'),
@@ -32,6 +47,20 @@ function customer_content_type_form_alter(&$form, FormStateInterface &$form_stat
 		$form['field_contact_person']['#group'] = 'contact_window';
 		$form['field_mobile']['#group'] = 'contact_window';
 	}
+}
+
+function ajax_check_customer_unique_id(array $form, FormStateInterface $form_state) {
+	$ajax_response = new AjaxResponse();
+	$title = $form_state->getValue('title')[0]['value'];
+    
+    $ajax_response->addCommand(new HtmlCommand('.title-message', ''));
+    $query = \Drupal::entityQuery("node")->condition('type', 'customer')->condition('title', $title)->execute();
+    if ( count($query) > 0 ) {
+        $ajax_response->addCommand(new HtmlCommand('.title-message', '<font color="red">客戶編號重複, 請重新命名</font>'));
+        $ajax_response->addCommand(new InvokeCommand('#edit-title-0-value', 'val', [""]));
+    }
+    
+	return $ajax_response;
 }
 
 function customer_content_type_node_presave(Drupal\Core\Entity\EntityInterface $node){
