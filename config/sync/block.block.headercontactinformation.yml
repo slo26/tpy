@@ -17,8 +17,8 @@ plugin: 'block_content:10fb93ae-563b-4c8d-9aa8-b7595a38d7c5'
 settings:
   id: 'block_content:10fb93ae-563b-4c8d-9aa8-b7595a38d7c5'
   label: 'Header Contact Information'
-  provider: block_content
   label_display: '0'
+  provider: block_content
   status: true
   info: ''
   view_mode: full

@@ -1,45 +1,45 @@
+_core:
+  default_config_hash: o4bYR9ZupWb3AsOIizTUG4g-nu1mdJqA59UB7QT-ifQ
 definitions:
   contact__site_page:
-    enabled: true
     menu_name: footer
     parent: ''
     weight: 0
     expanded: false
+    enabled: true
   standard__front_page:
-    weight: -50
     menu_name: main
     parent: ''
-    enabled: false
+    weight: -50
     expanded: false
+    enabled: false
   workbench__my_edited:
-    weight: -48
     menu_name: workbench
     parent: ''
+    weight: -48
     expanded: false
     enabled: false
   workbench__configure:
-    weight: -41
     menu_name: workbench
     parent: ''
+    weight: -41
     expanded: false
     enabled: false
   workbench__content:
+    menu_name: workbench
+    parent: ''
     weight: -50
-    menu_name: workbench
-    parent: ''
+    expanded: false
     enabled: true
-    expanded: false
   workbench__create_content:
-    enabled: false
     menu_name: workbench
     parent: ''
-    expanded: false
     weight: -49
-  workbench__all_content:
+    expanded: false
     enabled: false
+  workbench__all_content:
     menu_name: workbench
     parent: ''
-    expanded: false
     weight: -47
-_core:
-  default_config_hash: o4bYR9ZupWb3AsOIizTUG4g-nu1mdJqA59UB7QT-ifQ
+    expanded: false
+    enabled: false

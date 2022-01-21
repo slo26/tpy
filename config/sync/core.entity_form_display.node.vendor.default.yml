@@ -28,144 +28,144 @@ bundle: vendor
 mode: default
 content:
   field_account_name:
+    type: string_textfield
     weight: 14
+    region: content
     settings:
       size: 30
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_address:
+    type: string_textfield
     weight: 5
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_bank_account:
+    type: string_textfield
     weight: 12
+    region: content
     settings:
       size: 30
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_bank_name:
+    type: string_textfield
     weight: 9
+    region: content
     settings:
       size: 30
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_bank_routing_number:
+    type: string_textfield
     weight: 13
+    region: content
     settings:
       size: 30
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_branch_name:
+    type: string_textfield
     weight: 10
+    region: content
     settings:
       size: 30
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_contact_person:
+    type: string_textfield
     weight: 6
+    region: content
     settings:
       size: 30
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_country:
+    type: options_select
     weight: 11
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: options_select
-    region: content
   field_email:
-    weight: 8
-    settings:
-      size: 30
-      placeholder: ''
-    third_party_settings: {  }
     type: email_default
+    weight: 8
     region: content
+    settings:
+      placeholder: ''
+      size: 30
+    third_party_settings: {  }
   field_fax:
+    type: string_textfield
     weight: 4
+    region: content
     settings:
       size: 30
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_long_comment:
+    type: string_textarea
     weight: 18
+    region: content
     settings:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
-    type: string_textarea
-    region: content
   field_mobile:
+    type: string_textfield
     weight: 7
+    region: content
     settings:
       size: 30
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_payment:
+    type: options_select
     weight: 15
+    region: content
     settings: {  }
     third_party_settings: {  }
-    type: options_select
-    region: content
   field_payment_condition:
+    type: string_textfield
     weight: 16
+    region: content
     settings:
       size: 30
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_payment_due:
-    weight: 17
-    settings:
-      placeholder: ''
-    third_party_settings: {  }
     type: number
+    weight: 17
     region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
   field_phone:
+    type: string_textfield
     weight: 3
+    region: content
     settings:
       size: 30
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_uniform_number:
+    type: string_textfield
     weight: 2
+    region: content
     settings:
       size: 30
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_vendor_name:
+    type: string_textfield
     weight: 1
+    region: content
     settings:
       size: 30
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   title:
     type: string_textfield
     weight: 0
