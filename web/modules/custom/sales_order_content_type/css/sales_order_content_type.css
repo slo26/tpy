@@ -117,12 +117,19 @@ table#sales-oder-table-footer{
     display:none;
 }
 
+.original-sale, 
 #edit-field-created-date-0-value--description,
 #edit-field-return-date-0-value--description, 
 #edit-field-completed-date-0-value--description,
 #edit-field-appraise-date-0-value--description,
 #edit-field-shipping-date-0-value--description {
     margin-bottom:5px;
+}
+
+.original-sale,
+.bill-link {
+    font-size: inherit;
+    font-weight: bold;
 }
 
 /*.js-form-item-sell-no,*/

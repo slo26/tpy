@@ -1,5 +1,7 @@
 #edit-preview,
-#edit-body-0-format {
+#edit-body-0-format, 
+#edit-revision-information,
+#edit-meta-author {
     display:none;
 }
 

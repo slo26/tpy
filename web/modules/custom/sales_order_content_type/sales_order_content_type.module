@@ -252,7 +252,7 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 						'#attached' => [
 							'library' => ['node/drupal.node'],
 						],
-						'#weight' => -50,
+						//'#weight' => -50,
 						'#open' => true,
 						'#open' => true,
         );
@@ -264,6 +264,12 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
             '#weight' => 19,
         );*/
 		
+		if ( $node->moderation_state->value == "return" || $node->moderation_state->value == "return_completed" ) {
+			$original_sales = \Drupal\node\Entity\Node::load($node->field_original_sales_order_id->target_id);
+			$form['order_info']['original_sale'] = array('#type' => 'markup','#markup' => '<div class="original-sale">原銷售單: <a href="/node/' . $node->field_original_sales_order_id->target_id . '/edit" target="_blank">' . $original_sales->title->value . '</a></div>');
+			$form['order_info']['original_sale']['#weight'] = 1;
+		}
+
 		$form['field_created_date']['#group'] = 'order_info';
 		if ($form['field_created_date']['widget'][0]['value']['#default_value'] == '') {
 			$form['field_created_date']['#access'] = FALSE;
@@ -332,7 +338,7 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 						'#attached' => [
 							'library' => ['node/drupal.node'],
 						],
-						'#weight' => -49,
+						//'#weight' => -49,
 						'#open' => true,
 						'#open' => true,
         );
@@ -777,6 +783,7 @@ function ajax_return_process(array $form, FormStateInterface $form_state) {
 	$return_node = Node::create(['type' => "sales_order",]);
 	$return_node->set('title', generate_sale_id());
 	$return_node->field_customer_entity->target_id = $node->field_customer_entity->target_id;
+	$return_node->set('field_original_sales_order_id', $node->id());
 	$return_node->set('moderation_state', "return");
 	$return_node->save();
 	$return_node_nid = $return_node->id();

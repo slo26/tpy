@@ -64,15 +64,15 @@ class ShowBillStatementDialogForm extends FormBase {
                                 '</td><td>' . $type . 
                                 '</td><td><a href="/node/' . $sale->id() . '" target="_blank">' . $sale->title->value . '</a>' . 
                                 '</td><td>' . $tax_percentage . "%" . 
-                                '</td><td>' . ($bill->field_total_amount_with_tax->value - $bill->field_deposit->value - $bill->field_write_off_amount->value) . 
-                                '</td><td>' . ($bill->field_deposit->value + $bill->field_write_off_amount->value) . 
+                                '</td><td>' . number_format($bill->field_total_amount_with_tax->value - $bill->field_deposit->value - $bill->field_write_off_amount->value) . 
+                                '</td><td>' . number_format($bill->field_deposit->value + $bill->field_write_off_amount->value) . 
                                 '</td></tr>';
             }
         }
         $customer = \Drupal\node\Entity\Node::load($customer_nid);
         $table_top = '<div id="detail-bill-statement-table-top-body"><table>-BODY-</table></div>';
         $table_customer = "<tbody><tr><td>客戶編號: " . $customer->title->value . "</td><td>名稱: " . $customer->field_customer_title->value . "</td></tr>";
-        $table_summary  = "<tr><td>己收加預收: $total_deposit</td><td>應收總金額: $total_remain_amount</td><td>本期總金額: $total_amount</td><td>交易總筆數: $num</td></tr></tbody>";
+        $table_summary  = "<tr><td>己收加預收: " . number_format($total_deposit) ."</td><td>應收總金額: " . number_format($total_remain_amount) ."</td><td>本期總金額: " . number_format($total_amount) . "</td><td>交易總筆數: $num</td></tr></tbody>";
         $table_top = str_replace('-BODY-', $table_customer . $table_summary, $table_top);
 
         $table_middle = '<div id="detail-bill-statement-table-body"><table>-BODY-</table></div>';
