@@ -48,6 +48,16 @@ function sales_order_content_type_preprocess_node(&$variables) {
 	}
 }
 
+function sales_order_content_type_menu_local_tasks_alter(&$data, $route_name) {
+	$route_match = \Drupal::routeMatch();
+	if ($route_match->getRouteName() == 'entity.node.canonical') {
+    	$node = $route_match->getParameter('node');
+		if ( $node->bundle() != "sales_order") {
+			unset($data['tabs'][0]['sales_order_content_type.sale_sheet']);
+		}
+	}
+}
+
 function sales_order_table_generator_in_view($node) {
 	$customer_nid = $node->field_customer_entity->target_id;
 	$customer = \Drupal\node\Entity\Node::load($customer_nid);
@@ -58,21 +68,6 @@ function sales_order_table_generator_in_view($node) {
 		$table_body = '<tr id="sales-oder-table-header-tpy-name"><td colspan="4" align="center"><strong>' . \Drupal::config('common_utils.settings')->get('company') .'</strong></td></tr>';
 		$table_body .= '<tr id="sales-oder-table-header-tpy-add"><td colspan="4" align="center">' . \Drupal::config('common_utils.settings')->get('company_address') .'</td></tr>';
 		$table_body .= '<tr id="sales-oder-table-header-tpy-phone"><td colspan="4" align="center">Tel: ' . \Drupal::config('common_utils.settings')->get('company_phone') . '  Fax: ' . \Drupal::config('common_utils.settings')->get('company_fax') . '</td></tr>';
-		/*Iif ( $node->field_order_status->value == 'draft' ) {
-			$status = "草稿";
-		} else if ( $node->field_order_status->value == 'rate' ) {
-			$status = "報價單";
-		} else if ( ($node->field_order_status->value == 'shipment') || ($node->field_order_status->value == 'done') ) {
-			if ( $type == 4 ) {
-				$status = "出貨單/銷貨轉寄庫單";
-			} else if ( $type == 1 ) {
-				$status = "出貨單";
-			}  else if ( $type == 3 ) {
-				$status = "銷貨轉寄庫單";
-			}
-		} else if ( $node->field_order_status->value == 'drop' ) {
-			$status = "銷售不成立";
-		}*/
 		$status = "";
 		if ( $node->moderation_state->value == 'draft' ) {
 			$status = "草稿";
@@ -106,7 +101,6 @@ function sales_order_table_generator_in_view($node) {
 	/***************table list***************/
 	{
 		$table_list = "";
-		//if ( ($node->field_order_status->value == 'shipment') || ($node->field_order_status->value == 'done') ) {
 		if ( ($node->moderation_state->value == 'shipment') || ($node->moderation_state->value == 'done') ) {
 			$table_list = shipping($node);
 		} else {
@@ -139,7 +133,6 @@ function sales_order_table_generator_in_view($node) {
 	/***************table footer***************/
 	{
 		$table_footer = "";
-		//if ( ($node->field_order_status->value != 'shipment') && ($node->field_order_status->value != 'done') ) {
 		if ( ($node->moderation_state->value != 'shipment') && ($node->moderation_state->value != 'done') ) {
 			//$sales_tax = \Drupal::config('common_utils.settings')->get('sales_tax')/100;
 			$sales_tax = $node->field_tax_rate->value;
@@ -151,7 +144,7 @@ function sales_order_table_generator_in_view($node) {
 							'</td><td align="left" width="70px">幣別: </td><td align="left">' . '新台幣' . 
 							'</td><td align="left" width="110px">稅前合計: </td><td align="right" width="110px">' . number_format($total_amount_before_tax) .
 							'</td></tr>';
-			$table_body .= '<tr><td align="left" width="110px">付款條件:</td><td colspan="3" align="left">' . $customer->field_payment_condition->value . 
+			$table_body .= '<tr><td align="left" width="110px">結帳日:</td><td colspan="3" align="left">' . get_entity_storage_label($node, "field_payment_due", $customer->field_payment_due->value) . 
 							'</td><td align="left" width="110px">營業稅額: </td><td align="right" width="110px">' . number_format($total_amount_before_tax * $sales_tax) .
 							'</td></tr>'; 
 			$table_body .= '<tr><td align="left" width="110px"></td><td colspan="3" align="left"></td>' . 
@@ -169,29 +162,33 @@ function sales_order_table_generator_in_view($node) {
 		$comment = "";
 	}
 	
-	
 	return $table_head . $table_list . $table_footer . $comment;
 }
 
 function sales_order_content_type_node_presave(Drupal\Core\Entity\EntityInterface $node) {
 	if ( $node->type->target_id == "sales_order" ) {
-		//$label = get_entity_storage_label($node, "field_order_status", $node->field_order_status->value);
-
-		/*if ( $node->field_order_status->value == "rate" ) {
-			$node->set('field_appraise_date', date('Y-m-d', time()));
-		} else if ( $node->field_order_status->value == "shipment" ) {
-			$node->set('field_shipping_date', date('Y-m-d', time()));
-		} else if ( $node->field_order_status->value == "done" ) {
-			$node->set('field_completed_date', date('Y-m-d', time()));
-		} else if ( $node->field_order_status->value == "return" ) {
-			$node->set('field_return_date', date('Y-m-d', time()));
-		}*/
 		if ( $node->moderation_state->value == "rate" ) {
 			$node->set('field_appraise_date', date('Y-m-d', time()));
 			$label = "銷售估價";
 		} else if ( $node->moderation_state->value == "shipment" ) {
 			$node->set('field_shipping_date', date('Y-m-d', time()));
 			$label = "銷售出貨";
+			$bill_nid = $node->field_bill->target_id;
+			if ( !empty($bill_nid) ) {
+				$bill = \Drupal\node\Entity\Node::load($bill_nid);
+				$bill->set('field_expected_receive_payment', $node->field_shipping_date->value);
+				
+				if ( empty($bill->field_payment_expire->value) ) {
+					$customer = \Drupal\node\Entity\Node::load($node->field_customer_entity->target_id);
+					$payment_due = $customer->field_payment_due->value;
+					if ( !empty(payment_due) && strpos($payment_due, "check") !== false ) {
+						$payment_due = str_replace("check_", "", $payment_due);
+						$payment_due = date("Y-m-d", strtotime(date("Y-m-25") . "+$payment_due days"));  
+						$bill->set('field_payment_expire', $payment_due);
+					}
+				}
+				$bill->save();
+			}
 		} else if ( $node->moderation_state->value == "done" ) {
 			$node->set('field_completed_date', date('Y-m-d', time()));
 			$label = "銷售完成";
@@ -257,12 +254,6 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 						'#open' => true,
         );
 		$form['title']['#group'] = 'order_info';
-		//$form['field_order_status']['#group'] = 'order_info';s
-		/*$form['order_info']['sell_order_status_message'] = array(
-			'#type' => 'markup',
-			'#markup' => '<div class="sell-order-status-message"></div>',
-            '#weight' => 19,
-        );*/
 		
 		if ( $node->moderation_state->value == "return" || $node->moderation_state->value == "return_completed" ) {
 			$original_sales = \Drupal\node\Entity\Node::load($node->field_original_sales_order_id->target_id);
@@ -315,11 +306,6 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 			$customer_id = $node->field_customer_entity->target_id;
 		}
 
-		/*$form['field_order_status']['widget']['#ajax'] = [
-			'callback' => 'ajax_order_status_changed_validation',
-			'event' => 'change',
-			'wrapper' => 'ajax-change',
-		];*/
 		$form['moderation_state']['widget'][0]['state']['#description'] = " ";
 		$form['moderation_state']['widget'][0]['state']['#ajax'] = [
 			'callback' => 'ajax_order_status_changed_validation',
@@ -366,11 +352,6 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 		if ( $node->moderation_state->value == "return" ) {
 			$form['billing_info']['generate_bill']['#value'] = "產生退貨帳單";
 		}
-		if ( $node->moderation_state->value != "return_completed" && $node->moderation_state->value != "return" ) {
-			$form['billing_info']['deposit'] = array('#type' => 'markup',
-				'#markup' => '<div class="deposite"></div>',
-			);
-		}
 		$form['billing_info']['total_amount_without_tax'] = array('#type' => 'markup',
 			'#markup' => '<div class="total-amount-without-tax"></div>',
 		);
@@ -380,11 +361,22 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 		$form['billing_info']['total_amount_with_tax'] = array('#type' => 'markup',
 			'#markup' => '<div class="total-amount-with-tax"></div>',
 		);
-		$form['billing_info']['remain_amount'] = array('#type' => 'markup',
-			'#markup' => '<div class="remain-amount"></div>',
-		);
+		if ( $node->moderation_state->value != "return_completed" && $node->moderation_state->value != "return" ) {
+			$form['billing_info']['deposit'] = array('#type' => 'markup',
+				'#markup' => '<div class="deposite"></div>',
+			);
+			$form['billing_info']['discount'] = array('#type' => 'markup',
+				'#markup' => '<div class="discount"></div>',
+			);
+			$form['billing_info']['write_off_amount'] = array('#type' => 'markup',
+				'#markup' => '<div class="write-off-amount"></div>',
+			);
+		}
 		$form['billing_info']['write_off_amount'] = array('#type' => 'markup',
 			'#markup' => '<div class="write-off-amount"></div>',
+		);
+		$form['billing_info']['remain_amount'] = array('#type' => 'markup',
+			'#markup' => '<div class="remain-amount"></div>',
 		);
 		$form['billing_info']['expected_recevied_payment'] = array('#type' => 'markup',
 			'#markup' => '<div class="expected-recevied-payment"></div>',
@@ -396,21 +388,21 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 		$bill_nids = \Drupal::entityQuery("node")->condition('type', 'billing')->condition('field_order_id', $node->id())->execute();
 		foreach($bill_nids as $bill_nid) {
 			$bill = \Drupal\node\Entity\Node::load($bill_nid);
-			if ( $node->moderation_state->value != "return_completed" && $node->moderation_state->value != "return" ) {
-				$form['billing_info']['deposit']['#markup'] = '<div class="deposite">' . t('訂金  $') . number_format($bill->field_deposit->value) . '</div>';
-			}
+			
 			$form['billing_info']['total_amount_without_tax']['#markup'] = '<div class="total-amount-without-tax">' . t('未含稅總價  $') . number_format($bill->field_total_amount_without_tax->value) . '</div>';
-			$form['billing_info']['tax']['#markup'] = '<div class="tax">' . t('稅金  $') . $bill->field_tax->value . '</div>';
-			$form['billing_info']['total_amount_with_tax']['#markup'] = '<div class="total-amount-with-tax">' . t('含稅總價  $') . number_format($bill->field_total_amount_with_tax->value) . '</div>';
+			$form['billing_info']['tax']['#markup'] = '<div class="tax">' . t('+稅金  $') . $bill->field_tax->value . '</div>';
+			$form['billing_info']['total_amount_with_tax']['#markup'] = '<div class="total-amount-with-tax">' . t('=含稅總價  $') . number_format($bill->field_total_amount_with_tax->value) . '</div>';
 			if ( $node->moderation_state->value != "return_completed" && $node->moderation_state->value != "return" ) {
-				$form['billing_info']['remain_amount']['#markup'] = '<font color="red"><div class="remain-amount">' . t('剩餘末支付含稅總價  $') . number_format(($bill->field_total_amount_with_tax->value - $bill->field_deposit->value - $bill->field_write_off_amount->value)) . '</div></font>';
-				$form['billing_info']['write_off_amount']['#markup'] = '<div class="write-off-amount">' . t('沖銷金額  $') . number_format($bill->field_write_off_amount->value) . '</div>';
-				$form['billing_info']['expected_recevied_payment']['#markup'] = '<div class="expected-recevied-payment">' . t('預計收款日期  ') . $bill->field_expected_receive_payment->value . '</div>';
-			$form['billing_info']['actual_recevied_payment']['#markup'] = '<div class="actual-recevied-payment">' . t('已收款日期  ') . $bill->field_actual_received_payment->value . '</div>';
+				$form['billing_info']['deposit']['#markup'] = '<div class="deposite">' . t('-訂金  $') . number_format($bill->field_deposit->value) . '</div>';
+				$form['billing_info']['discount']['#markup'] = '<div class="discount">' . t('-折讓金額  $') . number_format($bill->field_discount->value) . '</div>';
+				$form['billing_info']['write_off_amount']['#markup'] = '<div class="write-off-amount">' . t('-沖銷金額  $') . number_format($bill->field_write_off_amount->value) . '</div>';
+				$form['billing_info']['remain_amount']['#markup'] = '<font color="red"><div class="remain-amount">' . t('=剩餘未支付含稅總價  $') . number_format(($bill->field_total_amount_with_tax->value - $bill->field_deposit->value - $bill->field_discount->value - $bill->field_write_off_amount->value)) . '</div></font>';
+				$form['billing_info']['expected_recevied_payment']['#markup'] = '<div class="expected-recevied-payment">' . t('帳款日期  ') . $bill->field_expected_receive_payment->value . '</div>';
+				$form['billing_info']['actual_recevied_payment']['#markup'] = '<div class="actual-recevied-payment">' . t('已收款日期  ') . $bill->field_actual_received_payment->value . '</div>';
 			} else {
 				$form['billing_info']['remain_amount']['#markup'] = '<font color="red"><div class="remain-amount">' . t('剩餘末退含稅總價  $') . number_format(($bill->field_total_amount_with_tax->value - $bill->field_deposit->value - $bill->field_write_off_amount->value)) . '</div></font>';
 				$form['billing_info']['write_off_amount']['#markup'] = '<div class="write-off-amount">' . t('沖銷退款金額  $') . number_format($bill->field_write_off_amount->value) . '</div>';
-				$form['billing_info']['expected_recevied_payment']['#markup'] = '<div class="expected-recevied-payment">' . t('預計退款日期  ') . $bill->field_expected_receive_payment->value . '</div>';
+				$form['billing_info']['expected_recevied_payment']['#markup'] = '<div class="expected-recevied-payment">' . t('結帳日期  ') . $bill->field_expected_receive_payment->value . '</div>';
 			$form['billing_info']['actual_recevied_payment']['#markup'] = '<div class="actual-recevied-payment">' . t('已退款日期  ') . $bill->field_actual_received_payment->value . '</div>';
 			}
 			
@@ -486,16 +478,8 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 			'#disabled' => true,
 			'#group' => 'customer_info',
         );
-		$form['customer_payment'] = array(
-            '#title' => '付款方式',
-            '#type' => 'textfield',
-            '#size' => 60,
-			'#weight' => 4,
-			'#disabled' => true,
-			'#group' => 'customer_info',
-        );
-		$form['customer_payment_condition'] = array(
-            '#title' => '付款條件',
+		$form['customer_payment_due'] = array(
+            '#title' => '結帳日',
             '#type' => 'textfield',
             '#size' => 60,
 			'#weight' => 4,
@@ -513,8 +497,7 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 			$form['customer_uniform_num']['#default_value'] = $customer->field_uniform_number->value;
 			$form['customer_contact_window']['#default_value'] = $customer->field_contact_person->value;
 			$form['customer_cell']['#default_value'] = $customer->field_mobile->value;
-			$form['customer_payment']['#default_value'] = get_entity_storage_label($customer, 'field_payment', $customer->field_payment->value);
-			$form['customer_payment_condition']['#default_value'] = $customer->field_payment_condition->value;
+			$form['customer_payment_due']['#default_value'] = get_entity_storage_label($customer, 'field_payment_due', $customer->field_payment_due->value);
 		}
 		/*-----------------送貨資訊---------------------*/
 		$form['delivery_info'] = array(
@@ -638,6 +621,15 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 			'#suffix' => '</div>',
         );
 
+		$form['gross_profit_margin'] = array(
+            '#title' => '毛利率(%)',
+            '#type' => 'textfield',
+			'#weight' => 28,
+            '#size' => 5,
+			//'#disabled' => true,
+			'#prefix' => '<div class="add-single-item-into-order">',
+			'#suffix' => '</div>',
+        );
 
 		$form['total_amount'] = array(
             '#title' => '金額',
@@ -769,6 +761,7 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 				'event' => 'click',
 			],
         );
+		//$form['#attached']['library'][] = 'sales_order_content_type/sales_order_content_type';
 	}
 }
 
@@ -802,6 +795,7 @@ function ajax_return_process(array $form, FormStateInterface $form_state) {
 		$return_item->set('field_quantity', $sell_item->field_quantity->value);
 		$return_item->set('field_price', $sell_item->field_price->value);
 		$return_item->set('field_discount', $sell_item->field_discount->value);
+		$return_item->set('field_gross_profit_margin', $sell_item->field_gross_profit_margin->value);
 		$return_item->set('field_total_amount', $sell_item->field_total_amount->value);
 		$return_item->save();		 
 		$return_item_tid = $return_item->id();
@@ -832,8 +826,6 @@ function ajax_load_print_comment(array $form, FormStateInterface $form_state) {
 function ajax_order_status_changed_validation(array $form, FormStateInterface $form_state) {
 	$ajax_response = new AjaxResponse();
 	$node = $form_state->getFormObject()->getEntity();
-	/*$selected_key = $form_state->getValue(field_order_status)[0]['value'];
-	$selected_value = get_entity_storage_label($node, 'field_order_status', $selected_key);*/
 	$selected_key = $form_state->getValue(moderation_state)[0]['value'];
 	$selected_value = MODERATION_STATE_LABEL[$selected_key];
 
@@ -850,8 +842,6 @@ function ajax_order_status_changed_validation(array $form, FormStateInterface $f
 			$roles = $current_user->getRoles();
 			if ( !in_array('manager', $roles) ) {
 				$message = '<div><font color="red">你沒有足夠的權限選擇' . $selected_value . '選項</font></div>';
-				//$ajax_response->addCommand(new HtmlCommand('.sell-order-status-message', $message));
-				//$ajax_response->addCommand(new InvokeCommand('#edit-field-order-status', 'val', [$node->field_order_status->value]));	
 				$ajax_response->addCommand(new HtmlCommand('#edit-moderation-state-0-state--description', $message));
 				$ajax_response->addCommand(new InvokeCommand('#edit-moderation-state-0-state', 'val', [$node->moderation_state->value]));	
 				return $ajax_response;
@@ -862,8 +852,6 @@ function ajax_order_status_changed_validation(array $form, FormStateInterface $f
                     					->execute();
 			if ( count($billing_nids) == 0 ) {
 				$message = '<div><font color="red">此銷售單沒有建立帳單收款, 無法選擇' . $selected_value . '選項</font></div>';
-				//$ajax_response->addCommand(new HtmlCommand('.sell-order-status-message', $message));
-				//$ajax_response->addCommand(new InvokeCommand('#edit-field-order-status', 'val', [$node->field_order_status->value]));
 				$ajax_response->addCommand(new HtmlCommand('#edit-moderation-state-0-state--description', $message));
 				$ajax_response->addCommand(new InvokeCommand('#edit-moderation-state-0-state', 'val', [$node->moderation_state->value]));
 				return $ajax_response;
@@ -872,8 +860,6 @@ function ajax_order_status_changed_validation(array $form, FormStateInterface $f
 					$bill = \Drupal\node\Entity\Node::load($billing_nid);
 					if ( empty($bill->field_actual_received_payment->value) ) {
 						$message = '<div><font color="red">此銷售單的帳單收款還未完成, 無法選擇' . $selected_value . '選項</font></div>';
-						//$ajax_response->addCommand(new HtmlCommand('.sell-order-status-message', $message));
-						//$ajax_response->addCommand(new InvokeCommand('#edit-field-order-status', 'val', [$node->field_order_status->value]));
 						$ajax_response->addCommand(new HtmlCommand('#edit-moderation-state-0-state--description', $message));
 						$ajax_response->addCommand(new InvokeCommand('#edit-moderation-state-0-state', 'val', [$node->moderation_state->value]));
 						return $ajax_response;
@@ -917,7 +903,7 @@ function ajax_order_status_changed_validation(array $form, FormStateInterface $f
 			if ( !empty($sell_item->field_requisition_status->value) ) {
 				$message = '<div><font color="red">此銷售單有一或多個訂單項目己被打包出貨或寄倉, 請將這些項目拆封,並退回原倉庫並手動在系統上做退倉動作, 無法選擇' . $selected_value . '選項</font></div>';
 				$ajax_response->addCommand(new HtmlCommand('#edit-moderation-state-0-state--description', $message));
-				$ajax_response->addCommand(new InvokeCommand('#edit-moderation-state-0-state', 'val', [$node->field_order_status->value]));
+				$ajax_response->addCommand(new InvokeCommand('#edit-moderation-state-0-state', 'val', [$node->moderation_state->value]));
 				break;
 			}
 		}
@@ -943,8 +929,7 @@ function ajax_customer_info_loading(array $form, FormStateInterface $form_state)
 		$ajax_response->addCommand(new InvokeCommand('#edit-customer-uniform-num', 'val', [$customer->field_uniform_number->value]));
 		$ajax_response->addCommand(new InvokeCommand('#edit-customer-contact-window', 'val', [$customer->field_contact_person->value]));
 		$ajax_response->addCommand(new InvokeCommand('#edit-customer-cell', 'val', [$customer->field_mobile->value]));
-		$ajax_response->addCommand(new InvokeCommand('#edit-customer-payment', 'val', [get_entity_storage_label($customer, 'field_payment', $customer->field_payment->value)]));
-		$ajax_response->addCommand(new InvokeCommand('#edit-customer-payment-condition', 'val', [$customer->field_payment_condition->value]));
+		$ajax_response->addCommand(new InvokeCommand('#edit-customer-payment-due', 'val', [get_entity_storage_label($customer, 'field_payment_due', $customer->field_payment_due->value)]));
         return $ajax_response;
 }
 
@@ -970,7 +955,7 @@ function ajax_product_loading(array $form, FormStateInterface $form_state) {
 		$form['storage']['#default_value'] = '_none';
 		$ajax_response->addCommand(new InvokeCommand('#edit-product-name', 'val', [$product->field_product_name->value]));
 		$ajax_response->addCommand(new ReplaceCommand('#edit-storage-select', $form['storage']));
-		$ajax_response->addCommand(new InvokeCommand('#edit-price', 'val', [$product->field_retail_price->value]));
+		$ajax_response->addCommand(new InvokeCommand('#edit-price', 'val', [$product->field_construction_price->value]));
 		$ajax_response->addCommand(new InvokeCommand('#edit-total-amount', 'val', ['0']));
 
 		$customr_nid = $form_state->getValue('field_customer_entity')[0]['target_id'];
@@ -1012,6 +997,13 @@ function ajax_calculate_price(array $form, FormStateInterface $form_state) {
 	$quantity = (int)$form_state->getValue('quantity');
 	$price = (int)$form_state->getValue('price');
 	$discount = (double)$form_state->getValue('discount');
+	
+	$product_nid = $form_state->getValue('list_product');	
+	$product = \Drupal\node\Entity\Node::load($product_nid);
+	$cost = $product->field_cost_price->value;
+
+	$gpm = round(caculate_gpm_for_item_sell($price, $discount, $cost), 2);
+
 	$total_amount = 0;
 	if ( empty($discount) || $discount <= 0 ) {
 		$tota_amount = $quantity*$price;
@@ -1022,6 +1014,7 @@ function ajax_calculate_price(array $form, FormStateInterface $form_state) {
 	}
 
 	$ajax_response->addCommand(new InvokeCommand('#edit-total-amount', 'val', [$tota_amount]));
+	$ajax_response->addCommand(new InvokeCommand('#edit-gross-profit-margin', 'val', [$gpm]));
 
 	return $ajax_response;
 }
@@ -1046,6 +1039,7 @@ function create_single_item_callback(array $form, FormStateInterface $form_state
 			$item->set('field_quantity', $form_state->getValue('quantity'));
 			$item->set('field_price', $form_state->getValue('price'));
 			$item->set('field_discount', $form_state->getValue('discount'));
+			$item->set('field_gross_profit_margin', $form_state->getValue('gross_profit_margin'));
 			$item->set('field_total_amount', $form_state->getValue('total_amount'));
 			$item->save();
 			//$form_state->set('field_sell_products', $item->id());
@@ -1094,6 +1088,7 @@ function create_single_item_callback(array $form, FormStateInterface $form_state
 	$form['storage']['#default_value'] = '_none';
 	$response->addCommand(new ReplaceCommand('#edit-storage-select', $form['storage']));
 	$response->addCommand(new InvokeCommand('#edit-price', 'val', [""]));
+	$response->addCommand(new InvokeCommand('#edit-gross-profit-margin', 'val', [""]));
 	$response->addCommand(new InvokeCommand('#edit-discount', 'val', [""]));
 	$response->addCommand(new InvokeCommand('#edit-quantity', 'val', [""]));
 	$response->addCommand(new InvokeCommand('#edit-total-amount', 'val', [""]));
@@ -1111,7 +1106,7 @@ function purchase_items_table_generate($order_id) {
 	}
 
 	$table = '<div id="sell-item-table"><table>-BODY-</table></div>';
-	$table_head = "<thead><tr><td>產品訂單編號</td><td>產品型號</td><td>產品名稱</td><td>倉庫</td><td>數量</td><td>單價</td><td>折扣(%)</td><td>金額</td><td></td></tr></thead>";
+	$table_head = "<thead><tr><td>產品訂單編號</td><td>產品型號</td><td>產品名稱</td><td>倉庫</td><td>數量</td><td>單價</td><td>折扣(%)</td><td>毛利率(%)</td><td>金額</td><td></td></tr></thead>";
 	$table_body_begin = '<tbody>';
 	$table_body = '';
 	$total_quantity = 0;
@@ -1142,12 +1137,12 @@ function purchase_items_table_generate($order_id) {
 						</ul>
 					</div>
 				</div>';
-		$table_body .= '<tr><td>' . $item->name->value . '</td><td>' . $product->title->value . '</td><td>' . $product->field_product_name->value . '</td><td>' . $storage->field_storage_name->value . '</td><td>' . number_format($item->field_quantity->value) . '</td><td>' . number_format($item->field_price->value) . '</td><td>' . $item->field_discount->value . '</td><td>' . number_format($item->field_total_amount->value) . '</td><td>' . $dropdown_button . '</td></tr>';
+		$table_body .= '<tr><td>' . $item->name->value . '</td><td>' . $product->title->value . '</td><td>' . $product->field_product_name->value . '</td><td>' . $storage->field_storage_name->value . '</td><td>' . number_format($item->field_quantity->value) . '</td><td>' . number_format($item->field_price->value) . '</td><td>' . $item->field_discount->value . '</td><td>' . $item->field_gross_profit_margin->value . '</td><td>' . number_format($item->field_total_amount->value) . '</td><td>' . $dropdown_button . '</td></tr>';
 		$total_quantity = $total_quantity + $item->field_quantity->value;
 		$sum = $sum + $item->field_price->value;
 		$total_cost = $total_cost + $item->field_total_amount->value;
 	}
-	$table_body .= '<tr><td><strong>總合</strong></td><td></td><td></td><td></td><td><strong>' . number_format($total_quantity) . '</strong></td><td><strong>$' . number_format($sum) . '</strong></td><td></td><td><strong>$' . number_format($total_cost) . '</strong></td><td></td></tr>';
+	$table_body .= '<tr><td><strong>總合</strong></td><td></td><td></td><td></td><td><strong>' . number_format($total_quantity) . '</strong></td><td><strong>$' . number_format($sum) . '</strong></td><td></td><td></td><td><strong>$' . number_format($total_cost) . '</strong></td><td></td></tr>';
 	$table_body_end = '</tbody>';
 
 	$table_body = $table_head . $table_body_begin . $table_body . $table_body_end;
@@ -1169,7 +1164,8 @@ function generate_bill_callback(array $form, FormStateInterface $form_state) {
 			$bill = \Drupal\node\Entity\Node::create(['type' => "billing",]);
 			$bill->set('title', generate_unique_id_for_bill());
 			if ( $entity->moderation_state->value == "return" ) {
-				$bill->field_bill_type->value = "return";	
+				$bill->field_bill_type->value = "return";
+				$bill->set('field_expected_receive_payment', date('Y-m-d', time()));
 			}
 			$bill->field_order_id->target_id = $entity->id();
 			$bill->field_customer_entity->target_id = $entity->field_customer_entity->target_id;
@@ -1195,13 +1191,15 @@ function generate_bill_callback(array $form, FormStateInterface $form_state) {
 			\Drupal::service('cache.entity')->invalidateAll();
 			\Drupal::service('cache.data')->invalidateAll();
 			\Drupal::service('cache.render')->invalidateAll();
-			if ( $node->moderation_state->value != "return_completed" && $node->moderation_state->value != "return" ) {
-				$response->addCommand(new HtmlCommand('.deposite', t('訂金  $') . number_format($bill->field_deposit->value)));
-			}
+			
 			$response->addCommand(new HtmlCommand('.total-amount-without-tax', t('未含稅總價  $') . $bill->field_total_amount_without_tax->value));
-			$response->addCommand(new HtmlCommand('.tax', t('稅金  $') . $bill->field_tax->value));
-			$response->addCommand(new HtmlCommand('.total-amount-with-tax', t('含稅總價  $') . $bill->field_total_amount_with_tax->value));
-			$response->addCommand(new HtmlCommand('.remain-amount', t('剩餘末支付含稅總價  $') . ($bill->field_total_amount_with_tax->value - $bill->field_deposit->value)));
+			$response->addCommand(new HtmlCommand('.tax', t('+稅金  $') . $bill->field_tax->value));
+			$response->addCommand(new HtmlCommand('.total-amount-with-tax', t('=含稅總價  $') . $bill->field_total_amount_with_tax->value));
+			if ( $node->moderation_state->value != "return_completed" && $node->moderation_state->value != "return" ) {
+				$response->addCommand(new HtmlCommand('.deposite', t('-訂金  $') . number_format($bill->field_deposit->value)));
+				$response->addCommand(new HtmlCommand('.discount', t('-折讓金額  $') . number_format($bill->field_discount->value)));
+			}
+			$response->addCommand(new HtmlCommand('.remain-amount', t('=剩餘末支付含稅總價  $') . ($bill->field_total_amount_with_tax->value - $bill->field_deposit->value)));
 			$response->addCommand(new HtmlCommand('.bill-link', '<a target="_blank" href="/node/' . $bill->id() . '/edit">帳單己建立, 連接到帳單</a>'));
 			$response->addCommand(new RemoveCommand('.generate-bill'));
 		}
@@ -1312,4 +1310,13 @@ function generate_sale_id() {
 		}
 	}
 	return $sales_order_id;
+}
+
+function caculate_gpm_for_item_sell($price, $discount, $cost) {
+	return ($price * (1-($discount/100)) - $cost) / ( $price * (1-($discount/100))) * 100;
+}
+
+function getSellOrderID($nid) {
+	$sale = \Drupal\node\Entity\Node::load($nid);
+	return $sale->title->value;
 }

@@ -49,6 +49,9 @@ function get_product_name_by_nid($product_nid) {
 
 function get_storage_name_by_nid($storage_nid) {
     $storage = \Drupal\node\Entity\Node::load($storage_nid);
+    if ( empty($storage->field_storage_name->value) ) {
+        return "";
+    }
     return $storage->field_storage_name->value;
 }
 

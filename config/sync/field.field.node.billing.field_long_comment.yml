@@ -1,0 +1,19 @@
+uuid: 5763b078-8bc1-46b2-9ea3-c043d7ece7e5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_long_comment
+    - node.type.billing
+id: node.billing.field_long_comment
+field_name: field_long_comment
+entity_type: node
+bundle: billing
+label: 備註
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

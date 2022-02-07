@@ -1,0 +1,29 @@
+uuid: 4cef5c0e-e9e0-40be-bcbf-9045088b3519
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_store_credit_entity
+    - node.type.billing_write_off
+    - taxonomy.vocabulary.prepaid_balance
+id: node.billing_write_off.field_store_credit_entity
+field_name: field_store_credit_entity
+entity_type: node
+bundle: billing_write_off
+label: 取用預付
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      prepaid_balance: prepaid_balance
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

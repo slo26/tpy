@@ -1,0 +1,25 @@
+uuid: 785b03f9-bbd4-449d-a60b-800b7a3c3d63
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_remittance_fee
+    - node.type.billing_write_off
+id: node.billing_write_off.field_remittance_fee
+field_name: field_remittance_fee
+entity_type: node
+bundle: billing_write_off
+label: 匯款手續費
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: !!float 0
+default_value_callback: ''
+settings:
+  min: !!float 0
+  max: null
+  prefix: $
+  suffix: ''
+field_type: decimal

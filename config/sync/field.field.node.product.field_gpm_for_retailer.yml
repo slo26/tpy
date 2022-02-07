@@ -1,0 +1,25 @@
+uuid: 26971e84-43a3-4ff9-bf15-294e006691a5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_gpm_for_retailer
+    - node.type.product
+id: node.product.field_gpm_for_retailer
+field_name: field_gpm_for_retailer
+entity_type: node
+bundle: product
+label: 零售毛利率
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: !!float 0
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: '%'
+field_type: decimal

@@ -1,0 +1,6 @@
+billing:
+  version: VERSION
+  css:
+    theme:
+      css/billing.css: {}
+

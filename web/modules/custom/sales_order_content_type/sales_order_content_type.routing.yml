@@ -1,4 +1,4 @@
-isales_order_content_type.form:
+sales_order_content_type.form:
   path: '/admin/config/example_form'
   defaults:
     _form: 'Drupal\sales_order_content_type\Form\AddItemToOrderModalForm'
@@ -22,4 +22,14 @@ sales_order_content_type.open_modal_form:
     _permission: 'administer site configuration'
   options:
     _admin_route: TRUE
+
+sales_order_content_type.sale_sheet:
+  path: '/node/{node}/sale-sheet'
+  defaults:
+    _form: 'Drupal\sales_order_content_type\Form\SaleSheet'
+    _title: '銷售單'
+  requirements:
+    _permission: 'authenticated'
+
+
 

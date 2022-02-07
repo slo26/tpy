@@ -5,15 +5,20 @@ dependencies:
   config:
     - field.field.node.product.field_color
     - field.field.node.product.field_comment
+    - field.field.node.product.field_construction_price
     - field.field.node.product.field_cost_price
     - field.field.node.product.field_dealer_price
     - field.field.node.product.field_directions
+    - field.field.node.product.field_gpm_for_construction
+    - field.field.node.product.field_gpm_for_retailer
+    - field.field.node.product.field_gpm_for_vendor
     - field.field.node.product.field_product_category
     - field.field.node.product.field_product_image
     - field.field.node.product.field_product_name
     - field.field.node.product.field_retail_price
     - field.field.node.product.field_size
     - field.field.node.product.field_specification
+    - field.field.node.product.field_unit
     - field.field.node.product.field_weight
     - image.style.large
     - node.type.product
@@ -91,7 +96,12 @@ content:
     region: content
 hidden:
   field_comment: true
+  field_construction_price: true
   field_cost_price: true
   field_dealer_price: true
+  field_gpm_for_construction: true
+  field_gpm_for_retailer: true
+  field_gpm_for_vendor: true
   field_retail_price: true
+  field_unit: true
   links: true

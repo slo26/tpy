@@ -1,0 +1,25 @@
+uuid: 6b91ebb3-9a9b-47ae-a546-5b1fd3d84b25
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_discount
+    - node.type.billing
+id: node.billing.field_discount
+field_name: field_discount
+entity_type: node
+bundle: billing
+label: 折讓金額
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: !!float 0
+default_value_callback: ''
+settings:
+  min: !!float 0
+  max: null
+  prefix: $
+  suffix: ''
+field_type: decimal

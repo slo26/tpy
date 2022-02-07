@@ -1,0 +1,86 @@
+#edit-title-0-value {
+    width: 200px;
+}
+
+.layout-region-node-secondary {
+    width: 20%;
+}
+.layout-region-node-main {
+    width: 80%;
+}
+
+/*.form-item-field-customer-entity-0-target-id {
+    width:30%;
+    margin-right:20px;
+}*/
+
+#edit-field-actual-received-payment-wrapper,
+#edit-field-begin-account-date-wrapper {
+    float: left;
+    margin-right: 10px;
+}
+
+.form-item-field-customer-entity-0-target-id {
+    float: left;
+}
+
+.form-item-field-customer-entity-0-target-id{
+    width: 30%;
+}
+
+#edit-field-customer-entity-0-target-id {
+    width:90%;
+}
+
+.form-item-field-advance-balance-0-value,
+.form-item-field-cash-amount-0-value,
+.form-item-field-check-amount-0-value,
+.form-item-field-remittance-amount-0-value,
+.form-item-field-remittance-fee-0-value,
+.form-item-field-hedgen-amount-0-value, 
+.form-item-field-offset-amount-0-value,
+.form-item-field-accumulated-advance-0-value {
+    margin: 0px;
+    padding-right: 5px;
+    float: left;
+}
+
+.form-item-field-total-discount-0-value {
+    padding-top: 10px;
+}
+
+#edit-auto-hedgen {
+    float: left;
+    margin-left: 15px;
+}
+
+#edit-auto-hedgen,
+#edit-undo-hedgen {
+    margin-right:15px;
+    margin-bottom: 15px;
+    margin-top: 30px;
+}
+
+
+#edit-field-receivable-balance-0-value,
+#edit-field-advance-balance-0-value,
+#edit-field-cash-amount-0-value,
+#edit-field-remittance-amount-0-value,
+#edit-field-check-amount-0-value,
+#edit-field-remittance-fee-0-value,
+#edit-field-hedgen-amount-0-value,
+#edit-field-total-discount-0-value,
+#edit-field-offset-amount-0-value,
+#edit-field-accumulated-advance-0-value,
+#edit-field-offset-amount-0-value {
+    width: 100px;
+}
+
+#sign{
+    margin-top: 34px;
+    float: left;
+    margin-left:3px;
+    margin-right:3px;
+}
+
+

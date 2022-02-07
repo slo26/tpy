@@ -1,0 +1,25 @@
+uuid: c1c219de-20b2-4044-b20f-3f241936e32b
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_cash_amount
+    - node.type.billing_write_off
+id: node.billing_write_off.field_cash_amount
+field_name: field_cash_amount
+entity_type: node
+bundle: billing_write_off
+label: 現金金額
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: !!float 0
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: $
+  suffix: ''
+field_type: decimal

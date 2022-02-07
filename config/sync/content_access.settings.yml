@@ -19,3 +19,5 @@ content_access_node_type:
   page: 'a:2:{s:8:"view_own";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}s:4:"view";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}}'
   purchase_order: 'a:2:{s:8:"view_own";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}s:4:"view";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}}'
   goods: 'a:2:{s:8:"view_own";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}s:4:"view";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}}'
+  billing_write_off: 'a:2:{s:8:"view_own";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}s:4:"view";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}}'
+  billing: 'a:2:{s:8:"view_own";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}s:4:"view";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}}'

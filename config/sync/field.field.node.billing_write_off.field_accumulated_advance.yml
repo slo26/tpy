@@ -1,0 +1,25 @@
+uuid: 45e43ec9-86ff-4a91-87a0-d9c919c04bd0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_accumulated_advance
+    - node.type.billing_write_off
+id: node.billing_write_off.field_accumulated_advance
+field_name: field_accumulated_advance
+entity_type: node
+bundle: billing_write_off
+label: 累入預收
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: !!float 0
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: $
+  suffix: ''
+field_type: decimal

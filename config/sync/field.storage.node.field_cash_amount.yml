@@ -1,0 +1,20 @@
+uuid: 9d897da0-b636-49e8-9969-b08017f3b01a
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_cash_amount
+field_name: field_cash_amount
+entity_type: node
+type: decimal
+settings:
+  precision: 10
+  scale: 2
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

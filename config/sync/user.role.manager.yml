@@ -3,10 +3,14 @@ langcode: en
 status: true
 dependencies:
   config:
+    - node.type.billing
+    - node.type.billing_write_off
     - node.type.customer
     - node.type.documentation
+    - node.type.goods
     - node.type.page
     - node.type.product
+    - node.type.purchase_order
     - node.type.sales_order
     - node.type.stock_up
     - node.type.storage
@@ -30,10 +34,14 @@ permissions:
   - 'administer views'
   - 'cancel account'
   - 'change own username'
+  - 'delete any billing content'
+  - 'delete any billing_write_off content'
   - 'delete any customer content'
   - 'delete any documentation content'
+  - 'delete any goods content'
   - 'delete any page content'
   - 'delete any product content'
+  - 'delete any purchase_order content'
   - 'delete any sales_order content'
   - 'delete any stock_up content'
   - 'delete any storage content'

@@ -1,0 +1,21 @@
+uuid: f982dbb6-4f18-4234-aa93-2948eac6ab18
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_end_date
+    - node.type.billing_write_off
+  module:
+    - datetime
+id: node.billing_write_off.field_end_date
+field_name: field_end_date
+entity_type: node
+bundle: billing_write_off
+label: 月結結束日
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

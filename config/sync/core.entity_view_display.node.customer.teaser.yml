@@ -15,8 +15,6 @@ dependencies:
     - field.field.node.customer.field_long_comment
     - field.field.node.customer.field_mobile
     - field.field.node.customer.field_owner
-    - field.field.node.customer.field_payment
-    - field.field.node.customer.field_payment_condition
     - field.field.node.customer.field_payment_due
     - field.field.node.customer.field_phone
     - field.field.node.customer.field_sales
@@ -49,8 +47,6 @@ hidden:
   field_long_comment: true
   field_mobile: true
   field_owner: true
-  field_payment: true
-  field_payment_condition: true
   field_payment_due: true
   field_phone: true
   field_sales: true

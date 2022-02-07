@@ -278,3 +278,7 @@ function update_inventory($term) {
         break;
     } 
 }
+
+function calculate_gross_profit_margin_for_each_sell($price, $discount, $cost) {
+    return ($price * ( 1 - ($discount/100)) - $cost) / ( $price * (1- ($discount/100)));
+}

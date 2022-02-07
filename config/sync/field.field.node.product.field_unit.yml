@@ -1,0 +1,19 @@
+uuid: 559754cb-f82e-40ef-bb1d-7a50df5cad2e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_unit
+    - node.type.product
+id: node.product.field_unit
+field_name: field_unit
+entity_type: node
+bundle: product
+label: 單位
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

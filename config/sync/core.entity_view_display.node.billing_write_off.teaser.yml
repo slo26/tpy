@@ -1,0 +1,58 @@
+uuid: c6180bcd-4734-4707-8d44-3e20a32cdc4b
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.billing_write_off.field_accumulated_advance
+    - field.field.node.billing_write_off.field_actual_received_payment
+    - field.field.node.billing_write_off.field_advance_balance
+    - field.field.node.billing_write_off.field_begin_account_date
+    - field.field.node.billing_write_off.field_begin_date
+    - field.field.node.billing_write_off.field_cash_amount
+    - field.field.node.billing_write_off.field_check_amount
+    - field.field.node.billing_write_off.field_closing_account_date
+    - field.field.node.billing_write_off.field_customer_entity
+    - field.field.node.billing_write_off.field_end_date
+    - field.field.node.billing_write_off.field_hedgen_amount
+    - field.field.node.billing_write_off.field_long_comment
+    - field.field.node.billing_write_off.field_offset_amount
+    - field.field.node.billing_write_off.field_receivable_balance
+    - field.field.node.billing_write_off.field_remittance_amount
+    - field.field.node.billing_write_off.field_remittance_fee
+    - field.field.node.billing_write_off.field_sale_purchase_entity
+    - field.field.node.billing_write_off.field_store_credit_entity
+    - field.field.node.billing_write_off.field_total_discount
+    - node.type.billing_write_off
+  module:
+    - user
+id: node.billing_write_off.teaser
+targetEntityType: node
+bundle: billing_write_off
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_accumulated_advance: true
+  field_actual_received_payment: true
+  field_advance_balance: true
+  field_begin_account_date: true
+  field_begin_date: true
+  field_cash_amount: true
+  field_check_amount: true
+  field_closing_account_date: true
+  field_customer_entity: true
+  field_end_date: true
+  field_hedgen_amount: true
+  field_long_comment: true
+  field_offset_amount: true
+  field_receivable_balance: true
+  field_remittance_amount: true
+  field_remittance_fee: true
+  field_sale_purchase_entity: true
+  field_store_credit_entity: true
+  field_total_discount: true

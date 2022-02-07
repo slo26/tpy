@@ -1,0 +1,8 @@
+uuid: 5f9fe093-348c-4aca-9bf9-2407a6c64ac4
+langcode: en
+status: true
+dependencies: {  }
+name: 取用預收
+vid: prepaid_balance
+description: 取用預收和累入預收
+weight: 0

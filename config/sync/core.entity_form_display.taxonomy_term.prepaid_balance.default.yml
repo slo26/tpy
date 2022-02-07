@@ -1,0 +1,73 @@
+uuid: 061d7dba-bc2b-4055-9fd2-edb3099f8ef3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.prepaid_balance.field_create_date
+    - field.field.taxonomy_term.prepaid_balance.field_customer_entity
+    - field.field.taxonomy_term.prepaid_balance.field_from_bill_write_off_entity
+    - field.field.taxonomy_term.prepaid_balance.field_store_credit
+    - field.field.taxonomy_term.prepaid_balance.field_to_bill_write_off
+    - taxonomy.vocabulary.prepaid_balance
+  module:
+    - datetime
+id: taxonomy_term.prepaid_balance.default
+targetEntityType: taxonomy_term
+bundle: prepaid_balance
+mode: default
+content:
+  field_create_date:
+    type: datetime_default
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_customer_entity:
+    type: entity_reference_autocomplete
+    weight: 1
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 30
+      placeholder: ''
+    third_party_settings: {  }
+  field_from_bill_write_off_entity:
+    type: entity_reference_autocomplete
+    weight: 3
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 30
+      placeholder: ''
+    third_party_settings: {  }
+  field_store_credit:
+    type: number
+    weight: 5
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_to_bill_write_off:
+    type: entity_reference_autocomplete
+    weight: 4
+    region: content
+    settings:
+      match_operator: CONTAINS
+      match_limit: 10
+      size: 30
+      placeholder: ''
+    third_party_settings: {  }
+  name:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 20
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  description: true
+  path: true
+  status: true

@@ -6,6 +6,8 @@ dependencies:
     - filter.format.comment
     - filter.format.full_html
     - node.type.article
+    - node.type.billing
+    - node.type.billing_write_off
     - node.type.customer
     - node.type.documentation
     - node.type.goods
@@ -16,7 +18,9 @@ dependencies:
     - node.type.stock_up
     - node.type.storage
     - node.type.vendor
+    - taxonomy.vocabulary.prepaid_balance
     - taxonomy.vocabulary.sell_items
+    - workflows.workflow.editorial
   module:
     - ckeditor_uploadimage
     - comment
@@ -48,17 +52,22 @@ permissions:
   - 'administer search'
   - 'administer views'
   - 'create article content'
+  - 'create billing content'
+  - 'create billing_write_off content'
   - 'create customer content'
   - 'create documentation content'
+  - 'create goods content'
   - 'create page content'
   - 'create product content'
   - 'create purchase_order content'
   - 'create sales_order content'
   - 'create stock_up content'
   - 'create storage content'
+  - 'create terms in prepaid_balance'
   - 'create terms in sell_items'
   - 'create vendor content'
-  - 'delete any goods content'
+  - 'delete own billing content'
+  - 'delete own billing_write_off content'
   - 'delete own customer content'
   - 'delete own documentation content'
   - 'delete own goods content'
@@ -69,7 +78,10 @@ permissions:
   - 'delete own stock_up content'
   - 'delete own storage content'
   - 'delete own vendor content'
+  - 'delete terms in prepaid_balance'
   - 'delete terms in sell_items'
+  - 'edit any billing content'
+  - 'edit any billing_write_off content'
   - 'edit any customer content'
   - 'edit any documentation content'
   - 'edit any goods content'
@@ -80,6 +92,9 @@ permissions:
   - 'edit any stock_up content'
   - 'edit any storage content'
   - 'edit any vendor content'
+  - 'edit own article content'
+  - 'edit own billing content'
+  - 'edit own billing_write_off content'
   - 'edit own customer content'
   - 'edit own documentation content'
   - 'edit own goods content'
@@ -90,12 +105,23 @@ permissions:
   - 'edit own stock_up content'
   - 'edit own storage content'
   - 'edit own vendor content'
+  - 'edit terms in prepaid_balance'
   - 'edit terms in sell_items'
   - 'post comments'
   - 'search content'
   - 'skip comment approval'
   - 'use advanced search'
   - 'use ckeditor_uploadimage'
+  - 'use editorial transition create_new_draft'
+  - 'use editorial transition draft_rate'
+  - 'use editorial transition draft_shipment'
+  - 'use editorial transition rate_rate'
+  - 'use editorial transition rate_shipment'
+  - 'use editorial transition return_completed_return_completed'
+  - 'use editorial transition return_return'
+  - 'use editorial transition return_return_completed'
+  - 'use editorial transition shipment_done'
+  - 'use editorial transition shipment_shipment'
   - 'use text format comment'
   - 'use text format full_html'
   - 'view all revisions'
@@ -110,8 +136,11 @@ permissions:
   - 'view any unpublished stock_up content'
   - 'view any unpublished storage content'
   - 'view any unpublished vendor content'
+  - 'view billing revisions'
+  - 'view billing_write_off revisions'
   - 'view customer revisions'
   - 'view documentation revisions'
+  - 'view goods revisions'
   - 'view own unpublished content'
   - 'view page revisions'
   - 'view product revisions'

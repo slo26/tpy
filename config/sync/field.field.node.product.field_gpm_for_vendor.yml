@@ -1,0 +1,25 @@
+uuid: 48abeba7-0d70-49f1-982d-0c9a6a3e328a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_gpm_for_vendor
+    - node.type.product
+id: node.product.field_gpm_for_vendor
+field_name: field_gpm_for_vendor
+entity_type: node
+bundle: product
+label: 經銷毛利率
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: !!float 0
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: '%'
+field_type: decimal

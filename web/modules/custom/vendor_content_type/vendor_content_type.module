@@ -82,9 +82,8 @@ function vendor_content_type_form_alter(&$form, FormStateInterface &$form_state,
         $form['field_country']['#group'] = 'payment_info';
         $form['field_bank_routing_number']['#group'] = 'payment_info';
         $form['field_account_name']['#group'] = 'payment_info';
-        $form['field_payment']['#group'] = 'payment_info';
-        $form['field_payment_condition']['#group'] = 'payment_info';
         $form['field_payment_due']['#group'] = 'payment_info';
         $form['field_bank_account']['#group'] = 'payment_info';
 	}
 }
+

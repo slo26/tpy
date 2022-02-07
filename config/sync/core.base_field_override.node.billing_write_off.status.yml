@@ -1,0 +1,22 @@
+uuid: e3c330d4-b3f2-4b52-9669-bcaa354f36e6
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.billing_write_off
+id: node.billing_write_off.status
+field_name: status
+entity_type: node
+bundle: billing_write_off
+label: Published
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

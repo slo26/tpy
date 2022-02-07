@@ -1,0 +1,7 @@
+name: Store Credit 
+type: module
+description: This module is to handle all store credit
+core_version_requirement: ^8 || ^9
+package: tpy
+
+

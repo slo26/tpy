@@ -1,0 +1,29 @@
+uuid: 6f3ecd70-c68d-4f2c-8f76-913f8c6d535d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_from_bill_write_off_entity
+    - node.type.billing_write_off
+    - taxonomy.vocabulary.prepaid_balance
+id: taxonomy_term.prepaid_balance.field_from_bill_write_off_entity
+field_name: field_from_bill_write_off_entity
+entity_type: taxonomy_term
+bundle: prepaid_balance
+label: 從累入
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      billing_write_off: billing_write_off
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

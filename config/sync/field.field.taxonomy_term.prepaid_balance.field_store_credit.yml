@@ -1,0 +1,25 @@
+uuid: be069f25-cabf-48c2-be78-67ded53b6405
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_store_credit
+    - taxonomy.vocabulary.prepaid_balance
+id: taxonomy_term.prepaid_balance.field_store_credit
+field_name: field_store_credit
+entity_type: taxonomy_term
+bundle: prepaid_balance
+label: 預收金額
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: !!float 0
+default_value_callback: ''
+settings:
+  min: !!float 0
+  max: null
+  prefix: $
+  suffix: ''
+field_type: decimal

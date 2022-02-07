@@ -5,6 +5,22 @@ use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax;
 
+function product_node_presave(Drupal\Core\Entity\EntityInterface $node) {
+    if ( $node->type->target_id == "product" ) {
+        $dealer_price = $node->field_dealer_price->value;
+        $retail_price = $node->field_retail_price->value;
+        $construction_price = $node->field_construction_price->value;
+        $cost = $node->field_cost_price->value;
+
+        $gpm = calculate_gpm_for_product($construction_price, $cost);
+        $node->set('field_gpm_for_construction', $gpm);
+        $gpm = calculate_gpm_for_product($retail_price, $cost);
+        $node->set('field_gpm_for_retailer', $gpm);
+        $gpm = calculate_gpm_for_product($dealer_price, $cost);
+        $node->set('field_gpm_for_vendor', $gpm);
+    }
+}
+
 function product_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
     if ( $form_id == "node_product_form" || $form_id == "node_product_edit_form" ) {
         $form['title']['widget'][0]['value']['#ajax'] = array(
@@ -17,7 +33,82 @@ function product_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
 			'#markup' => '<div class="title-message"></div>',
             '#weight' => 2,
         );
+
+        $form['field_cost_price']['widget'][0]['value']['#ajax'] = array(
+            'callback' => 'ajax_calculate_gpm',
+			'event' => 'change',
+        );
+
+        $form['field_construction_price']['widget'][0]['value']['#ajax'] = array(
+            'callback' => 'ajax_calculate_gpm_for_construction',
+			'event' => 'change',
+        );
+
+        $form['field_retail_price']['widget'][0]['value']['#ajax'] = array(
+            'callback' => 'ajax_calculate_gpm_for_retailer',
+			'event' => 'change',
+        );
+
+        $form['field_dealer_price']['widget'][0]['value']['#ajax'] = array(
+            'callback' => 'ajax_calculate_gpm_for_dealer',
+			'event' => 'change',
+        );
     }
+}
+
+function ajax_calculate_gpm(array $form, FormStateInterface $form_state) {
+	$ajax_response = new AjaxResponse();
+    $dealer_price = $form_state->getValue('field_dealer_price')[0]['value'];
+    $retail_price = $form_state->getValue('field_retail_price')[0]['value'];
+    $cost = $form_state->getValue('field_cost_price')[0]['value'];
+
+    $gpm = calculate_gpm_for_product($retail_price, $cost);
+    $ajax_response->addCommand(new InvokeCommand('#edit-field-gpm-for-retailer-0-value', 'val', [$gpm]));
+    $gpm = calculate_gpm_for_product($dealer_price, $cost);
+    $ajax_response->addCommand(new InvokeCommand('#edit-field-gpm-for-vendor-0-value', 'val', [$gpm]));
+    
+	return $ajax_response;
+}
+
+function ajax_calculate_gpm_for_retailer(array $form, FormStateInterface $form_state) {
+    $ajax_response = new AjaxResponse();
+    $retail_price = $form_state->getValue('field_retail_price')[0]['value'];
+    $cost = $form_state->getValue('field_cost_price')[0]['value'];
+    $gpm = calculate_gpm_for_product($retail_price, $cost);
+
+    $ajax_response->addCommand(new InvokeCommand('#edit-field-gpm-for-retailer-0-value', 'val', [$gpm]));
+
+    return $ajax_response;
+}
+
+function ajax_calculate_gpm_for_dealer(array $form, FormStateInterface $form_state) {
+    $ajax_response = new AjaxResponse();
+    $dealer_price = $form_state->getValue('field_dealer_price')[0]['value'];
+    $cost = $form_state->getValue('field_cost_price')[0]['value'];
+    $gpm = calculate_gpm_for_product($dealer_price, $cost);
+
+    $ajax_response->addCommand(new InvokeCommand('#edit-field-gpm-for-vendor-0-value', 'val', [$gpm]));
+
+    return $ajax_response;
+}
+
+function ajax_calculate_gpm_for_construction(array $form, FormStateInterface $form_state) {
+    $ajax_response = new AjaxResponse();
+    $construction_price = $form_state->getValue('field_construction_price')[0]['value'];
+    $cost = $form_state->getValue('field_cost_price')[0]['value'];
+    $gpm = calculate_gpm_for_product($construction_price, $cost);
+
+    $ajax_response->addCommand(new InvokeCommand('#edit-field-gpm-for-construction-0-value', 'val', [$gpm]));
+
+    return $ajax_response;
+}
+
+function calculate_gpm_for_product($price, $cost) {
+    if ( $price == 0 ) {
+        return 0;
+    }
+    $gpm = ($price - $cost) / $price;
+    return round($gpm, 2) * 100;
 }
 
 function ajax_check_unique_id(array $form, FormStateInterface $form_state) {
@@ -33,4 +124,3 @@ function ajax_check_unique_id(array $form, FormStateInterface $form_state) {
     
 	return $ajax_response;
 }
-

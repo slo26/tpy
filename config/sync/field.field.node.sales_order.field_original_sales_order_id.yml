@@ -1,0 +1,28 @@
+uuid: 93be701e-a980-4ccf-9022-422d6227beba
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_original_sales_order_id
+    - node.type.sales_order
+id: node.sales_order.field_original_sales_order_id
+field_name: field_original_sales_order_id
+entity_type: node
+bundle: sales_order
+label: 原銷售單
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      sales_order: sales_order
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

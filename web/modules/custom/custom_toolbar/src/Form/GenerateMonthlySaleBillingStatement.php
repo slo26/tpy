@@ -78,6 +78,12 @@ class GenerateMonthlySaleBillingStatement extends ConfigFormBase {
             ]   
         );
 
+        $form['exclude'] = [
+            '#type'          => 'checkbox',
+            '#title'         => t('排除金額己全收取帳單'),
+            '#default_value' => false,
+        ];
+
         $form['monthly_bill_statement'] = array('#type' => 'markup', '#markup' => '<div class="monthly-bill-statement"></div>',);
 
         /*$form['actions']['submit'] = [
@@ -93,19 +99,18 @@ class GenerateMonthlySaleBillingStatement extends ConfigFormBase {
         $begin_date = $form_state->getValue('begin_date');
         $end_date = $form_state->getValue('end_date');
         $customer_nid = $form_state->getValue('customer-bill-statement');
+        $exclude = $form_state->getValue('exclude');
         $bill_nids = array();
+        $query = \Drupal::entityQuery("node");
+        $query->condition('type', 'billing');
+        $query->condition('field_expected_receive_payment', [$begin_date, $end_date], "BETWEEN");
         if ( !empty($customer_nid) ) {
-            $bill_nids = \Drupal::entityQuery("node")
-                                    ->condition('type', 'billing')
-                                    ->condition('field_expected_receive_payment', [$begin_date, $end_date], "BETWEEN")
-                                    ->condition("field_customer_entity", $customer_nid)
-                                    ->execute();
-        } else {
-            $bill_nids = \Drupal::entityQuery("node")
-                                    ->condition('type', 'billing')
-                                    ->condition('field_expected_receive_payment', [$begin_date, $end_date], "BETWEEN")
-                                    ->execute();
+            $query->condition("field_customer_entity", $customer_nid);
         }
+        if ( $exclude == true ) {
+            $query->condition("field_remain_unpaid_amount", 0);
+        }
+        $bill_nids = $query->execute();
         $customer_entities = array();
         if ( !empty($bill_nids) ) {
             foreach($bill_nids as $bill_nid) {
@@ -157,6 +162,8 @@ class GenerateMonthlySaleBillingStatement extends ConfigFormBase {
             $preview_link = '<a class="use-ajax" data-dialog-options="{&quot;width&quot;:1000}" data-dialog-type="dialog" href=' . $url . '>預覽</a>';
             $url = "/admin/bill/monthly-detail-bill-statementForm/$customer_nid/$begin_date/$end_date";
             $print_link = '<a href=' . $url . ' target="_blank">應收帳款明細表</a>';
+            $url = "/node/add/billing-write-off/$begin_date/$end_date/$customer_nid";
+            $strike_a_balance_link = '<a href=' . $url . ' target="_blank">應收沖帳款</a>';
             $dropdown_button = '<div class="dropbutton-wrapper dropbutton-multiple">
                 <div class="dropbutton-widget">
                     <ul class="dropbutton">
@@ -172,6 +179,9 @@ class GenerateMonthlySaleBillingStatement extends ConfigFormBase {
                         </li>
                         <li class="edit dropbutton-action">' 
                             . $print_link . 
+                        '</li>
+                        <li class="edit dropbutton-action">' 
+                            . $strike_a_balance_link . 
                         '</li>
                     </ul>
                 </div>

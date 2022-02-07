@@ -1,17 +1,39 @@
-uuid: dda1efe2-7b2f-4e40-ae9b-4f4dbfe2538e
+uuid: 5c5d6831-c760-46be-bbc1-7fed74ce124d
 langcode: en
 status: true
 dependencies:
   module:
     - node
+    - options
 id: node.field_payment_due
 field_name: field_payment_due
 entity_type: node
-type: integer
+type: list_string
 settings:
-  unsigned: false
-  size: normal
-module: core
+  allowed_values:
+    -
+      value: cash
+      label: 現金
+    -
+      value: cash_30
+      label: 現金匯款30天
+    -
+      value: cash_60
+      label: 現金匯款60天
+    -
+      value: check_30
+      label: 當月結30天票
+    -
+      value: check_45
+      label: 當月結45天票
+    -
+      value: check_60
+      label: 當月結60天票
+    -
+      value: check_90
+      label: 當月結90天票
+  allowed_values_function: ''
+module: options
 locked: false
 cardinality: 1
 translatable: true

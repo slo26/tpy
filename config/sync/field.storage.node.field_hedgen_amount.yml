@@ -1,0 +1,20 @@
+uuid: ebe23153-2f68-4426-80cd-c2c59e53bf5a
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_hedgen_amount
+field_name: field_hedgen_amount
+entity_type: node
+type: decimal
+settings:
+  precision: 10
+  scale: 2
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,64 @@
+uuid: edd70067-8cdf-4b5e-b89a-bc61de8a7763
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.prepaid_balance.field_create_date
+    - field.field.taxonomy_term.prepaid_balance.field_customer_entity
+    - field.field.taxonomy_term.prepaid_balance.field_from_bill_write_off_entity
+    - field.field.taxonomy_term.prepaid_balance.field_store_credit
+    - field.field.taxonomy_term.prepaid_balance.field_to_bill_write_off
+    - taxonomy.vocabulary.prepaid_balance
+  module:
+    - datetime
+id: taxonomy_term.prepaid_balance.default
+targetEntityType: taxonomy_term
+bundle: prepaid_balance
+mode: default
+content:
+  field_create_date:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_customer_entity:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_from_bill_write_off_entity:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_store_credit:
+    type: number_decimal
+    label: above
+    settings:
+      thousand_separator: ''
+      decimal_separator: .
+      scale: 2
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_to_bill_write_off:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+hidden:
+  description: true

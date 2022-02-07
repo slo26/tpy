@@ -26,11 +26,11 @@ definitions:
     expanded: false
     enabled: false
   workbench__content:
+    enabled: false
     menu_name: workbench
     parent: ''
-    weight: -50
     expanded: false
-    enabled: true
+    weight: -50
   workbench__create_content:
     menu_name: workbench
     parent: ''
@@ -43,3 +43,45 @@ definitions:
     weight: -47
     expanded: false
     enabled: false
+  system__admin_structure:
+    menu_name: admin
+    parent: system.admin
+    weight: -8
+    expanded: true
+    enabled: true
+  system__admin_content:
+    menu_name: admin
+    parent: system.admin
+    weight: -10
+    expanded: true
+    enabled: true
+  system__themes_page:
+    menu_name: admin
+    parent: system.admin
+    weight: -6
+    expanded: true
+    enabled: true
+  system__modules_list:
+    menu_name: admin
+    parent: system.admin
+    weight: -2
+    expanded: true
+    enabled: true
+  system__admin_config:
+    menu_name: admin
+    parent: system.admin
+    weight: 0
+    expanded: true
+    enabled: true
+  entity__user__collection:
+    menu_name: admin
+    parent: system.admin
+    weight: 4
+    expanded: true
+    enabled: true
+  system__admin_reports:
+    menu_name: admin
+    parent: system.admin
+    weight: 5
+    expanded: true
+    enabled: true

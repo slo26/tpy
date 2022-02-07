@@ -1,0 +1,20 @@
+uuid: 7a64900f-5192-44e1-997e-936a619bec1e
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_gpm_for_construction
+field_name: field_gpm_for_construction
+entity_type: node
+type: decimal
+settings:
+  precision: 10
+  scale: 2
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

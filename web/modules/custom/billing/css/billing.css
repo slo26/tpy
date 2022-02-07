@@ -1,0 +1,45 @@
+.layout-region-node-secondary {
+    width: 20%;
+}
+.layout-region-node-main {
+    width: 80%;
+}
+
+.form-item-field-total-amount-without-tax-0-value,
+.form-item-field-tax-0-value,
+.form-item-field-deposit-0-value,
+.form-item-field-discount-0-value,
+.form-item-field-write-off-amount-0-value {
+    float: left;
+}
+
+#sign{
+    margin-top: 34px;
+    float: left;
+    margin-left:3px;
+    margin-right:3px;
+}
+
+#edit-field-remain-unpaid-amount-wrapper {
+    margin-top: 20px;
+    margin-bottom: 25px;
+}
+
+#end-sign {
+    margin-top: 25px;
+    margin-left:3px;
+    margin-right:3px;
+    margin-bottom: 20px;
+    float: left;
+}
+
+
+#edit-field-total-amount-without-tax-0-value,
+#edit-field-tax-0-value,
+#edit-field-deposit-0-value,
+#edit-field-discount-0-value,
+#edit-field-write-off-amount-0-value,
+#edit-field-remain-unpaid-amount-0-value {
+    width: 100px;
+}
+

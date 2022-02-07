@@ -16,8 +16,6 @@ dependencies:
     - field.field.node.vendor.field_fax
     - field.field.node.vendor.field_long_comment
     - field.field.node.vendor.field_mobile
-    - field.field.node.vendor.field_payment
-    - field.field.node.vendor.field_payment_condition
     - field.field.node.vendor.field_payment_due
     - field.field.node.vendor.field_phone
     - field.field.node.vendor.field_uniform_number
@@ -48,8 +46,6 @@ hidden:
   field_fax: true
   field_long_comment: true
   field_mobile: true
-  field_payment: true
-  field_payment_condition: true
   field_payment_due: true
   field_phone: true
   field_uniform_number: true

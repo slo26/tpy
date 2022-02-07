@@ -71,21 +71,9 @@ class CustomToolbarController extends ControllerBase {
         $markup .= '<div class="description">以下是目前的設定:</br>' .  implode(", ", $settings) .'</div>';
         $markup .= '</a></li>';
         $markup .= '<li>';
-        $markup .= '<a href="/admin/structure/types/manage/sales_order/fields/node.sales_order.field_order_status/storage">';
-        $markup .= '<span class="label">訂單狀態</span>';
-        //$settings = getFieldStorageSettingsAllowedValues('field_order_status', 'sales_order');
-        //$markup .= '<div class="description">以下是目前的設定:</br>' .  implode(", ", $settings) .'</div>';
-        $markup .= '</a></li>';
-        $markup .= '<li>';
         $markup .= '<a href="/admin/structure/types/manage/purchase_order/fields/node.purchase_order.field_purchase_status/storage">';
         $markup .= '<span class="label">採購狀態</span>';
         $settings = getFieldStorageSettingsAllowedValues('field_purchase_status', 'purchase_order');
-        $markup .= '<div class="description">以下是目前的設定:</br>' .  implode(", ", $settings) .'</div>';
-        $markup .= '</a></li>';
-        $markup .= '<li>';
-        $markup .= '<a href="/admin/structure/types/manage/customer/fields/node.customer.field_payment/storage">';
-        $markup .= '<span class="label">付款方式</span>';
-        $settings = getFieldStorageSettingsAllowedValues('field_payment', 'customer');
         $markup .= '<div class="description">以下是目前的設定:</br>' .  implode(", ", $settings) .'</div>';
         $markup .= '</a></li>';
         $markup .= '<li>';
@@ -124,11 +112,28 @@ class CustomToolbarController extends ControllerBase {
         $markup .= '<div class="description">建立應收對帳單</div>';
         $markup .= '</a></li>';
         $markup .= '<li>';
+        $markup .= '<a href="/admin/all-write-off-view">';
+        $markup .= '<span class="label">已完成應收對帳列表</span>';
+        $markup .= '<div class="description">已完成應收對帳列表</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
         $markup .= '<a href="/admin/all-billing">';
         $markup .= '<span class="label">銷售單帳單</span>';
         $markup .= '<div class="description">銷售單帳單</div>';
         $markup .= '</a></li>';
-        $markup .= '</ul></div></div>';        
+        $markup .= '</ul></div></div>';    
+        
+        $markup .= '<div class="panel">';
+        $markup .= '<h3 class="panel__title">客戶信用</h3>';
+        $markup .= '<div class="panel__content">';
+        $markup .= '<ul class="admin-list">';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/all-store-credit">';
+        $markup .= '<span class="label">客戶信用儲值</span>';
+        $markup .= '<div class="description">客戶信用儲值列表</div>';
+        $markup .= '</a></li>';
+        $markup .= '</ul></div></div>';
+
         $markup .= '</div>';
 
         $markup .= '<div class="layout-column layout-column--half">';
@@ -315,68 +320,20 @@ class CustomToolbarController extends ControllerBase {
         );
     }
 
-    public function sell() {
-        $markup = '<ul class="admin-list">';
-        $markup .= '<li><a href="' . '/node/add/sales_order';
-        $markup .= '"><span class="label">新增銷售單';
-        $markup .= '</span><div class="description">新增銷售單.';
-        $markup .= '</div></a></li>';
-
-
-        $markup .= '<li><a href="' . '/admin/all-sell-orders';
-        $markup .= '"><span class="label">銷售單列表';
-        $markup .= '</span><div class="description">所有銷售單列表.';
-        $markup .= '</div></a></li>';
-
-        $markup .= '<li><a href="' . '/admin/sell-items';
-        $markup .= '"><span class="label">產品銷售列表.';
-        $markup .= '</span><div class="description">所有產品銷售列表.';
-        $markup .= '</div></a></li>';
-        
+    public function customers_vendors() {
+        $markup = '<div id="block-seven-content" class="block block-system block-system-main-block">';
+        $markup .= '<ul class="admin-list">';
+        $markup .= '<li><a href="/node/add/customer"><span class="label">新增客戶</span>';
+        $markup .= '<div class="description">新增客戶</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li><a href="/admin/all-customers"><span class="label">客戶列表</span>';
+        $markup .= '<div class="description">列出所有客戶</div></a></li>';
+        $markup .= '<li><a href="/node/add/vendor"><span class="label">新增廠商</span>';
+        $markup .= '<div class="description">新增廠商</div></a></li>';
+        $markup .= '<li><a href="/admin/vendor"><span class="label">廠商列表</span>';
+        $markup .= '<div class="description">列出所有廠商</div></a></li>';
         $markup .= '</ul>';
-
-        return array(
-            '#type' => 'markup',
-            '#markup' => $markup,
-        );
-    }
-
-    public function company() {
-        $markup = '<ul class="admin-list">';
-        $markup .= '<li><a href="' . '/node/add/customer';
-        $markup .= '"><span class="label">新增客戶';
-        $markup .= '</span><div class="description">新增客戶.';
-        $markup .= '</div></a></li>';
-
-
-        $markup .= '<li><a href="' . '/admin/all-customers';
-        $markup .= '"><span class="label">客戶列表';
-        $markup .= '</span><div class="description">所有客戶列表.';
-        $markup .= '</div></a></li>';
-        
-        $markup .= '</ul>';
-
-        return array(
-            '#type' => 'markup',
-            '#markup' => $markup,
-        );
-    }
-
-    public function product() {
-        $markup = '<ul class="admin-list">';
-        $markup .= '<li><a href="' . '/node/add/product';
-        $markup .= '"><span class="label">新增產品';
-        $markup .= '</span><div class="description">新增產品.';
-        $markup .= '</div></a></li>';
-
-
-        $markup .= '<li><a href="' . '/admin/all-products';
-        $markup .= '"><span class="label">產品列表';
-        $markup .= '</span><div class="description">所有產品列表.';
-        $markup .= '</div></a></li>';
-        
-        $markup .= '</ul>';
-
+        $markup .= '</div>';
         return array(
             '#type' => 'markup',
             '#markup' => $markup,
@@ -413,30 +370,105 @@ class CustomToolbarController extends ControllerBase {
         );
     }
 
-    public function storage() {
-        $markup = '<ul class="admin-list">';
-        $markup .= '<li><a href="' . '/node/add/storage';
-        $markup .= '"><span class="label">新增倉庫';
-        $markup .= '</span><div class="description">新增倉庫.';
-        $markup .= '</div></a></li>';
+    public function import_sell_inventory() {
+        $markup = '<div id="block-seven-content" class="block block-system block-system-main-block">';
+        $markup .= '<div class="clearfix">';
 
-        $markup .= '<li><a href="' . '/admin/all-storages';
-        $markup .= '"><span class="label">倉庫列表';
-        $markup .= '</span><div class="description">所有倉庫列表.';
-        $markup .= '</div></a></li>';
+        $markup .= '<div class="layout-column layout-column--half">';
+        $markup .= '<div class="panel">';
+        $markup .= '<h3 class="panel__title">銷貨</h3>';
+        $markup .= '<div class="panel__content">';
+        $markup .= '<ul class="admin-list">';
+        $markup .= '<li>';
+        $markup .= '<a href="/node/add/sales_order">';
+        $markup .= '<span class="label">新增銷售單</span>';
+        $markup .= '<div class="description">新增銷售單</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/all-sell-orders">';
+        $markup .= '<span class="label">銷售單列表</span>';
+        $markup .= '<div class="description">銷售單列表</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/sell-items">';
+        $markup .= '<span class="label">產品銷售列表</span>';
+        $markup .= '<div class="description">產品銷售列表</div>';
+        $markup .= '</a></li>';
+        $markup .= '</ul></div></div>';
 
-        $markup .= '<li><a href="' . '/node/add/stock_up';
-        $markup .= '"><span class="label">新增商品庫存';
-        $markup .= '</span><div class="description">新增商品庫存.';
-        $markup .= '</div></a></li>';
+        $markup .= '<div class="panel">';
+        $markup .= '<h3 class="panel__title">倉儲</h3>';
+        $markup .= '<div class="panel__content">';
+        $markup .= '<ul class="admin-list">';
+        $markup .= '<li>';
+        $markup .= '<a href="/node/add/stock_up">';
+        $markup .= '<span class="label">新增商品庫存</span>';
+        $markup .= '<div class="description">新增商品庫存</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/all-stock-up">';
+        $markup .= '<span class="label">商品庫存列表</span>';
+        $markup .= '<div class="description">商品庫存列表</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/node/add/storage">';
+        $markup .= '<span class="label">新增倉庫</span>';
+        $markup .= '<div class="description">新增倉庫</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/all-storages">';
+        $markup .= '<span class="label">倉庫列表</span>';
+        $markup .= '<div class="description">倉庫列表</div>';
+        $markup .= '</a></li>';
+        $markup .= '</ul></div></div>';
 
-        $markup .= '<li><a href="' . '/admin/all-stock-up';
-        $markup .= '"><span class="label">商品庫存列表';
-        $markup .= '</span><div class="description">所有商品庫存列表.';
-        $markup .= '</div></a></li>';
-        
+        $markup .= '</div>';
+
+        $markup .= '<div class="layout-column layout-column--half">';
+
+        $markup .= '<div class="panel">';
+        $markup .= '<h3 class="panel__title">採購</h3>';
+        $markup .= '<div class="panel__content">';
+        $markup .= '<ul class="admin-list">';
+        $markup .= '<li>';
+        $markup .= '<a href="/node/add/purchase_order">';
+        $markup .= '<span class="label">新增採購單</span>';
+        $markup .= '<div class="description">新增採購</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/all-purchase-orders">';
+        $markup .= '<span class="label">採購列表</span>';
+        $markup .= '<div class="description">採購列表</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/purchase-items">';
+        $markup .= '<span class="label">採購項目列表</span>';
+        $markup .= '<div class="description">採購項目列表</div>';
+        $markup .= '</a></li>';
+        $markup .= '</ul></div></div>';
+
+        $markup .= '</div></div>';
+
+        return array(
+            '#type' => 'markup',
+            '#markup' => $markup,
+        );
+    }
+
+    public function products_goods() {
+        $markup = '<div id="block-seven-content" class="block block-system block-system-main-block">';
+        $markup .= '<ul class="admin-list">';
+        $markup .= '<li><a href="/node/add/product"><span class="label">新增產品</span>';
+        $markup .= '<div class="description">新增產品</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li><a href="/admin/all-products"><span class="label">產品列表</span>';
+        $markup .= '<div class="description">列出所有產品</div></a></li>';
+        $markup .= '<li><a href="/node/add/goods"><span class="label">新增零件／物品</span>';
+        $markup .= '<div class="description">新增零件／物品</div></a></li>';
+        $markup .= '<li><a href="/admin/parts-goods"><span class="label">零件/物品列表</span>';
+        $markup .= '<div class="description">列出所有零件和物品</div></a></li>';
         $markup .= '</ul>';
-
+        $markup .= '</div>';
         return array(
             '#type' => 'markup',
             '#markup' => $markup,

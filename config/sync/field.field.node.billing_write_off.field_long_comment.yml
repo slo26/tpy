@@ -1,0 +1,19 @@
+uuid: 59d06458-c269-4fec-a9e9-a1b2114bf77f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_long_comment
+    - node.type.billing_write_off
+id: node.billing_write_off.field_long_comment
+field_name: field_long_comment
+entity_type: node
+bundle: billing_write_off
+label: 備註
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

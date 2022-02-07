@@ -1,0 +1,21 @@
+uuid: 429551c5-c9c3-4b60-a773-447997fa876f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_begin_date
+    - node.type.billing_write_off
+  module:
+    - datetime
+id: node.billing_write_off.field_begin_date
+field_name: field_begin_date
+entity_type: node
+bundle: billing_write_off
+label: 月結起始日
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

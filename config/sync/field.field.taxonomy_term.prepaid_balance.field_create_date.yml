@@ -1,0 +1,24 @@
+uuid: 2f5a2e66-2b45-4177-a374-4054488680d5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_create_date
+    - taxonomy.vocabulary.prepaid_balance
+  module:
+    - datetime
+id: taxonomy_term.prepaid_balance.field_create_date
+field_name: field_create_date
+entity_type: taxonomy_term
+bundle: prepaid_balance
+label: 建立日期
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    default_date_type: now
+    default_date: now
+default_value_callback: ''
+settings: {  }
+field_type: datetime

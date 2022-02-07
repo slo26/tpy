@@ -1,24 +1,16 @@
-custom_toolbar.sell:
-  path: '/admin/custom-toolbar/sell'
+custom_toolbar.import_sell_inventory:
+  path: '/admin/custom-toolbar/import-sell-inventory'
   defaults:
-    _controller: '\Drupal\custom_toolbar\Controller\CustomToolbarController::sell'
-    _title: '銷貨'
-  requirements:
-    _role: 'authenticated'
-
-custom_toolbar.company:
-  path: '/admin/custom-toolbar/company'
-  defaults:
-    _controller: '\Drupal\custom_toolbar\Controller\CustomToolbarController::company'
-    _title: '客戶/廠商'
+    _controller: '\Drupal\custom_toolbar\Controller\CustomToolbarController::import_sell_inventory'
+    _title: '進銷存'
   requirements:
     _role: 'authenticated'
 
 custom_toolbar.product:
-  path: '/admin/custom-toolbar/product'
+  path: '/admin/custom-toolbar/customers-vendors'
   defaults:
-    _controller: '\Drupal\custom_toolbar\Controller\CustomToolbarController::product'
-    _title: '產品'
+    _controller: '\Drupal\custom_toolbar\Controller\CustomToolbarController::customers_vendors'
+    _title: '客戶/廠商'
   requirements:
     _role: 'authenticated'
 
@@ -30,11 +22,11 @@ custom_toolbar.web_teamroom_other:
   requirements:
     _role: 'authenticated'
 
-custom_toolbar.storage:
-  path: '/admin/custom-toolbar/storage'
+custom_toolbar.products_goods:
+  path: '/admin/custom-toolbar/products-goods'
   defaults:
-    _controller: '\Drupal\custom_toolbar\Controller\CustomToolbarController::storage'
-    _title: '庫存'
+    _controller: '\Drupal\custom_toolbar\Controller\CustomToolbarController::products_goods'
+    _title: '產品/零件'
   requirements:
     _role: 'authenticated'
 
@@ -50,7 +42,7 @@ custom_toolbar.billing:
   path: '/admin/billing'
   defaults:
     _controller: '\Drupal\custom_toolbar\Controller\CustomToolbarController::billStatement'
-    _title: '帳單'
+    _title: '帳務'
   requirements:
     _role: 'authenticated'
 
@@ -68,14 +60,14 @@ custom_toolbar.documents_export:
     _form: 'Drupal\custom_toolbar\Form\GenerateMonthlySaleBillingStatement'
     _title: '產生應收月結對帳單'
   requirements:
-    _permission: 'authenticated'
+    _role: 'authenticated'
 
 custom_toolbar.show_bill_statement:
   path: '/admin/view/{customer_nid}/show-bill-statement/{begin_date}/{end_date}'
   defaults:
     _form: '\Drupal\custom_toolbar\Form\ShowBillStatementDialogForm'
   requirements:
-    _permission: 'authenticated'
+    _role: 'authenticated'
 
 custom_toolbar.show_detail_monthly_bill_statement:
   path: '/admin/bill/monthly-detail-bill-statementForm/{customer_nid}/{begin_date}/{end_date}'
@@ -83,4 +75,5 @@ custom_toolbar.show_detail_monthly_bill_statement:
     _form: 'Drupal\custom_toolbar\Form\MonthlyDetailBillStatementForm'
     _title: '月份應收帳款明細表'
   requirements:
-    _permission: 'authenticated'
+    _role: 'authenticated'
+

@@ -1,0 +1,25 @@
+uuid: 557339e6-a51b-4b3a-9e2a-b8e2efd0ae4a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_receivable_balance
+    - node.type.billing_write_off
+id: node.billing_write_off.field_receivable_balance
+field_name: field_receivable_balance
+entity_type: node
+bundle: billing_write_off
+label: 應收餘額
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: !!float 0
+default_value_callback: ''
+settings:
+  min: !!float 0
+  max: null
+  prefix: $
+  suffix: ''
+field_type: decimal

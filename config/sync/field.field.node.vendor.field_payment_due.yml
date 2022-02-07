@@ -1,23 +1,21 @@
-uuid: ffe7a1e7-3bc2-41b9-b159-aaf3221c2b4a
+uuid: bca48b75-3eb5-4f7b-b014-0c1a1f45c81e
 langcode: en
 status: true
 dependencies:
   config:
     - field.storage.node.field_payment_due
     - node.type.vendor
+  module:
+    - options
 id: node.vendor.field_payment_due
 field_name: field_payment_due
 entity_type: node
 bundle: vendor
-label: 結帳日
+label: 當月結
 description: ''
 required: false
 translatable: true
 default_value: {  }
 default_value_callback: ''
-settings:
-  min: null
-  max: null
-  prefix: ''
-  suffix: ''
-field_type: integer
+settings: {  }
+field_type: list_string

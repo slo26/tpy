@@ -1,0 +1,21 @@
+uuid: 81d351e5-0857-4e3d-9653-8b316e1ea9ad
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_payment_expire
+    - node.type.billing
+  module:
+    - datetime
+id: node.billing.field_payment_expire
+field_name: field_payment_expire
+entity_type: node
+bundle: billing
+label: 收款到期日
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

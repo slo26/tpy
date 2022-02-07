@@ -1,0 +1,20 @@
+uuid: 42b72e67-7391-4dd5-ab77-1ea08f35e64a
+langcode: en
+status: true
+dependencies:
+  module:
+    - datetime
+    - node
+id: node.field_begin_account_date
+field_name: field_begin_account_date
+entity_type: node
+type: datetime
+settings:
+  datetime_type: date
+module: datetime
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

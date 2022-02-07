@@ -1,0 +1,20 @@
+uuid: 957d6d38-3764-4cec-9ce8-65692e5cf6d7
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_receivable_balance
+field_name: field_receivable_balance
+entity_type: node
+type: decimal
+settings:
+  precision: 10
+  scale: 2
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

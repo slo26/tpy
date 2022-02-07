@@ -1,0 +1,29 @@
+uuid: 4129c267-12b7-4289-b450-448e358b2016
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_customer_entity
+    - node.type.billing_write_off
+    - node.type.customer
+id: node.billing_write_off.field_customer_entity
+field_name: field_customer_entity
+entity_type: node
+bundle: billing_write_off
+label: 客戶
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      customer: customer
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

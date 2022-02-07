@@ -1,0 +1,9 @@
+billing_write_off.node_add:
+  path: '/node/add/billing-write-off/{begin_date}/{end_date}/{customer_nid}'
+  defaults:
+    _controller: '\Drupal\billing_write_off\Controller\AddNodeController::addNodeForm'
+    _title: 'Create billing write off'
+  options:
+    _admin_route: TRUE
+  requirements:
+    _role: 'authenticated'

@@ -9,7 +9,7 @@ id: node.product.field_dealer_price
 field_name: field_dealer_price
 entity_type: node
 bundle: product
-label: 經銷商價錢
+label: 經銷價錢
 description: ''
 required: false
 translatable: false
@@ -20,6 +20,6 @@ default_value_callback: ''
 settings:
   min: !!float 0
   max: null
-  prefix: ''
+  prefix: $
   suffix: ''
 field_type: decimal

@@ -1,0 +1,25 @@
+uuid: 10ea3061-14bd-4d7d-b811-c5f866fc529f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_construction_price
+    - node.type.product
+id: node.product.field_construction_price
+field_name: field_construction_price
+entity_type: node
+bundle: product
+label: 工程價錢
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: !!float 0
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: $
+  suffix: ''
+field_type: decimal

@@ -1,0 +1,25 @@
+uuid: a24c8a78-db95-4d67-b5cd-7f4e2a37881a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_remain_unpaid_amount
+    - node.type.billing
+id: node.billing.field_remain_unpaid_amount
+field_name: field_remain_unpaid_amount
+entity_type: node
+bundle: billing
+label: 剩餘未付金額
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: !!float 0
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: $
+  suffix: ''
+field_type: decimal

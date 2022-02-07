@@ -15,8 +15,6 @@ dependencies:
     - field.field.node.vendor.field_fax
     - field.field.node.vendor.field_long_comment
     - field.field.node.vendor.field_mobile
-    - field.field.node.vendor.field_payment
-    - field.field.node.vendor.field_payment_condition
     - field.field.node.vendor.field_payment_due
     - field.field.node.vendor.field_phone
     - field.field.node.vendor.field_uniform_number
@@ -116,29 +114,12 @@ content:
     third_party_settings: {  }
     weight: 6
     region: content
-  field_payment:
+  field_payment_due:
     type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
     weight: 14
-    region: content
-  field_payment_condition:
-    type: string
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    weight: 15
-    region: content
-  field_payment_due:
-    type: number_integer
-    label: above
-    settings:
-      thousand_separator: ''
-      prefix_suffix: true
-    third_party_settings: {  }
-    weight: 16
     region: content
   field_phone:
     type: string

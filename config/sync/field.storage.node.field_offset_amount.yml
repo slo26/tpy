@@ -1,0 +1,20 @@
+uuid: 7774d3a6-f676-49a2-9988-0c216f87b0d7
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_offset_amount
+field_name: field_offset_amount
+entity_type: node
+type: decimal
+settings:
+  precision: 10
+  scale: 2
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -11,7 +11,7 @@ id: node.billing.field_expected_receive_payment
 field_name: field_expected_receive_payment
 entity_type: node
 bundle: billing
-label: 預計收款日期
+label: 帳款日
 description: ''
 required: false
 translatable: false

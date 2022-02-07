@@ -1,0 +1,17 @@
+uuid: 466e0791-1ce9-413e-9073-959de5da1680
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 'billing write off'
+type: billing_write_off
+description: 應收帳款沖銷/應付帳款沖銷
+help: ''
+new_revision: false
+preview_mode: 1
+display_submitted: false

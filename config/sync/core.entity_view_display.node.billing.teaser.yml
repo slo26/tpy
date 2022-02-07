@@ -8,9 +8,13 @@ dependencies:
     - field.field.node.billing.field_bill_type
     - field.field.node.billing.field_customer_entity
     - field.field.node.billing.field_deposit
+    - field.field.node.billing.field_discount
     - field.field.node.billing.field_expected_receive_payment
+    - field.field.node.billing.field_long_comment
     - field.field.node.billing.field_order_id
+    - field.field.node.billing.field_payment_expire
     - field.field.node.billing.field_receipt_number
+    - field.field.node.billing.field_remain_unpaid_amount
     - field.field.node.billing.field_tax
     - field.field.node.billing.field_tax_rate
     - field.field.node.billing.field_total_amount_with_tax
@@ -34,9 +38,13 @@ hidden:
   field_bill_type: true
   field_customer_entity: true
   field_deposit: true
+  field_discount: true
   field_expected_receive_payment: true
+  field_long_comment: true
   field_order_id: true
+  field_payment_expire: true
   field_receipt_number: true
+  field_remain_unpaid_amount: true
   field_tax: true
   field_tax_rate: true
   field_total_amount_with_tax: true

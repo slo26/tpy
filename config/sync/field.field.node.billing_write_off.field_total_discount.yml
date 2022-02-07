@@ -1,0 +1,25 @@
+uuid: f71a5b60-6d70-4d82-94e9-30ec81226cb2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_total_discount
+    - node.type.billing_write_off
+id: node.billing_write_off.field_total_discount
+field_name: field_total_discount
+entity_type: node
+bundle: billing_write_off
+label: 折讓金額
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: !!float 0
+default_value_callback: ''
+settings:
+  min: !!float 0
+  max: null
+  prefix: $
+  suffix: ''
+field_type: decimal

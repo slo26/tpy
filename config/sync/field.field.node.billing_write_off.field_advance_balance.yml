@@ -1,0 +1,25 @@
+uuid: affc52e5-ca74-4bfb-974b-0de1e0ca90f9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_advance_balance
+    - node.type.billing_write_off
+id: node.billing_write_off.field_advance_balance
+field_name: field_advance_balance
+entity_type: node
+bundle: billing_write_off
+label: 預收餘額
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: !!float 0
+default_value_callback: ''
+settings:
+  min: !!float 0
+  max: null
+  prefix: $
+  suffix: ''
+field_type: decimal

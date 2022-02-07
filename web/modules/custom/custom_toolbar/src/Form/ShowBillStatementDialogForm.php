@@ -51,7 +51,6 @@ class ShowBillStatementDialogForm extends FormBase {
                 $num++;
                 $sale = \Drupal\node\Entity\Node::load($bill->field_order_id->target_id);
                 $type = "";
-                //if ( $sale->field_order_status->value == "return" ) {
                 if ( $sale->moderation_state->value == "return" ) {
                     $type = "銷退";
                 } else {

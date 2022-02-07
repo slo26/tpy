@@ -11,11 +11,10 @@ dependencies:
     - field.field.node.sales_order.field_customer_entity
     - field.field.node.sales_order.field_delivery
     - field.field.node.sales_order.field_logistics
-    - field.field.node.sales_order.field_order_status
+    - field.field.node.sales_order.field_original_sales_order_id
     - field.field.node.sales_order.field_receiver
     - field.field.node.sales_order.field_return_completed
     - field.field.node.sales_order.field_return_date
-    - field.field.node.sales_order.field_return_sale_entity
     - field.field.node.sales_order.field_rich_comment
     - field.field.node.sales_order.field_sell_products
     - field.field.node.sales_order.field_shipping_address
@@ -94,12 +93,13 @@ content:
     third_party_settings: {  }
     weight: 7
     region: content
-  field_order_status:
-    type: list_default
+  field_original_sales_order_id:
+    type: entity_reference_label
     label: above
-    settings: {  }
+    settings:
+      link: true
     third_party_settings: {  }
-    weight: 2
+    weight: 18
     region: content
   field_receiver:
     type: string
@@ -126,14 +126,6 @@ content:
       format_type: html_date
     third_party_settings: {  }
     weight: 13
-    region: content
-  field_return_sale_entity:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 17
     region: content
   field_rich_comment:
     type: text_default

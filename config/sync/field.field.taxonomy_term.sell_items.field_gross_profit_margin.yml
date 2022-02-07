@@ -1,0 +1,23 @@
+uuid: 6ad1ff41-9399-41a6-96a2-f43972eb77e6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_gross_profit_margin
+    - taxonomy.vocabulary.sell_items
+id: taxonomy_term.sell_items.field_gross_profit_margin
+field_name: field_gross_profit_margin
+entity_type: taxonomy_term
+bundle: sell_items
+label: 毛利率
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  min: !!float 0
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: decimal

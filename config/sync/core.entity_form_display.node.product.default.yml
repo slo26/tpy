@@ -5,19 +5,25 @@ dependencies:
   config:
     - field.field.node.product.field_color
     - field.field.node.product.field_comment
+    - field.field.node.product.field_construction_price
     - field.field.node.product.field_cost_price
     - field.field.node.product.field_dealer_price
     - field.field.node.product.field_directions
+    - field.field.node.product.field_gpm_for_construction
+    - field.field.node.product.field_gpm_for_retailer
+    - field.field.node.product.field_gpm_for_vendor
     - field.field.node.product.field_product_category
     - field.field.node.product.field_product_image
     - field.field.node.product.field_product_name
     - field.field.node.product.field_retail_price
     - field.field.node.product.field_size
     - field.field.node.product.field_specification
+    - field.field.node.product.field_unit
     - field.field.node.product.field_weight
     - image.style.thumbnail
     - node.type.product
   module:
+    - content_moderation
     - image
 id: node.product.default
 targetEntityType: node
@@ -32,22 +38,29 @@ content:
     third_party_settings: {  }
   field_comment:
     type: string_textfield
-    weight: 12
+    weight: 17
     region: content
     settings:
       size: 60
       placeholder: 備註
     third_party_settings: {  }
+  field_construction_price:
+    type: number
+    weight: 11
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
   field_cost_price:
     type: number
-    weight: 9
+    weight: 10
     region: content
     settings:
       placeholder: ''
     third_party_settings: {  }
   field_dealer_price:
     type: number
-    weight: 11
+    weight: 13
     region: content
     settings:
       placeholder: ''
@@ -59,6 +72,27 @@ content:
     settings:
       size: 60
       placeholder: 說明
+    third_party_settings: {  }
+  field_gpm_for_construction:
+    type: number
+    weight: 12
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_gpm_for_retailer:
+    type: number
+    weight: 16
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_gpm_for_vendor:
+    type: number
+    weight: 14
+    region: content
+    settings:
+      placeholder: ''
     third_party_settings: {  }
   field_product_category:
     type: options_select
@@ -84,7 +118,7 @@ content:
     third_party_settings: {  }
   field_retail_price:
     type: number
-    weight: 10
+    weight: 15
     region: content
     settings:
       placeholder: 零售價錢
@@ -105,6 +139,14 @@ content:
       size: 60
       placeholder: 規格
     third_party_settings: {  }
+  field_unit:
+    type: string_textfield
+    weight: 9
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
   field_weight:
     type: string_textfield
     weight: 7
@@ -113,9 +155,15 @@ content:
       size: 60
       placeholder: 重量
     third_party_settings: {  }
+  moderation_state:
+    type: moderation_state_default
+    weight: 19
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   status:
     type: boolean_checkbox
-    weight: 13
+    weight: 18
     region: content
     settings:
       display_label: true

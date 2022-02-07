@@ -1,0 +1,5 @@
+sales_order_content_type.sale_sheet:
+  route_name: sales_order_content_type.sale_sheet
+  title: '銷售單'
+  base_route: entity.node.canonical
+  weight: -1

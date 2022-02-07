@@ -15,13 +15,13 @@ dependencies:
     - field.field.node.vendor.field_fax
     - field.field.node.vendor.field_long_comment
     - field.field.node.vendor.field_mobile
-    - field.field.node.vendor.field_payment
-    - field.field.node.vendor.field_payment_condition
     - field.field.node.vendor.field_payment_due
     - field.field.node.vendor.field_phone
     - field.field.node.vendor.field_uniform_number
     - field.field.node.vendor.field_vendor_name
     - node.type.vendor
+  module:
+    - content_moderation
 id: node.vendor.default
 targetEntityType: node
 bundle: vendor
@@ -121,26 +121,11 @@ content:
       size: 30
       placeholder: ''
     third_party_settings: {  }
-  field_payment:
+  field_payment_due:
     type: options_select
-    weight: 15
+    weight: 101
     region: content
     settings: {  }
-    third_party_settings: {  }
-  field_payment_condition:
-    type: string_textfield
-    weight: 16
-    region: content
-    settings:
-      size: 30
-      placeholder: ''
-    third_party_settings: {  }
-  field_payment_due:
-    type: number
-    weight: 17
-    region: content
-    settings:
-      placeholder: ''
     third_party_settings: {  }
   field_phone:
     type: string_textfield
@@ -165,6 +150,12 @@ content:
     settings:
       size: 30
       placeholder: ''
+    third_party_settings: {  }
+  moderation_state:
+    type: moderation_state_default
+    weight: 100
+    region: content
+    settings: {  }
     third_party_settings: {  }
   title:
     type: string_textfield

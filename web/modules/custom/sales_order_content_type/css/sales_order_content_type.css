@@ -1,3 +1,10 @@
+.layout-region-node-secondary {
+    width: 25%;
+}
+.layout-region-node-main {
+    width: 75%;
+}
+
 .add-single-item-into-order {
     /*float: left;
     margin-right: 0.4em;*/
@@ -178,7 +185,8 @@ div.js-form-item-field-actual-received-payment-value-max label:after {
 }
 
 div.bill-link, 
-div.deposite, 
+div.deposite,
+div.discount,
 div.total-amount-without-tax,
 div.tax,
 div.total-amount-with-tax,

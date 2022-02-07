@@ -560,7 +560,7 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: field
-          label: 預計收/退款日期
+          label: 結帳日
           exclude: false
           alter:
             alter_text: false
@@ -1068,7 +1068,7 @@ display:
           exposed: true
           expose:
             operator_id: field_expected_receive_payment_value_op
-            label: 預計收/退款日期
+            label: 結帳日期
             description: ''
             use_operator: false
             operator: field_expected_receive_payment_value_op

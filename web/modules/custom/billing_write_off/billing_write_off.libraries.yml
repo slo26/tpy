@@ -1,0 +1,6 @@
+billing_write_off:
+  version: VERSION
+  css:
+    theme:
+      css/billing_write_off.css: {}
+

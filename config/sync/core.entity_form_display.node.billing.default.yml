@@ -7,9 +7,13 @@ dependencies:
     - field.field.node.billing.field_bill_type
     - field.field.node.billing.field_customer_entity
     - field.field.node.billing.field_deposit
+    - field.field.node.billing.field_discount
     - field.field.node.billing.field_expected_receive_payment
+    - field.field.node.billing.field_long_comment
     - field.field.node.billing.field_order_id
+    - field.field.node.billing.field_payment_expire
     - field.field.node.billing.field_receipt_number
+    - field.field.node.billing.field_remain_unpaid_amount
     - field.field.node.billing.field_tax
     - field.field.node.billing.field_tax_rate
     - field.field.node.billing.field_total_amount_with_tax
@@ -26,7 +30,7 @@ mode: default
 content:
   field_actual_received_payment:
     type: datetime_default
-    weight: 11
+    weight: 12
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -48,6 +52,13 @@ content:
     third_party_settings: {  }
   field_deposit:
     type: number
+    weight: 7
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_discount:
+    type: number
     weight: 8
     region: content
     settings:
@@ -55,9 +66,17 @@ content:
     third_party_settings: {  }
   field_expected_receive_payment:
     type: datetime_default
-    weight: 10
+    weight: 11
     region: content
     settings: {  }
+    third_party_settings: {  }
+  field_long_comment:
+    type: string_textarea
+    weight: 16
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
     third_party_settings: {  }
   field_order_id:
     type: entity_reference_autocomplete
@@ -69,9 +88,22 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  field_payment_expire:
+    type: datetime_default
+    weight: 15
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   field_receipt_number:
     type: number
-    weight: 12
+    weight: 13
+    region: content
+    settings:
+      placeholder: ''
+    third_party_settings: {  }
+  field_remain_unpaid_amount:
+    type: number
+    weight: 10
     region: content
     settings:
       placeholder: ''
@@ -86,13 +118,6 @@ content:
   field_tax_rate:
     type: number
     weight: 4
-    region: content
-    settings:
-      placeholder: ''
-    third_party_settings: {  }
-  field_total_amount_with_tax:
-    type: number
-    weight: 7
     region: content
     settings:
       placeholder: ''
@@ -113,7 +138,7 @@ content:
     third_party_settings: {  }
   moderation_state:
     type: moderation_state_default
-    weight: 13
+    weight: 14
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -127,6 +152,7 @@ content:
     third_party_settings: {  }
 hidden:
   created: true
+  field_total_amount_with_tax: true
   path: true
   promote: true
   status: true

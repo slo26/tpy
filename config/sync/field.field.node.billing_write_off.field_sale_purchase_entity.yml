@@ -1,0 +1,31 @@
+uuid: 8133c7b9-3e7c-4ff8-ac52-1552f778b64e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_sale_purchase_entity
+    - node.type.billing_write_off
+    - node.type.purchase_order
+    - node.type.sales_order
+id: node.billing_write_off.field_sale_purchase_entity
+field_name: field_sale_purchase_entity
+entity_type: node
+bundle: billing_write_off
+label: 銷售/採購單
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      purchase_order: purchase_order
+      sales_order: sales_order
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: purchase_order
+field_type: entity_reference

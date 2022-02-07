@@ -9,6 +9,7 @@ module:
   better_exposed_filters: 0
   big_pipe: 0
   billing: 0
+  billing_write_off: 0
   block: 0
   block_content: 0
   breakpoint: 0
@@ -73,6 +74,7 @@ module:
   serialization: 0
   shortcut: 0
   stock_up_content_type: 0
+  store_credit: 0
   system: 0
   taxonomy: 0
   text: 0
