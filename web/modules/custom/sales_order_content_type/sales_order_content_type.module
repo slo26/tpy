@@ -586,11 +586,11 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 			),
 			'#attributes' => array(
 				'min' => '0',
-				'max' => '0',
+				'max' => '100000',
         		' type' => 'number',
     		),
 			'#weight' => 26,
-			'#size' => 5,
+			'#size' => 6,
 			'#prefix' => '<div class="add-quantity">',
 			'#suffix' => '</div>',
         );

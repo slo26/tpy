@@ -38,6 +38,7 @@ function vendor_content_type_form_alter(&$form, FormStateInterface &$form_state,
         $form['field_uniform_number']['#group'] = 'vendor_info';
         $form['field_phone']['#group'] = 'vendor_info';
         $form['field_address']['#group'] = 'vendor_info';
+		$form['field_factory_address']['#group'] = 'vendor_info';
         $form['field_fax']['#group'] = 'vendor_info';
         $form['field_email']['#group'] = 'vendor_info';
         $form['field_contact_person']['#group'] = 'vendor_info';

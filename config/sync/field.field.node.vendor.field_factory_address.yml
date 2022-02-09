@@ -1,0 +1,19 @@
+uuid: 9f941d6b-20d4-41ce-a148-9fa3019aa5a8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_factory_address
+    - node.type.vendor
+id: node.vendor.field_factory_address
+field_name: field_factory_address
+entity_type: node
+bundle: vendor
+label: 工廠地址
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

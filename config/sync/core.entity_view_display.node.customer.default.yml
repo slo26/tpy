@@ -17,6 +17,7 @@ dependencies:
     - field.field.node.customer.field_payment_due
     - field.field.node.customer.field_phone
     - field.field.node.customer.field_sales
+    - field.field.node.customer.field_suggest_to_tax
     - field.field.node.customer.field_total_employee
     - field.field.node.customer.field_uniform_number
     - field.field.node.customer.field_uniform_number_address
@@ -36,7 +37,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 6
+    weight: 7
     region: content
   field_contact_person:
     type: string
@@ -44,7 +45,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 11
+    weight: 12
     region: content
   field_customer_title:
     type: string
@@ -66,14 +67,14 @@ content:
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 14
+    weight: 13
     region: content
   field_email:
     type: basic_string
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 13
+    weight: 17
     region: content
   field_fax:
     type: string
@@ -81,7 +82,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 9
+    weight: 10
     region: content
   field_industry:
     type: list_default
@@ -95,7 +96,7 @@ content:
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 17
+    weight: 15
     region: content
   field_mobile:
     type: string
@@ -103,7 +104,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 10
+    weight: 11
     region: content
   field_owner:
     type: string
@@ -111,7 +112,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 5
+    weight: 6
     region: content
   field_payment_due:
     type: list_default
@@ -126,7 +127,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 8
+    weight: 9
     region: content
   field_sales:
     type: entity_reference_label
@@ -134,7 +135,17 @@ content:
     settings:
       link: true
     third_party_settings: {  }
-    weight: 16
+    weight: 14
+    region: content
+  field_suggest_to_tax:
+    type: boolean
+    label: above
+    settings:
+      format: default
+      format_custom_false: ''
+      format_custom_true: ''
+    third_party_settings: {  }
+    weight: 5
     region: content
   field_total_employee:
     type: number_integer
@@ -143,7 +154,7 @@ content:
       thousand_separator: ''
       prefix_suffix: true
     third_party_settings: {  }
-    weight: 15
+    weight: 18
     region: content
   field_uniform_number:
     type: string
@@ -159,7 +170,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 7
+    weight: 8
     region: content
   field_web_site:
     type: string
@@ -167,7 +178,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 12
+    weight: 16
     region: content
 hidden:
   links: true

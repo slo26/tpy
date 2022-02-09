@@ -13,6 +13,7 @@ dependencies:
     - field.field.node.vendor.field_contact_person
     - field.field.node.vendor.field_country
     - field.field.node.vendor.field_email
+    - field.field.node.vendor.field_factory_address
     - field.field.node.vendor.field_fax
     - field.field.node.vendor.field_long_comment
     - field.field.node.vendor.field_mobile
@@ -43,6 +44,7 @@ hidden:
   field_contact_person: true
   field_country: true
   field_email: true
+  field_factory_address: true
   field_fax: true
   field_long_comment: true
   field_mobile: true

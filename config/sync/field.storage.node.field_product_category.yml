@@ -35,6 +35,18 @@ settings:
     -
       value: copper_cable
       label: 同軸電纜
+    -
+      value: lan_cable
+      label: 網路線類
+    -
+      value: tel_cable
+      label: 電話線類
+    -
+      value: MDF_IDF_ODF
+      label: 總配線架
+    -
+      value: tel_sys
+      label: 對講機
   allowed_values_function: ''
 module: options
 locked: false

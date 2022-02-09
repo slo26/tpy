@@ -13,7 +13,10 @@ settings:
   allowed_values:
     -
       value: kerry
-      label: 嘉榮貨運
+      label: 大榮貨運
+    -
+      value: 'kerry C'
+      label: 大榮貨運代收
     -
       value: hct
       label: 新竹貨運
@@ -21,8 +24,14 @@ settings:
       value: postoffice
       label: 中華郵政
     -
-      value: tcat
-      label: 黑貓
+      value: CHN
+      label: 中國快遞
+    -
+      value: 'CHN C'
+      label: 中國快遞代收
+    -
+      value: Maple
+      label: 楓葉便利袋
   allowed_values_function: ''
 module: options
 locked: false

@@ -78,8 +78,8 @@ function billing_write_off_node_delete(Drupal\Core\Entity\EntityInterface $node)
             $entity->delete();
         }
 
-        $current = \Drupal::entityTypeManager()->getStorage("node")->load($node->id());
-        $current->delete();
+        //$current = \Drupal::entityTypeManager()->getStorage("node")->load($node->id());
+        //$current->delete();
     }
 }
 

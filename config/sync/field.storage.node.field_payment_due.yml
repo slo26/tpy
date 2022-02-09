@@ -32,6 +32,9 @@ settings:
     -
       value: check_90
       label: 當月結90天票
+    -
+      value: hedge
+      label: 帳款對沖
   allowed_values_function: ''
 module: options
 locked: false
