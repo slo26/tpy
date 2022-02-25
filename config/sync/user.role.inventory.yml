@@ -1,0 +1,9 @@
+uuid: 8397022e-8063-4deb-8ac2-7a80d006e53c
+langcode: en
+status: true
+dependencies: {  }
+id: inventory
+label: 倉儲
+weight: 9
+is_admin: null
+permissions: {  }

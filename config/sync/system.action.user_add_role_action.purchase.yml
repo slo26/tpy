@@ -1,0 +1,14 @@
+uuid: 14b2c80e-a83f-4449-b32f-3ff24497cc30
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.purchase
+  module:
+    - user
+id: user_add_role_action.purchase
+label: 'Add the 採購 role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: purchase

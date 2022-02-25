@@ -1,0 +1,9 @@
+uuid: 025343bd-ea07-42da-b1a2-5a0a74fa9764
+langcode: en
+status: true
+dependencies: {  }
+id: billing
+label: 帳務
+weight: 10
+is_admin: null
+permissions: {  }

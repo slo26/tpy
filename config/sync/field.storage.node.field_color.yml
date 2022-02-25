@@ -23,6 +23,9 @@ settings:
     -
       value: black
       label: 黑色
+    -
+      value: grey
+      label: 灰色
   allowed_values_function: ''
 module: options
 locked: false

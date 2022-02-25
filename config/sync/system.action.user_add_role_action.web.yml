@@ -1,0 +1,14 @@
+uuid: b5de23b7-58e5-4baf-a7f8-e780b9a20226
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.web
+  module:
+    - user
+id: user_add_role_action.web
+label: 'Add the 網頁 role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: web

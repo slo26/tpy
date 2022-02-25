@@ -1,0 +1,14 @@
+uuid: fe6cc14f-bf64-4ecb-ab55-c0ffad28ccc5
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.sale
+  module:
+    - user
+id: user_remove_role_action.sale
+label: 'Remove the 銷售 role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: sale

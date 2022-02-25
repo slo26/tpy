@@ -1,0 +1,14 @@
+uuid: dfee06d5-77c7-4db6-b4cd-9383eb92a6ba
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.customer_vendor
+  module:
+    - user
+id: user_add_role_action.customer_vendor
+label: 'Add the 客戶_廠商 role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: customer_vendor

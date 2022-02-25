@@ -1,0 +1,14 @@
+uuid: fccdefcf-466e-4577-9a69-355d504ecca3
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.sale
+  module:
+    - user
+id: user_add_role_action.sale
+label: 'Add the 銷售 role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: sale

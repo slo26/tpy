@@ -1,0 +1,14 @@
+uuid: f37c20b9-03ed-4746-962b-b3be52db83ef
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.billing
+  module:
+    - user
+id: user_remove_role_action.billing
+label: 'Remove the 帳務 role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: billing

@@ -33,6 +33,9 @@ settings:
       value: telephone_socket
       label: 電信插座
     -
+      value: Other_Socket
+      label: 其它插座
+    -
       value: copper_cable
       label: 同軸電纜
     -

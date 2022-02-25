@@ -8,6 +8,14 @@ content_access_roles_gids:
   manager: 5
   sales: 6
   ceo: 7
+  sale: 8
+  purchase: 9
+  inventory: 10
+  billing: 11
+  product: 12
+  customer_vendor: 13
+  web: 14
+  document: 15
 content_access_node_type:
   sales_order: 'a:2:{s:8:"view_own";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}s:4:"view";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}}'
   vendor: 'a:2:{s:8:"view_own";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}s:4:"view";a:2:{i:0;s:13:"authenticated";i:1;s:13:"administrator";}}'

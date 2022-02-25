@@ -15,12 +15,12 @@ type_settings:
   states:
     archived:
       label: Archived
-      weight: 3
+      weight: 4
       published: false
       default_revision: true
     done:
       label: 銷售完成
-      weight: -2
+      weight: -1
       published: false
       default_revision: false
     draft:
@@ -30,12 +30,12 @@ type_settings:
       default_revision: false
     drop:
       label: 銷售不成立
-      weight: -1
+      weight: 0
       published: false
       default_revision: false
     published:
       label: Published
-      weight: 2
+      weight: 3
       published: true
       default_revision: true
     rate:
@@ -45,16 +45,21 @@ type_settings:
       default_revision: false
     return:
       label: 銷售退貨
-      weight: 0
+      weight: 1
       published: false
       default_revision: false
     return_completed:
       label: 銷退完成
-      weight: 1
+      weight: 2
       published: false
       default_revision: false
     shipment:
       label: 銷售出貨
+      weight: -2
+      published: false
+      default_revision: false
+    stocking:
+      label: 銷售備貨
       weight: -3
       published: false
       default_revision: false
@@ -67,61 +72,91 @@ type_settings:
         - return
         - shipment
       to: draft
-      weight: -4
+      weight: -8
     draft_rate:
       label: 草稿-銷售估價
       from:
         - draft
       to: rate
-      weight: -3
+      weight: -7
     draft_shipment:
       label: 草稿-銷售出貨
       from:
         - draft
       to: shipment
-      weight: -2
+      weight: -5
+    draft_stocking:
+      label: 草稿-銷售備貨
+      from:
+        - draft
+      to: stocking
+      weight: -6
     rate_rate:
       label: 銷售估價-銷售估價
       from:
         - rate
       to: rate
-      weight: 0
+      weight: -4
     rate_shipment:
       label: 銷售估價-銷售出貨
       from:
         - rate
       to: shipment
-      weight: -1
+      weight: -2
+    rate_stocking:
+      label: 銷售估價-銷售備貨
+      from:
+        - rate
+      to: stocking
+      weight: -3
     return_completed_return_completed:
       label: 銷退完成-銷退完成
       from:
         - return_completed
       to: return_completed
-      weight: 5
+      weight: 6
     return_return:
       label: 銷售退貨-銷售退貨
       from:
         - return
       to: return
-      weight: 4
+      weight: 5
     return_return_completed:
       label: 銷售退貨-銷退完成
       from:
         - return
       to: return_completed
-      weight: 3
+      weight: 4
     shipment_done:
       label: 銷售出貨-銷售完成
       from:
         - shipment
       to: done
-      weight: 1
+      weight: 2
     shipment_shipment:
       label: ' 銷售出貨- 銷售出貨'
       from:
         - shipment
       to: shipment
-      weight: 2
+      weight: 3
+    stocking_rate:
+      label: 銷售備貨-銷售估價
+      from:
+        - stocking
+      to: rate
+      weight: 0
+    stocking_shipment:
+      label: 銷售備貨-銷售出貨
+      from:
+        - stocking
+      to: shipment
+      weight: 1
+    stocking_stocking:
+      label: 銷售備貨-銷售備貨
+      from:
+        - stocking
+      to: stocking
+      weight: -1
   entity_types:
     node:
       - sales_order

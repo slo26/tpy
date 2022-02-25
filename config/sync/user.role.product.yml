@@ -1,0 +1,9 @@
+uuid: 94dd5d8b-c3dc-4dfe-8294-137360c45488
+langcode: en
+status: true
+dependencies: {  }
+id: product
+label: 產品
+weight: 11
+is_admin: null
+permissions: {  }

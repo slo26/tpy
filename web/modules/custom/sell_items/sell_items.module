@@ -31,6 +31,7 @@ function sell_items_preprocess_html(&$variables) {
 
 function sell_items_taxonomy_term_presave($term) {
 	if ( $term->bundle() == "sell_items" ) {
+        $term->status->value = false; 
         if ( empty($term->field_order_id->target_id) ) {
             $term->set('name', gen_sell_item_id());
         }
@@ -123,6 +124,8 @@ function sell_items_form_alter(&$form, FormStateInterface &$form_state, $form_id
             'callback' => 'ajax_sell_items_calculate_price',
 			'event' => 'change',
         );
+
+        $form ['field_gross_profit_margin']['#access'] = view_gross_profit_margin();
         $form['#validate'][] = 'sell_items_form_validate';
     }
 }
@@ -245,7 +248,7 @@ function update_inventory($term) {
             $message = get_product_name_by_nid($term->field_product_id->target_id) . " 退倉成功, 儲存在 " . get_storage_name_by_nid($term->field_storage->target_id) . " 的庫數量 " . $remain_num; 
             \Drupal::messenger()->addMessage($message);
         } else {
-            if ( $material->field_stock->value >= $term->field_quantity->value ) {
+            //if ( $material->field_stock->value >= $term->field_quantity->value ) {
                 $remain_num = $material->field_stock->value - $term->field_quantity->value;
                 $material->set('field_stock', $remain_num);
                 $material->save();
@@ -268,12 +271,12 @@ function update_inventory($term) {
                     }
                     $temp_inventory->save();
                 }
-            } else {
-                $message = get_product_name_by_nid($term->field_product_id->target_id) . " 儲存在 " . get_storage_name_by_nid($term->field_storage->target_id) . " 的庫存剩餘 " . $remain_num . " 不足, 儲存失敗"; 
-                \Drupal::messenger()->addMessage($message, 'error');
-                $term->set('field_requisition_status', "");
+            //} else {
+            //    $message = get_product_name_by_nid($term->field_product_id->target_id) . " 儲存在 " . get_storage_name_by_nid($term->field_storage->target_id) . " 的庫存剩餘 " . $remain_num . " 不足, 儲存失敗"; 
+            //    \Drupal::messenger()->addMessage($message, 'error');
+            //    $term->set('field_requisition_status', "");
                 //throw new \Exception($message);
-            }
+            //}
         }
         break;
     } 

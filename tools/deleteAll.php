@@ -9,7 +9,8 @@ $switcher->switchTo(new UserSession(['uid' => 1]));
 
 $all_tpy_taxonomy_term = ['prepaid_balance', 'sell_items', 'purchase_items'];
 //'storage'
-$all_tpy_content_type = ['billing_write_off', 'billing', 'sales_order', 'product', 'goods', 'customer', 'stock_up', 'vendor', 'purchase_order'];
+//$all_tpy_content_type = ['billing_write_off', 'billing', 'sales_order', 'product', 'goods', 'customer', 'stock_up', 'vendor', 'purchase_order'];
+$all_tpy_content_type = ['product', 'stock_up'];
 
 for($i=0; $i < count($all_tpy_taxonomy_term); $i++) {
     $tids = \Drupal::entityQuery("taxonomy_term")->condition('vid', $all_tpy_taxonomy_term[$i])->execute();

@@ -1,0 +1,63 @@
+uuid: d1b24fd8-fa7e-4f5e-985e-aa5ed3359dde
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_product_category_inventory
+field_name: field_product_category_inventory
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: Connector_parts
+      label: 接頭零件
+    -
+      value: cable
+      label: 電纜線
+    -
+      value: telecommunications_equipment
+      label: 電信器材
+    -
+      value: other_wires
+      label: 其他線材
+    -
+      value: discount
+      label: 折扣
+    -
+      value: fiber_optic_digital_products
+      label: 光纖數位產品
+    -
+      value: patch_panel
+      label: 配線架
+    -
+      value: digital_media_box
+      label: 數位箱
+    -
+      value: terminal_board
+      label: 端子板
+    -
+      value: walkie_talkie
+      label: 對講機
+    -
+      value: successor
+      label: 接續子
+    -
+      value: internet_cable
+      label: 網路線
+    -
+      value: phone_cable
+      label: 電話線
+    -
+      value: power_outlet
+      label: 電源插座
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

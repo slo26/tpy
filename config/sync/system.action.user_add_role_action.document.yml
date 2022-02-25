@@ -1,0 +1,14 @@
+uuid: b69141b8-4c00-4924-a67b-04f3b61979b7
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.document
+  module:
+    - user
+id: user_add_role_action.document
+label: 'Add the 文件 role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: document

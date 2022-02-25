@@ -80,6 +80,14 @@ class CommonUtilsSettingsForm extends ConfigFormBase {
         '#size' => 50
     );
 
+    $form['view_gross_profit_margin_info'] = array(
+      '#type' => 'textfield',
+      '#title' => $this->t('權限查詢毛利率'),
+      '#default_value' => $config->get('view_gross_profit_margin_info'),
+      '#size' => 50,
+      '#description' => 'administrator,ceo,manager'
+  );
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -103,6 +111,7 @@ class CommonUtilsSettingsForm extends ConfigFormBase {
       $settings->set('company_url', $form_state->getValue('company_url'));
       $settings->set('company_email', $form_state->getValue('company_email'));
       $settings->set('sales_tax', $form_state->getValue('sales_tax'));
+      $settings->set('view_gross_profit_margin_info', $form_state->getValue('view_gross_profit_margin_info'));
 
       $settings->save();
 

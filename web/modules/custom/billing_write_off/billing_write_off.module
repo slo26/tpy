@@ -28,6 +28,7 @@ function billing_write_off_node_insert(Drupal\Core\Entity\EntityInterface $node)
             $store_credit->set('field_create_date', date("Y-m-d"));
             $store_credit->field_from_bill_write_off_entity->target_id = $node->id();
             $store_credit->set('field_store_credit', $node->field_accumulated_advance->value);
+            $store_credit->set('status', false);
             $store_credit->save();
         }
         if ( !empty($node->field_store_credit_entity->target_id) ) {

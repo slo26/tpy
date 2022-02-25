@@ -1,0 +1,14 @@
+uuid: 44faa30e-ce3f-4392-b29f-bbd1c276383f
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.product
+  module:
+    - user
+id: user_remove_role_action.product
+label: 'Remove the 產品 role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: product

@@ -1,0 +1,14 @@
+uuid: 77c0469e-2f23-48f0-b9ee-de39a0664a05
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.billing
+  module:
+    - user
+id: user_add_role_action.billing
+label: 'Add the 帳務 role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: billing

@@ -192,7 +192,11 @@ class CustomToolbarController extends ControllerBase {
         $markup .= '<div class="description">新增產品</div>';
         $markup .= '</a></li>';
         $markup .= '<li>';
-        $markup .= '<a href="/admin/all-products">';
+        if ( view_gross_profit_margin() ) {
+            $markup .= '<a href="/admin/all-products-for-admin">';
+        } else {
+            $markup .= '<a href="/admin/all-products">';
+        }
         $markup .= '<span class="label">產品列表</span>';
         $markup .= '<div class="description">產品列表</div>';
         $markup .= '</a></li>';
@@ -461,7 +465,11 @@ class CustomToolbarController extends ControllerBase {
         $markup .= '<li><a href="/node/add/product"><span class="label">新增產品</span>';
         $markup .= '<div class="description">新增產品</div>';
         $markup .= '</a></li>';
-        $markup .= '<li><a href="/admin/all-products"><span class="label">產品列表</span>';
+        if ( view_gross_profit_margin() ) {
+            $markup .= '<li><a href="/admin/all-products-for-admin"><span class="label">產品列表</span>';    
+        } else {
+            $markup .= '<li><a href="/admin/all-products"><span class="label">產品列表</span>';
+        }
         $markup .= '<div class="description">列出所有產品</div></a></li>';
         $markup .= '<li><a href="/node/add/goods"><span class="label">新增零件／物品</span>';
         $markup .= '<div class="description">新增零件／物品</div></a></li>';

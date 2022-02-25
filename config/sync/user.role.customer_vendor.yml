@@ -1,0 +1,9 @@
+uuid: 67ab3a3c-064e-4b93-b9b0-986837a59a9b
+langcode: en
+status: true
+dependencies: {  }
+id: customer_vendor
+label: 客戶/廠商
+weight: 12
+is_admin: null
+permissions: {  }

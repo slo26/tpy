@@ -1,0 +1,9 @@
+uuid: a71dcaf6-f179-4702-a64a-bc6244641a40
+langcode: en
+status: true
+dependencies: {  }
+id: sale
+label: 銷售
+weight: 7
+is_admin: null
+permissions: {  }

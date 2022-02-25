@@ -34,7 +34,7 @@ class SaleSheet extends ConfigFormBase {
     public function buildForm(array $form, FormStateInterface $form_state, $node = null) {
         $result = "";
         $sale = \Drupal\node\Entity\Node::load($node);
-        if ( $sale->moderation_state->value == "shipment" || $sale->moderation_state->value == "done" ) {
+        if ( $sale->moderation_state->value == "stocking" || $sale->moderation_state->value == "shipment" || $sale->moderation_state->value == "done" ) {
             $customer_nid = $sale->field_customer_entity->target_id;
             $customer = \Drupal\node\Entity\Node::load($customer_nid);
             /***************table head***************/ 
@@ -115,7 +115,7 @@ class SaleSheet extends ConfigFormBase {
             
             $result = $table_head . $table_list . $table_footer . $comment;
         } else {
-            $result = "此頁只有在銷售出貨或銷售完成時才會產生.";
+            $result = "此頁只有在銷售備貨, 銷售出貨或銷售完成時才會產生.";
         }
 
         $form['sale_form'] = array('#type' => 'markup', '#markup' => "<div>$result</div>",);

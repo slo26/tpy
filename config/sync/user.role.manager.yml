@@ -15,6 +15,9 @@ dependencies:
     - node.type.stock_up
     - node.type.storage
     - node.type.vendor
+    - taxonomy.vocabulary.prepaid_balance
+    - taxonomy.vocabulary.purchase_items
+    - taxonomy.vocabulary.sell_items
   module:
     - field_ui
     - node
@@ -22,7 +25,7 @@ dependencies:
     - taxonomy
     - views_ui
 id: manager
-label: manager
+label: 經理
 weight: 4
 is_admin: null
 permissions:
@@ -34,6 +37,7 @@ permissions:
   - 'administer views'
   - 'cancel account'
   - 'change own username'
+  - 'create product content'
   - 'delete any billing content'
   - 'delete any billing_write_off content'
   - 'delete any customer content'
@@ -46,15 +50,23 @@ permissions:
   - 'delete any stock_up content'
   - 'delete any storage content'
   - 'delete any vendor content'
+  - 'delete billing revisions'
+  - 'delete billing_write_off revisions'
   - 'delete customer revisions'
   - 'delete documentation revisions'
+  - 'delete goods revisions'
   - 'delete own vendor content'
   - 'delete page revisions'
   - 'delete product revisions'
+  - 'delete purchase_order revisions'
   - 'delete sales_order revisions'
   - 'delete stock_up revisions'
   - 'delete storage revisions'
+  - 'delete terms in prepaid_balance'
+  - 'delete terms in purchase_items'
+  - 'delete terms in sell_items'
   - 'delete vendor revisions'
+  - 'edit any product content'
   - 'select account cancellation method'
   - 'view the administration theme'
   - 'view user email addresses'

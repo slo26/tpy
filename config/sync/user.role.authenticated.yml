@@ -19,6 +19,7 @@ dependencies:
     - node.type.storage
     - node.type.vendor
     - taxonomy.vocabulary.prepaid_balance
+    - taxonomy.vocabulary.purchase_items
     - taxonomy.vocabulary.sell_items
     - workflows.workflow.editorial
   module:
@@ -58,12 +59,12 @@ permissions:
   - 'create documentation content'
   - 'create goods content'
   - 'create page content'
-  - 'create product content'
   - 'create purchase_order content'
   - 'create sales_order content'
   - 'create stock_up content'
   - 'create storage content'
   - 'create terms in prepaid_balance'
+  - 'create terms in purchase_items'
   - 'create terms in sell_items'
   - 'create vendor content'
   - 'delete own billing content'
@@ -78,21 +79,17 @@ permissions:
   - 'delete own stock_up content'
   - 'delete own storage content'
   - 'delete own vendor content'
-  - 'delete terms in prepaid_balance'
-  - 'delete terms in sell_items'
   - 'edit any billing content'
   - 'edit any billing_write_off content'
   - 'edit any customer content'
   - 'edit any documentation content'
   - 'edit any goods content'
   - 'edit any page content'
-  - 'edit any product content'
   - 'edit any purchase_order content'
   - 'edit any sales_order content'
   - 'edit any stock_up content'
   - 'edit any storage content'
   - 'edit any vendor content'
-  - 'edit own article content'
   - 'edit own billing content'
   - 'edit own billing_write_off content'
   - 'edit own customer content'
@@ -106,6 +103,7 @@ permissions:
   - 'edit own storage content'
   - 'edit own vendor content'
   - 'edit terms in prepaid_balance'
+  - 'edit terms in purchase_items'
   - 'edit terms in sell_items'
   - 'post comments'
   - 'search content'
@@ -125,6 +123,8 @@ permissions:
   - 'use text format comment'
   - 'use text format full_html'
   - 'view all revisions'
+  - 'view any unpublished billing content'
+  - 'view any unpublished billing_write_off content'
   - 'view any unpublished content'
   - 'view any unpublished customer content'
   - 'view any unpublished documentation content'

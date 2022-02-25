@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies: {  }
 id: employee
-label: employee
+label: 員工
 weight: 3
 is_admin: null
 permissions: {  }

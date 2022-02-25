@@ -1,0 +1,14 @@
+uuid: cdd95911-87e2-4409-824b-52e73ec5598e
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.inventory
+  module:
+    - user
+id: user_remove_role_action.inventory
+label: 'Remove the 倉儲 role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: inventory

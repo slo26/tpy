@@ -1,0 +1,14 @@
+uuid: 7e306487-ddba-450a-8fca-c477fff585d6
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.purchase
+  module:
+    - user
+id: user_remove_role_action.purchase
+label: 'Remove the 採購 role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: purchase

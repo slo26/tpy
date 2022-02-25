@@ -20,6 +20,9 @@ settings:
     -
       value: delivery
       label: 送貨
+    -
+      value: mail_paid
+      label: 物流代收款
   allowed_values_function: ''
 module: options
 locked: false

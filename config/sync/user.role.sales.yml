@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies: {  }
 id: sales
-label: Sales
+label: 業務
 weight: 5
 is_admin: null
 permissions: {  }

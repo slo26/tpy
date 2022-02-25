@@ -109,3 +109,18 @@ function get_product_or_goods_name_by_nid($nid) {
     return "";
 }
 
+function view_gross_profit_margin() {
+    $config = \Drupal::config ( 'common_utils.settings' );
+    $auth = explode(",", $config->get('view_gross_profit_margin_info'));
+
+    $current_user = \Drupal::currentUser();
+    $roles = $current_user->getRoles();
+
+    foreach($roles as $userRole) {
+        if ( in_array($userRole, $auth) ) {
+            return true;
+        }
+    }
+    return false;
+}
+

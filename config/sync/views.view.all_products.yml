@@ -7,10 +7,8 @@ dependencies:
     - field.storage.node.field_construction_price
     - field.storage.node.field_cost_price
     - field.storage.node.field_dealer_price
-    - field.storage.node.field_gpm_for_construction
-    - field.storage.node.field_gpm_for_retailer
-    - field.storage.node.field_gpm_for_vendor
     - field.storage.node.field_product_category
+    - field.storage.node.field_product_category_inventory
     - field.storage.node.field_product_image
     - field.storage.node.field_product_name
     - field.storage.node.field_retail_price
@@ -233,6 +231,68 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
+        field_product_category_inventory:
+          id: field_product_category_inventory
+          table: node__field_product_category_inventory
+          field: field_product_category_inventory
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: 產品倉儲分類
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: list_default
+          settings: {  }
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
         field_product_category:
           id: field_product_category
           table: node__field_product_category
@@ -241,7 +301,7 @@ display:
           group_type: group
           admin_label: ''
           plugin_id: field
-          label: 產品分類
+          label: 網頁產品分類
           exclude: false
           alter:
             alter_text: false
@@ -615,72 +675,6 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        field_gpm_for_construction:
-          id: field_gpm_for_construction
-          table: node__field_gpm_for_construction
-          field: field_gpm_for_construction
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: field
-          label: 工程毛利率
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: number_decimal
-          settings:
-            thousand_separator: ''
-            decimal_separator: .
-            scale: 2
-            prefix_suffix: true
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
         field_dealer_price:
           id: field_dealer_price
           table: node__field_dealer_price
@@ -747,72 +741,6 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        field_gpm_for_vendor:
-          id: field_gpm_for_vendor
-          table: node__field_gpm_for_vendor
-          field: field_gpm_for_vendor
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: field
-          label: 經銷商毛利率(%)
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: number_decimal
-          settings:
-            thousand_separator: ''
-            decimal_separator: .
-            scale: 2
-            prefix_suffix: true
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
         field_retail_price:
           id: field_retail_price
           table: node__field_retail_price
@@ -859,72 +787,6 @@ display:
           element_wrapper_class: ''
           element_default_classes: true
           empty: '0'
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: number_decimal
-          settings:
-            thousand_separator: ''
-            decimal_separator: .
-            scale: 2
-            prefix_suffix: true
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-        field_gpm_for_retailer:
-          id: field_gpm_for_retailer
-          table: node__field_gpm_for_retailer
-          field: field_gpm_for_retailer
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: field
-          label: 零售毛利率(%)
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
@@ -1224,6 +1086,52 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
+        field_product_category_inventory_value:
+          id: field_product_category_inventory_value
+          table: node__field_product_category_inventory
+          field: field_product_category_inventory_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: list_field
+          operator: or
+          value: {  }
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_product_category_inventory_value_op
+            label: 產品倉儲分類
+            description: ''
+            use_operator: false
+            operator: field_product_category_inventory_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_product_category_inventory_value
+            required: false
+            remember: false
+            multiple: true
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              employee: '0'
+              manager: '0'
+              sales: '0'
+              ceo: '0'
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
         field_product_category_value:
           id: field_product_category_value
           table: node__field_product_category
@@ -1233,26 +1141,29 @@ display:
           admin_label: ''
           plugin_id: list_field
           operator: or
-          value:
-            all: all
+          value: {  }
           group: 1
           exposed: true
           expose:
             operator_id: field_product_category_value_op
-            label: 產品分類
+            label: 網頁產品分類
             description: ''
             use_operator: false
             operator: field_product_category_value_op
             operator_limit_selection: false
             operator_list: {  }
-            identifier: product_category
+            identifier: field_product_category_value
             required: false
             remember: false
-            multiple: false
+            multiple: true
             remember_roles:
               authenticated: authenticated
               anonymous: '0'
               administrator: '0'
+              employee: '0'
+              manager: '0'
+              sales: '0'
+              ceo: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -1458,10 +1369,8 @@ display:
         - 'config:field.storage.node.field_construction_price'
         - 'config:field.storage.node.field_cost_price'
         - 'config:field.storage.node.field_dealer_price'
-        - 'config:field.storage.node.field_gpm_for_construction'
-        - 'config:field.storage.node.field_gpm_for_retailer'
-        - 'config:field.storage.node.field_gpm_for_vendor'
         - 'config:field.storage.node.field_product_category'
+        - 'config:field.storage.node.field_product_category_inventory'
         - 'config:field.storage.node.field_product_image'
         - 'config:field.storage.node.field_product_name'
         - 'config:field.storage.node.field_retail_price'
@@ -1489,10 +1398,8 @@ display:
         - 'config:field.storage.node.field_construction_price'
         - 'config:field.storage.node.field_cost_price'
         - 'config:field.storage.node.field_dealer_price'
-        - 'config:field.storage.node.field_gpm_for_construction'
-        - 'config:field.storage.node.field_gpm_for_retailer'
-        - 'config:field.storage.node.field_gpm_for_vendor'
         - 'config:field.storage.node.field_product_category'
+        - 'config:field.storage.node.field_product_category_inventory'
         - 'config:field.storage.node.field_product_image'
         - 'config:field.storage.node.field_product_name'
         - 'config:field.storage.node.field_retail_price'

@@ -1,0 +1,9 @@
+uuid: 72fe228d-64f7-4f88-9d8e-5af2f9ad2fd1
+langcode: en
+status: true
+dependencies: {  }
+id: document
+label: 文件
+weight: 14
+is_admin: null
+permissions: {  }

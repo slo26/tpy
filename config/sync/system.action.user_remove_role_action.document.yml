@@ -1,0 +1,14 @@
+uuid: 5ed604d8-3d03-499f-9529-de3d8b85dd8c
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.document
+  module:
+    - user
+id: user_remove_role_action.document
+label: 'Remove the 文件 role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: document

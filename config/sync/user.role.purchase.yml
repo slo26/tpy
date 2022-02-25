@@ -1,0 +1,9 @@
+uuid: db04c1ec-c8a4-4aba-afa0-53f355b02a2d
+langcode: en
+status: true
+dependencies: {  }
+id: purchase
+label: 採購
+weight: 8
+is_admin: null
+permissions: {  }

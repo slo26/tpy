@@ -15,6 +15,7 @@ const MODERATION_STATE_LABEL = array(
         'draft' => '草稿',
         'rate' => '銷售估價',
         'shipment' => '銷售出貨',
+		'stocking' => '銷售備貨',
         'done' => '銷售完成',
         'drop' => '銷售不成立',
         'return' => '銷售退貨',
@@ -73,6 +74,8 @@ function sales_order_table_generator_in_view($node) {
 			$status = "草稿";
 		} else if ( $node->moderation_state->value == 'rate' ) {
 			$status = "報價單";
+		} else if ( $node->moderation_state->value == 'stocking' ) {
+			$status = "備貨單";
 		} else if ( ($node->moderation_state->value == 'shipment') || ($node->moderation_state->value == 'done') ) {
 			if ( $type == 4 ) {
 				$status = "出貨單/銷貨轉寄庫單";
@@ -101,7 +104,7 @@ function sales_order_table_generator_in_view($node) {
 	/***************table list***************/
 	{
 		$table_list = "";
-		if ( ($node->moderation_state->value == 'shipment') || ($node->moderation_state->value == 'done') ) {
+		if ( ($node->moderation_state->value == 'stocking') || ($node->moderation_state->value == 'shipment') || ($node->moderation_state->value == 'done') ) {
 			$table_list = shipping($node);
 		} else {
 			$total_amount_before_tax = 0;
@@ -117,8 +120,8 @@ function sales_order_table_generator_in_view($node) {
 				$index++;
 				$table_body .= '<tr><td>' . $index . '</td><td><a href="/taxonomy/term/' .$tid . '/edit" target="blank">' . $product->title->value . '</a></td><td>' . $product->field_product_name->value . 
 								'</td><td align="right">' . number_format($item->field_quantity->value) . 
-								'</td><td  align="right">' . number_format($item->field_price->value) . 
-								'</td><td  align="right">' . number_format($item->field_total_amount->value) . '</td></tr>';
+								'</td><td  align="right">' . $item->field_price->value . 
+								'</td><td  align="right">' . $item->field_total_amount->value . '</td></tr>';
 				if ( !empty($item->field_comments->value) ) {
 					$table_body .= '<tr><td colspan="6" align="left">加註: ' . $item->field_comments->value . '</td></tr>';
 				}
@@ -133,7 +136,7 @@ function sales_order_table_generator_in_view($node) {
 	/***************table footer***************/
 	{
 		$table_footer = "";
-		if ( ($node->moderation_state->value != 'shipment') && ($node->moderation_state->value != 'done') ) {
+		if ( ($node->moderation_state->value != 'stocking') && ($node->moderation_state->value != 'shipment') && ($node->moderation_state->value != 'done') ) {
 			//$sales_tax = \Drupal::config('common_utils.settings')->get('sales_tax')/100;
 			$sales_tax = $node->field_tax_rate->value;
 			$total_amount_after_tax = $total_amount_before_tax + ($total_amount_before_tax * $sales_tax);
@@ -170,9 +173,13 @@ function sales_order_content_type_node_presave(Drupal\Core\Entity\EntityInterfac
 		if ( $node->moderation_state->value == "rate" ) {
 			$node->set('field_appraise_date', date('Y-m-d', time()));
 			$label = "銷售估價";
-		} else if ( $node->moderation_state->value == "shipment" ) {
+		} else if ( ($node->moderation_state->value == "stocking") || ($node->moderation_state->value == "shipment") ) {
 			$node->set('field_shipping_date', date('Y-m-d', time()));
-			$label = "銷售出貨";
+			if ( $node->moderation_state->value == "stocking" ) {
+				$label = "銷售備貨";
+			} else {
+				$label = "銷售出貨";
+			}
 			$bill_nid = $node->field_bill->target_id;
 			if ( !empty($bill_nid) ) {
 				$bill = \Drupal\node\Entity\Node::load($bill_nid);
@@ -626,9 +633,10 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
             '#type' => 'textfield',
 			'#weight' => 28,
             '#size' => 5,
-			//'#disabled' => true,
+			'#disabled' => true,
 			'#prefix' => '<div class="add-single-item-into-order">',
 			'#suffix' => '</div>',
+			'#access' => view_gross_profit_margin(),
         );
 
 		$form['total_amount'] = array(
@@ -795,6 +803,7 @@ function ajax_return_process(array $form, FormStateInterface $form_state) {
 		$return_item->set('field_quantity', $sell_item->field_quantity->value);
 		$return_item->set('field_price', $sell_item->field_price->value);
 		$return_item->set('field_discount', $sell_item->field_discount->value);
+		
 		$return_item->set('field_gross_profit_margin', $sell_item->field_gross_profit_margin->value);
 		$return_item->set('field_total_amount', $sell_item->field_total_amount->value);
 		$return_item->save();		 
@@ -986,7 +995,7 @@ function ajax_quantity_base_on_select(array $form, FormStateInterface $form_stat
 		$stock_up = \Drupal\node\Entity\Node::load($stock_up_nid);
 		$number_in_stock = $number_in_stock + $stock_up->field_stock->value;
 	}
-	$ajax_response->addCommand(new InvokeCommand('#edit-quantity', 'attr', ['max', $number_in_stock]));
+	//$ajax_response->addCommand(new InvokeCommand('#edit-quantity', 'attr', ['max', $number_in_stock]));
 	$ajax_response->addCommand(new InvokeCommand('#edit-quantity', 'val', ['0']));
 
 	return $ajax_response;
@@ -995,7 +1004,7 @@ function ajax_quantity_base_on_select(array $form, FormStateInterface $form_stat
 function ajax_calculate_price(array $form, FormStateInterface $form_state) {
 	$ajax_response = new AjaxResponse();
 	$quantity = (int)$form_state->getValue('quantity');
-	$price = (int)$form_state->getValue('price');
+	$price = (double)$form_state->getValue('price');
 	$discount = (double)$form_state->getValue('discount');
 	
 	$product_nid = $form_state->getValue('list_product');	
@@ -1034,12 +1043,20 @@ function create_single_item_callback(array $form, FormStateInterface $form_state
 			$item = \Drupal\taxonomy\Entity\Term::create(['vid' => 'sell_items']);
 			$item->set('name', $item_id);
 			$item->field_order_id->target_id = $entity->id();
+
+			$product = \Drupal\node\Entity\Node::load($form_state->getValue('list_product'));
+			$cost = $product->field_cost_price->value;
 			$item->set('field_product_id', $form_state->getValue('list_product'));
 			$item->set('field_storage', $form_state->getValue('storage'));
 			$item->set('field_quantity', $form_state->getValue('quantity'));
-			$item->set('field_price', $form_state->getValue('price'));
-			$item->set('field_discount', $form_state->getValue('discount'));
-			$item->set('field_gross_profit_margin', $form_state->getValue('gross_profit_margin'));
+			$price = (double)$form_state->getValue('price');
+			$item->set('field_price', $price);
+			$discount = (double)$form_state->getValue('discount');
+			$item->set('field_discount', $discount);
+			//$item->set('field_gross_profit_margin', $form_state->getValue('gross_profit_margin'));
+			$gpm = round(caculate_gpm_for_item_sell($price, $discount, $cost), 2);
+			$item->set('field_gross_profit_margin', $gpm);
+			
 			$item->set('field_total_amount', $form_state->getValue('total_amount'));
 			$item->save();
 			//$form_state->set('field_sell_products', $item->id());
@@ -1106,7 +1123,12 @@ function purchase_items_table_generate($order_id) {
 	}
 
 	$table = '<div id="sell-item-table"><table>-BODY-</table></div>';
-	$table_head = "<thead><tr><td>產品訂單編號</td><td>產品型號</td><td>產品名稱</td><td>倉庫</td><td>數量</td><td>單價</td><td>折扣(%)</td><td>毛利率(%)</td><td>金額</td><td></td></tr></thead>";
+	if ( view_gross_profit_margin() ) {
+		$table_head = "<thead><tr><td>產品訂單編號</td><td>產品型號</td><td>產品名稱</td><td>倉庫</td><td>數量</td><td>單價</td><td>折扣(%)</td><td>毛利率(%)</td><td>金額</td><td></td></tr></thead>";
+	} else {
+		$table_head = "<thead><tr><td>產品訂單編號</td><td>產品型號</td><td>產品名稱</td><td>倉庫</td><td>數量</td><td>單價</td><td>折扣(%)</td><td></td><td>金額</td><td></td></tr></thead>";
+	}
+	
 	$table_body_begin = '<tbody>';
 	$table_body = '';
 	$total_quantity = 0;
@@ -1137,12 +1159,16 @@ function purchase_items_table_generate($order_id) {
 						</ul>
 					</div>
 				</div>';
-		$table_body .= '<tr><td>' . $item->name->value . '</td><td>' . $product->title->value . '</td><td>' . $product->field_product_name->value . '</td><td>' . $storage->field_storage_name->value . '</td><td>' . number_format($item->field_quantity->value) . '</td><td>' . number_format($item->field_price->value) . '</td><td>' . $item->field_discount->value . '</td><td>' . $item->field_gross_profit_margin->value . '</td><td>' . number_format($item->field_total_amount->value) . '</td><td>' . $dropdown_button . '</td></tr>';
+		if ( view_gross_profit_margin() ) {
+			$table_body .= '<tr><td>' . $item->name->value . '</td><td>' . $product->title->value . '</td><td>' . $product->field_product_name->value . '</td><td>' . $storage->field_storage_name->value . '</td><td>' . number_format($item->field_quantity->value) . '</td><td>' . $item->field_price->value . '</td><td>' . $item->field_discount->value . '</td><td>' . $item->field_gross_profit_margin->value . '</td><td>' . $item->field_total_amount->value . '</td><td>' . $dropdown_button . '</td></tr>';
+		} else {
+			$table_body .= '<tr><td>' . $item->name->value . '</td><td>' . $product->title->value . '</td><td>' . $product->field_product_name->value . '</td><td>' . $storage->field_storage_name->value . '</td><td>' . number_format($item->field_quantity->value) . '</td><td>' . $item->field_price->value . '</td><td>' . $item->field_discount->value . '</td><td></td><td>' . $item->field_total_amount->value . '</td><td>' . $dropdown_button . '</td></tr>';
+		}
 		$total_quantity = $total_quantity + $item->field_quantity->value;
 		$sum = $sum + $item->field_price->value;
 		$total_cost = $total_cost + $item->field_total_amount->value;
 	}
-	$table_body .= '<tr><td><strong>總合</strong></td><td></td><td></td><td></td><td><strong>' . number_format($total_quantity) . '</strong></td><td><strong>$' . number_format($sum) . '</strong></td><td></td><td></td><td><strong>$' . number_format($total_cost) . '</strong></td><td></td></tr>';
+	$table_body .= '<tr><td><strong>總合</strong></td><td></td><td></td><td></td><td><strong>' . number_format($total_quantity) . '</strong></td><td><strong>$' . $sum . '</strong></td><td></td><td></td><td><strong>$' . $total_cost . '</strong></td><td></td></tr>';
 	$table_body_end = '</tbody>';
 
 	$table_body = $table_head . $table_body_begin . $table_body . $table_body_end;

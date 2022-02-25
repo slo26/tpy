@@ -1,0 +1,14 @@
+uuid: 70777af5-7275-4d50-89ea-09ae5371f4af
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.web
+  module:
+    - user
+id: user_remove_role_action.web
+label: 'Remove the 網頁 role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: web

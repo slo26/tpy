@@ -1,0 +1,14 @@
+uuid: 76ffa797-eaf4-40f9-8c3d-7c38757cb27a
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.product
+  module:
+    - user
+id: user_add_role_action.product
+label: 'Add the 產品 role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: product

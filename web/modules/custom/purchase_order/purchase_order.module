@@ -22,7 +22,6 @@ function purchase_order_preprocess_html(&$variables) {
     $variables['#attached']['library'][] = 'purchase_order/purchase_order';
 }
 
-
 function purchase_order_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
 	if ( $form_id === 'node_purchase_order_form' || $form_id == 'node_purchase_order_edit_form' ) {
 		/*-----------------採購資訊---------------------*/
@@ -362,8 +361,9 @@ function add_purchase_item_callback(array $form, FormStateInterface $form_state)
 			$item->set('field_quantity', $form_state->getValue('quantity'));
 			$item->set('field_price', $form_state->getValue('price'));
 			$item->set('field_total_amount', $form_state->getValue('total_amount'));
+			$item->set('status', false);
 			$item->save();
-			$form['field_sell_products']['widget'][0]['target_id']['#default_value'] = $item->id();
+			//$form['field_sell_products']['widget'][0]['target_id']['#default_value'] = $item->id();
 			$status = '<font color="blue">新增成功!</font>';
 
 			$table = items_table_generate($entity->id());

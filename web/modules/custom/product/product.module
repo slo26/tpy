@@ -30,6 +30,10 @@ function product_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
     if ( $form_id == "node_product_form" || $form_id == "node_product_edit_form" ) {
         $node = $form_state->getFormObject()->getEntity();
 
+        $form['field_gpm_for_construction']['#access'] = view_gross_profit_margin();
+        $form['field_gpm_for_vendor']['#access'] = view_gross_profit_margin();
+        $form['field_gpm_for_retailer']['#access'] = view_gross_profit_margin();
+
         $form['title']['widget'][0]['value']['#ajax'] = array(
                 'callback' => 'ajax_check_unique_id',
 				'event' => 'change',
