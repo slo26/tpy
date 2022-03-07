@@ -124,3 +124,9 @@ function view_gross_profit_margin() {
     return false;
 }
 
+function get_business_tax() {
+    $config = \Drupal::config ( 'common_utils.settings' );
+    $business_tax = $config->get('sales_tax');
+    return $business_tax;
+}
+

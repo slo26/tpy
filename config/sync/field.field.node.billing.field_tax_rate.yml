@@ -13,7 +13,9 @@ label: 營業稅率
 description: ''
 required: false
 translatable: false
-default_value: {  }
+default_value:
+  -
+    value: 0
 default_value_callback: ''
 settings:
   min: 0

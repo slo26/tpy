@@ -29,7 +29,7 @@ sales_order_content_type.sale_sheet:
     _form: 'Drupal\sales_order_content_type\Form\SaleSheet'
     _title: '銷售單'
   requirements:
-    _permission: 'authenticated'
+    _role: 'authenticated'
 
 
 
