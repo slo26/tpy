@@ -48,7 +48,7 @@ class MonthlyDetailBillStatementForm extends ConfigFormBase {
         $section_two .= '<tr id="monthly-detail-bill-s2-addr"><td>地址: ' . $customer->field_address->value . '</a></td><td>聯絡人: ' . $customer->field_contact_person->value . '</td></tr>';
         $section_two .= '<tr id="monthly-detail-bill-s2-phone"><td>電話: ' . $customer->field_phone->value . '   傳真: ' . $customer->field_fax->value  . '</td><td>統一編號: ' . $customer->field_uniform_number->value . '</td></tr></tbody></table>';
 
-        $section_three = '<table id="monthly-detail-bill-s3"><tbody><tr><th width="100">帳款日期</th><th width="150">銷售單憑證</th><th width="150">產品編號</th><th width="360">品名規格</th><th width="50">數量</th><th width="30">單位</th><th width="110">稅前售價</th><th width="110">稅前金額</th><th width="50">種類</th></tr>';
+        $section_three = '<table id="monthly-detail-bill-s3"><tbody><tr><th width="100">帳款日期</th><th width="150">銷售單憑證</th><th width="150">產品編號</th><th width="360">產品名稱</th><th width="50">數量</th><th width="30">單位</th><th width="110">稅前售價</th><th width="110">稅前金額</th><th width="50">種類</th></tr>';
         $bill_nids = \Drupal::entityQuery("node")
                                 ->condition('type', 'billing')
                                 ->condition('field_expected_receive_payment', [$begin_date, $end_date], "BETWEEN")
@@ -80,9 +80,9 @@ class MonthlyDetailBillStatementForm extends ConfigFormBase {
                                     ->execute();
                     $inventory = \Drupal\node\Entity\Node::load($inventory_nids[0]);
                     if ( $i == 0 ) {
-                        $section_three .= '<tr id="monthly-detail-bill-s3-begin"><td>' . $bill->field_expected_receive_payment->value . '</td><td><a href="/node/' . $sale->id() .'/edit" target="_blank">' . $sale->title->value . '</a></td><td>' . $product->title->value . '</td><td>' . $product->field_specification->value . '</td><td>' . $term->field_quantity->value * $negative .'</td><td>' . $inventory->field_unit->value . '</td><td>' . number_format($term->field_price->value) . '</td><td>' . number_format($term->field_total_amount->value * $negative) . '</td><td><a href="/node/' . $bill->id() . '/edit" target="_blank">' . get_entity_storage_label($bill, 'field_bill_type', $bill->field_bill_type->value) . '</a></td></tr>';
+                        $section_three .= '<tr id="monthly-detail-bill-s3-begin"><td>' . $bill->field_expected_receive_payment->value . '</td><td><a href="/node/' . $sale->id() .'/edit" target="_blank">' . $sale->title->value . '</a></td><td>' . $product->title->value . '</td><td>' . $product->field_product_name->value . '</td><td>' . $term->field_quantity->value * $negative .'</td><td>' . $inventory->field_unit->value . '</td><td>' . number_format($term->field_price->value) . '</td><td>' . number_format($term->field_total_amount->value * $negative) . '</td><td><a href="/node/' . $bill->id() . '/edit" target="_blank">' . get_entity_storage_label($bill, 'field_bill_type', $bill->field_bill_type->value) . '</a></td></tr>';
                     } else {
-                        $section_three .= '<tr id="monthly-detail-bill-s3-mid"><td></td><td></td><td>' . $product->title->value . '</td><td>' . $product->field_specification->value . '</td><td>' . $term->field_quantity->value * $negative .'</td><td>' . $inventory->field_unit->value . '</td><td>' . number_format($term->field_price->value) . '</td><td>' . number_format($term->field_total_amount->value * $negative) . '</td><td></td><td></td></tr>';
+                        $section_three .= '<tr id="monthly-detail-bill-s3-mid"><td></td><td></td><td>' . $product->title->value . '</td><td>' . $product->field_product_name->value . '</td><td>' . $term->field_quantity->value * $negative .'</td><td>' . $inventory->field_unit->value . '</td><td>' . number_format($term->field_price->value) . '</td><td>' . number_format($term->field_total_amount->value * $negative) . '</td><td></td><td></td></tr>';
                     }
                 }
                 $total_tax_amount = $total_tax_amount + $bill->field_tax->value;

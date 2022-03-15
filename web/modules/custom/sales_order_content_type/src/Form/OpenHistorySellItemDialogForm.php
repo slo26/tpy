@@ -74,12 +74,12 @@ class OpenHistorySellItemDialogForm extends FormBase {
     private function getViewSellItems($product_nid, $customer_nid) {
         $config = \Drupal::config ('common_utils.settings');
         $host = $config->get('hostname');
-        $product = \Drupal\node\Entity\Node::load($product_nid);
+        //$product = \Drupal\node\Entity\Node::load($product_nid);
         if ( $customer_nid != "none" ) {
-            $customer = \Drupal\node\Entity\Node::load($customer_nid);
-            $url = "https://$host/admin/api/sell_items?pid=" . $product->title->value . "&customer_title=" . $customer->field_customer_title->value;
+            //$customer = \Drupal\node\Entity\Node::load($customer_nid);
+            $url = "https://$host/admin/api/sell_items?pid=" . $product_nid . "&cid=" . $customer_nid;
         } else {
-            $url = "https://$host/admin/api/sell_items?pid=" . $product->title->value;
+            $url = "https://$host/admin/api/sell_items?pid=" . $product_nid;
         }
         
         $ch = curl_init();

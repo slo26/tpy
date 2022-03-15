@@ -1,6 +1,32 @@
 <?php
+use \Drupal\Core\Form\FormStateInterface;
+use Drupal\views\ViewExecutable;
 
 function custom_toolbar_preprocess_html(&$variables) {
     //Add JS and CSS library
     $variables['#attached']['library'][] = 'custom_toolbar/custom_toolbar';
+}
+
+function custom_toolbar_menu_local_tasks_alter(&$data, $route_name) {
+    unset($data['tabs'][0]["entity.node.delete_form"]);
+}
+
+function custom_toolbar_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
+    if ( $form_id == "node_sales_order_delete_form" ) {
+        $node = $form_state->getFormObject()->getEntity();
+        $bill_nid = $node->field_bill->target_id;
+        if ( !empty($bill_nid) ) {
+            $bill = \Drupal\node\Entity\Node::load($bill_nid);
+            if ( !empty($bill->field_actual_received_payment->value) ) {
+                $form['actions']['submit']['#disabled'] = true;
+            }
+        }
+    } else if ( $form_id == "node_billing_write_off_delete_form" ) {
+        $form['actions']['submit']['#disabled'] = true;
+    } else if ( $form_id == "node_billing_delete_form" ) {
+        $bill = $form_state->getFormObject()->getEntity();
+        if ( !empty($bill->field_actual_received_payment->value) ) {
+            $form['actions']['submit']['#disabled'] = true;
+        }
+    }
 }

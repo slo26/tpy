@@ -24,15 +24,15 @@ const MODERATION_STATE_LABEL = array(
 
 function sales_order_content_type_form_views_exposed_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
         if ( $form['#id'] == 'views-exposed-form-all-sell-orders-page-1' ) {
-                $form['create_content'] = [
-                      '#type' => 'link',
-                      '#title' => '新增銷售單',
-                      '#url' => Url::fromUri("https://" . \Drupal::config('common_utils.settings')->get('hostname') . '/node/add/sales_order'),
-                      '#attributes' => [
-                        'id' => ['views-exposed-form-create-content-button'],
-                      ],
-                      '#weight' => 100,
-                ];
+			$form['create_content'] = [
+					'#type' => 'link',
+					'#title' => '新增銷售單',
+					'#url' => Url::fromUri("https://" . \Drupal::config('common_utils.settings')->get('hostname') . '/node/add/sales_order'),
+					'#attributes' => [
+					'id' => ['views-exposed-form-create-content-button'],
+					],
+					'#weight' => 100,
+			];
         }
     }
 
@@ -396,9 +396,11 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 			'#markup' => '<div class="actual-recevied-payment"></div>',
 		);
 
-		$bill_nids = \Drupal::entityQuery("node")->condition('type', 'billing')->condition('field_order_id', $node->id())->execute();
-		foreach($bill_nids as $bill_nid) {
-			$bill = \Drupal\node\Entity\Node::load($bill_nid);
+		if ( !empty($node->field_bill->target_id) ) {
+			$bill = \Drupal\node\Entity\Node::load($node->field_bill->target_id);
+		//$bill_nids = \Drupal::entityQuery("node")->condition('type', 'billing')->condition('field_order_id', $node->id())->execute();
+		//foreach($bill_nids as $bill_nid) {
+			//$bill = \Drupal\node\Entity\Node::load($bill_nid);
 			
 			$form['billing_info']['total_amount_without_tax']['#markup'] = '<div class="total-amount-without-tax">' . t('未含稅總價  $') . number_format($bill->field_total_amount_without_tax->value) . '</div>';
 			$form['billing_info']['tax']['#markup'] = '<div class="tax">' . t('+稅金  $') . $bill->field_tax->value . '</div>';
@@ -416,7 +418,7 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 				$form['billing_info']['expected_recevied_payment']['#markup'] = '<div class="expected-recevied-payment">' . t('結帳日期  ') . $bill->field_expected_receive_payment->value . '</div>';
 			$form['billing_info']['actual_recevied_payment']['#markup'] = '<div class="actual-recevied-payment">' . t('已退款日期  ') . $bill->field_actual_received_payment->value . '</div>';
 			}
-			
+		//}
 		}
 		/*-----------------客戶資訊---------------------*/
 		$form['customer_info'] = array(
@@ -682,7 +684,11 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 			],
 			'#prefix' => '<div class="add-single-item-into-order-button">',
 			'#suffix' => '</div>',
-        );
+		);
+
+		if ( !empty($bill->field_actual_received_payment->value) ) {
+			$form['create_single_item']['#disabled'] = true;
+		}
 
 		$form['to_sell_item_list_by_all'] = array(
 				'#prefix' => '<div class="to-sell-item-list-by-all">',
@@ -1138,13 +1144,22 @@ function purchase_items_table_generate($order_id) {
 	$total_quantity = 0;
 	$sum = 0;
 	$total_cost = 0;
+	$is_closed = false;
+	$node = \Drupal\node\Entity\Node::load($order_id);
+	if ( !empty($node->field_bill->target_id) ) {
+		$bill = \Drupal\node\Entity\Node::load($node->field_bill->target_id);
+		if ( !empty($bill->field_actual_received_payment->value) ) {
+			$is_closed = true;
+		}
+	}
 	
 	foreach($tids as $tid) {
 		$item = \Drupal\taxonomy\Entity\Term::load($tid);
 		$product = \Drupal\node\Entity\Node::load($item->field_product_id->target_id);
 		$storage = \Drupal\node\Entity\Node::load($item->field_storage->target_id);
 
-		$dropdown_button = '<div class="dropbutton-wrapper dropbutton-multiple">
+		if ( !$is_closed ) {
+			$dropdown_button = '<div class="dropbutton-wrapper dropbutton-multiple">
 					<div class="dropbutton-widget">
 						<ul class="dropbutton">
 							<li class="edit dropbutton-action">
@@ -1163,6 +1178,7 @@ function purchase_items_table_generate($order_id) {
 						</ul>
 					</div>
 				</div>';
+		}
 		if ( view_gross_profit_margin() ) {
 			$table_body .= '<tr><td>' . $item->name->value . '</td><td>' . $product->title->value . '</td><td>' . $product->field_product_name->value . '</td><td>' . $storage->field_storage_name->value . '</td><td>' . number_format($item->field_quantity->value) . '</td><td>' . $item->field_price->value . '</td><td>' . $item->field_discount->value . '</td><td>' . $item->field_gross_profit_margin->value . '</td><td>' . $item->field_total_amount->value . '</td><td>' . $dropdown_button . '</td></tr>';
 		} else {

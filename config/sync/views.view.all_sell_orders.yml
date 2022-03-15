@@ -17,6 +17,7 @@ dependencies:
     - user.role.manager
     - workflows.workflow.editorial
   module:
+    - better_exposed_filters
     - content_moderation
     - datetime
     - node
@@ -816,7 +817,7 @@ display:
             offset_label: Offset
           quantity: 9
       exposed_form:
-        type: basic
+        type: bef
         options:
           submit_button: Apply
           reset_button: true
@@ -825,6 +826,67 @@ display:
           expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
+          text_input_required: 'Select any filter and click on Apply to see results'
+          text_input_required_format: full_html
+          bef:
+            general:
+              autosubmit: false
+              autosubmit_exclude_textfield: false
+              autosubmit_textfield_delay: 500
+              autosubmit_hide: false
+              input_required: false
+              allow_secondary: false
+              secondary_label: 'Advanced options'
+              secondary_open: false
+            pager:
+              plugin_id: default
+              advanced:
+                is_secondary: false
+            filter:
+              field_appraise_date_value:
+                plugin_id: default
+                advanced:
+                  collapsible: false
+                  is_secondary: false
+              field_shipping_date_value:
+                plugin_id: default
+                advanced:
+                  collapsible: false
+                  is_secondary: false
+              field_return_date_value:
+                plugin_id: default
+                advanced:
+                  collapsible: false
+                  is_secondary: false
+              field_expected_receive_payment_value:
+                plugin_id: default
+                advanced:
+                  collapsible: false
+                  is_secondary: false
+              field_actual_received_payment_value:
+                plugin_id: default
+                advanced:
+                  collapsible: false
+                  is_secondary: false
+              moderation_state:
+                plugin_id: default
+                advanced:
+                  rewrite:
+                    filter_rewrite_values: ''
+                  collapsible: false
+                  is_secondary: false
+              title:
+                plugin_id: default
+                advanced:
+                  placeholder_text: ''
+                  collapsible: false
+                  is_secondary: false
+              field_customer_title_value:
+                plugin_id: default
+                advanced:
+                  placeholder_text: ''
+                  collapsible: false
+                  is_secondary: false
       access:
         type: role
         options:
@@ -1485,7 +1547,198 @@ display:
     position: 1
     display_options:
       exposed_block: false
-      display_extenders: {  }
+      display_extenders:
+        views_ef_fieldset:
+          views_ef_fieldset:
+            enabled: 0
+            options:
+              sort:
+                root:
+                  container_type: details
+                  title: Filters
+                  description: ''
+                  weight: '0'
+                  open: 0
+                  id: root
+                  pid: ''
+                  depth: '0'
+                  type: container
+                field_appraise_date_value:
+                  weight: '-20'
+                  id: field_appraise_date_value
+                  pid: root
+                  depth: '1'
+                  type: filter
+                field_shipping_date_value:
+                  weight: '-20'
+                  id: field_shipping_date_value
+                  pid: root
+                  depth: '1'
+                  type: filter
+                reset:
+                  weight: '-20'
+                  id: reset
+                  pid: root
+                  depth: '1'
+                  type: buttons
+                field_return_date_value:
+                  weight: '-19'
+                  id: field_return_date_value
+                  pid: root
+                  depth: '1'
+                  type: filter
+                field_expected_receive_payment_value:
+                  weight: '-18'
+                  id: field_expected_receive_payment_value
+                  pid: root
+                  depth: '1'
+                  type: filter
+                moderation_state:
+                  weight: '-16'
+                  id: moderation_state
+                  pid: root
+                  depth: '1'
+                  type: filter
+                title:
+                  weight: '-15'
+                  id: title
+                  pid: root
+                  depth: '1'
+                  type: filter
+                field_customer_title_value:
+                  weight: '-14'
+                  id: field_customer_title_value
+                  pid: root
+                  depth: '1'
+                  type: filter
+                moderation_state_op:
+                  weight: '-13'
+                  id: moderation_state_op
+                  pid: root
+                  depth: '1'
+                  type: filter
+                submit:
+                  weight: '-12'
+                  id: submit
+                  pid: root
+                  depth: '1'
+                  type: buttons
+                container-0:
+                  container_type: details
+                  title: 'Container 0'
+                  description: ''
+                  weight: '-11'
+                  open: 0
+                  id: container-0
+                  pid: root
+                  depth: '1'
+                  type: container
+                field_actual_received_payment_value:
+                  weight: '-23'
+                  id: field_actual_received_payment_value
+                  pid: container-0
+                  depth: '2'
+                  type: filter
+                container-1:
+                  container_type: details
+                  title: 'Container 1'
+                  description: ''
+                  weight: '-10'
+                  open: 0
+                  id: container-1
+                  pid: root
+                  depth: '1'
+                  type: container
+                container-2:
+                  container_type: details
+                  title: 'Container 2'
+                  description: ''
+                  weight: '-9'
+                  open: 0
+                  id: container-2
+                  pid: root
+                  depth: '1'
+                  type: container
+                container-10:
+                  container_type: details
+                  title: 'Container 10'
+                  description: ''
+                  weight: '-9'
+                  open: 0
+                  id: container-10
+                  pid: root
+                  depth: '1'
+                  type: container
+                container-3:
+                  container_type: details
+                  title: 'Container 3'
+                  description: ''
+                  weight: '-8'
+                  open: 0
+                  id: container-3
+                  pid: root
+                  depth: '1'
+                  type: container
+                container-4:
+                  container_type: details
+                  title: 'Container 4'
+                  description: ''
+                  weight: '-7'
+                  open: 0
+                  id: container-4
+                  pid: root
+                  depth: '1'
+                  type: container
+                container-5:
+                  container_type: details
+                  title: 'Container 5'
+                  description: ''
+                  weight: '-6'
+                  open: 0
+                  id: container-5
+                  pid: root
+                  depth: '1'
+                  type: container
+                container-6:
+                  container_type: details
+                  title: 'Container 6'
+                  description: ''
+                  weight: '-5'
+                  open: 0
+                  id: container-6
+                  pid: root
+                  depth: '1'
+                  type: container
+                container-7:
+                  container_type: details
+                  title: 'Container 7'
+                  description: ''
+                  weight: '-4'
+                  open: 0
+                  id: container-7
+                  pid: root
+                  depth: '1'
+                  type: container
+                container-8:
+                  container_type: details
+                  title: 'Container 8'
+                  description: ''
+                  weight: '-3'
+                  open: 0
+                  id: container-8
+                  pid: root
+                  depth: '1'
+                  type: container
+                container-9:
+                  container_type: details
+                  title: 'Container 9'
+                  description: ''
+                  weight: '-2'
+                  open: 0
+                  id: container-9
+                  pid: root
+                  depth: '1'
+                  type: container
       path: admin/all-sell-orders
     cache_metadata:
       max-age: -1

@@ -8,7 +8,7 @@ use Drupal\Core\Url;
 /**
  * Implements hook_entity_operation().
  */
-function sell_items_entity_operation(\Drupal\Core\Entity\EntityInterface $entity) {
+/*function sell_items_entity_operation(\Drupal\Core\Entity\EntityInterface $entity) {
     $operations = [];
     if ( $entity->getEntityTypeId() == 'taxonomy_term' && $entity->bundle() === 'sell_items' ) {
         $roles = \Drupal::currentUser()->getRoles();
@@ -19,7 +19,7 @@ function sell_items_entity_operation(\Drupal\Core\Entity\EntityInterface $entity
         ];
     }
   return $operations;
-}
+}*/
 
 /**
  * Implements hook_page_preprocess_html().
@@ -83,9 +83,12 @@ function sell_items_taxonomy_term_delete($term) {
     }
 }
 
+function sell_items_menu_local_tasks_alter(&$data, $route_name) {
+    unset($data['tabs'][0]["entity.taxonomy_term.delete_form"]);
+}
+
 function sell_items_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
     if ($form_id === 'taxonomy_term_sell_items_form' ) {
-
         $term = $form_state->getFormObject()->getEntity();
         if ( $term->isNew() ) {
             $form ['name']['widget'][0]['value']['#default_value'] = gen_sell_item_id();
@@ -125,8 +128,30 @@ function sell_items_form_alter(&$form, FormStateInterface &$form_state, $form_id
 			'event' => 'change',
         );
 
+        if ( !empty($term->field_order_id->target_id) ) {
+            $node = \Drupal\node\Entity\Node::load($term->field_order_id->target_id);
+            if ( !empty($node->field_bill->target_id) ) {
+                $bill = \Drupal\node\Entity\Node::load($node->field_bill->target_id);
+                if ( !empty($bill->field_actual_received_payment->value) ) {
+                    $form['actions']['submit']['#disabled'] = true;
+                    $form['actions']["delete"]['#attributes']['style'] = 'display: none;';
+                }
+            }
+        }
+
         $form ['field_gross_profit_margin']['#access'] = view_gross_profit_margin();
         $form['#validate'][] = 'sell_items_form_validate';
+    } else if ( $form_id === 'taxonomy_term_sell_items_delete_form' ) {
+        $term = $form_state->getFormObject()->getEntity();
+        if ( !empty($term->field_order_id->target_id) ) {
+            $node = \Drupal\node\Entity\Node::load($term->field_order_id->target_id);
+            if ( !empty($node->field_bill->target_id) ) {
+                $bill = \Drupal\node\Entity\Node::load($node->field_bill->target_id);
+                if ( !empty($bill->field_actual_received_payment->value) ) {
+                    $form['actions']['submit']['#disabled'] = true;
+                }
+            }
+        }
     }
 }
 

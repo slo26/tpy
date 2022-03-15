@@ -47,6 +47,7 @@ function billing_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
         $node = $form_state->getFormObject()->getEntity();
         if ( !empty($node->field_actual_received_payment->value) ) {
             $form['actions']['submit']['#disabled'] = true;
+            $form['actions']["delete"]['#attributes']['style'] = 'display: none;';
         }
         
         if ( $node->isNew() ) {

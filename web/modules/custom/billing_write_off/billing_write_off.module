@@ -94,6 +94,8 @@ function billing_write_off_form_alter(&$form, FormStateInterface &$form_state, $
 
         if ( !$node->isNew() ) {
             $form['actions']['submit']['#disabled'] = true;
+            //$form['actions']["delete"]['#disabled'] = true;
+            $form['actions']["delete"]['#attributes']['style'] = 'display: none;';
         }
         if ( $node->isNew() ) {
             $form ['title']['widget'][0]['value']['#default_value'] = generate_billing_write_off_id($customer_nid);
