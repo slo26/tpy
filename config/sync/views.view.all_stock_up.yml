@@ -15,6 +15,7 @@ dependencies:
     - node.type.stock_up
     - user.role.authenticated
   module:
+    - better_exposed_filters
     - image
     - node
     - options
@@ -727,7 +728,7 @@ display:
             offset_label: Offset
           quantity: 9
       exposed_form:
-        type: basic
+        type: bef
         options:
           submit_button: Apply
           reset_button: true
@@ -736,6 +737,46 @@ display:
           expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
+          text_input_required: 'Select any filter and click on Apply to see results'
+          text_input_required_format: full_html
+          bef:
+            general:
+              autosubmit: false
+              autosubmit_exclude_textfield: false
+              autosubmit_textfield_delay: 500
+              autosubmit_hide: false
+              input_required: false
+              allow_secondary: false
+              secondary_label: 'Advanced options'
+              secondary_open: false
+            pager:
+              plugin_id: default
+              advanced:
+                is_secondary: false
+            filter:
+              field_stock_value:
+                plugin_id: default
+                advanced:
+                  collapsible: false
+                  is_secondary: false
+              title_1:
+                plugin_id: default
+                advanced:
+                  placeholder_text: ''
+                  collapsible: false
+                  is_secondary: false
+              field_storage_name_value:
+                plugin_id: default
+                advanced:
+                  placeholder_text: ''
+                  collapsible: false
+                  is_secondary: false
+              title:
+                plugin_id: default
+                advanced:
+                  placeholder_text: ''
+                  collapsible: false
+                  is_secondary: false
       access:
         type: role
         options:
@@ -777,6 +818,64 @@ display:
           expose:
             operator_limit_selection: false
             operator_list: {  }
+        field_stock_value:
+          id: field_stock_value
+          table: node__field_stock
+          field: field_stock_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: numeric
+          operator: '='
+          value:
+            min: ''
+            max: ''
+            value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_stock_value_op
+            label: 庫存
+            description: ''
+            use_operator: true
+            operator: field_stock_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_stock_value
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              employee: '0'
+              manager: '0'
+              sales: '0'
+              ceo: '0'
+              sale: '0'
+              purchase: '0'
+              inventory: '0'
+              billing: '0'
+              product: '0'
+              customer_vendor: '0'
+              web: '0'
+              document: '0'
+            min_placeholder: ''
+            max_placeholder: ''
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
         title_1:
           id: title_1
           table: node_field_data
