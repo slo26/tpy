@@ -15,7 +15,6 @@ dependencies:
     - node.type.stock_up
     - node.type.storage
     - node.type.vendor
-    - taxonomy.vocabulary.prepaid_balance
     - taxonomy.vocabulary.purchase_items
     - taxonomy.vocabulary.sell_items
   module:
@@ -62,7 +61,6 @@ permissions:
   - 'delete sales_order revisions'
   - 'delete stock_up revisions'
   - 'delete storage revisions'
-  - 'delete terms in prepaid_balance'
   - 'delete terms in purchase_items'
   - 'delete terms in sell_items'
   - 'delete vendor revisions'

@@ -11,6 +11,7 @@ dependencies:
     - node.type.customer
     - node.type.documentation
     - node.type.goods
+    - node.type.ourbound_inbound_warehouse
     - node.type.page
     - node.type.product
     - node.type.purchase_order
@@ -84,6 +85,7 @@ permissions:
   - 'edit any customer content'
   - 'edit any documentation content'
   - 'edit any goods content'
+  - 'edit any ourbound_inbound_warehouse content'
   - 'edit any page content'
   - 'edit any purchase_order content'
   - 'edit any sales_order content'
@@ -95,6 +97,7 @@ permissions:
   - 'edit own customer content'
   - 'edit own documentation content'
   - 'edit own goods content'
+  - 'edit own ourbound_inbound_warehouse content'
   - 'edit own page content'
   - 'edit own product content'
   - 'edit own purchase_order content'

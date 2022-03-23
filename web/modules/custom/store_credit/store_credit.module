@@ -3,11 +3,11 @@ use \Drupal\Core\Form\FormStateInterface;
 
 function store_credit_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
     if ( $form_id === 'taxonomy_term_prepaid_balance_form' ) {
-        $term = $form_state->getFormObject()->getEntity();
+        /*$term = $form_state->getFormObject()->getEntity();
         if ( !empty($term->field_to_bill_write_off->target_id) ) {
             $form['actions']['submit']['#disabled'] = true;
-        }
-
+        }*/
+        $form['actions']['submit']['#disabled'] = true;
     }
 }
 
@@ -19,3 +19,4 @@ function gen_store_credit_id() {
         return "Credit-" . date("md") . "-" . (count($total) + 1);
     }
 }
+

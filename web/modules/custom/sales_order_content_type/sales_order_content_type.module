@@ -803,6 +803,7 @@ function ajax_return_process(array $form, FormStateInterface $form_state) {
 	foreach($sell_items_tids as $sell_items_tid) {
 		$sell_item = \Drupal\taxonomy\Entity\Term::load($sell_items_tid);
 		$return_item = \Drupal\taxonomy\Entity\Term::create(['vid' => 'sell_items']);
+		$return_item->set('status', 0);
 		$return_item->set('field_sell_type', 'return');
 		$return_item->set('name', gen_sell_item_id($return_node->title->value));
 		$return_item->field_order_id->target_id = $return_node_nid;
@@ -1046,12 +1047,15 @@ function create_single_item_callback(array $form, FormStateInterface $form_state
 	$status = "";
 	$entity = $form_state->getFormObject()->getEntity();
 	if ( !empty($entity->id()) ) {
-		if ( empty($form_state->getValue('list_product')) || empty($form_state->getValue('quantity')) || $form_state->getValue('storage') == '_none' ) {
-			$status = '<font color="red">產品編號, 倉庫和數量必填!</font>';	
+		if ( empty($form_state->getValue('list_product'))  ) {
+		//if ( empty($form_state->getValue('list_product')) || empty($form_state->getValue('quantity')) || $form_state->getValue('storage') == '_none' ) {
+			//$status = '<font color="red">產品編號, 倉庫和數量必填!</font>';
+			$status = '<font color="red">產品編號必填!</font>';
 		} else {
 			$item_id = gen_sell_item_id($entity->title->value);
 			$item = \Drupal\taxonomy\Entity\Term::create(['vid' => 'sell_items']);
 			$item->set('name', $item_id);
+			$item->set('status', 0);
 			$item->field_order_id->target_id = $entity->id();
 
 			$product = \Drupal\node\Entity\Node::load($form_state->getValue('list_product'));
@@ -1370,3 +1374,4 @@ function getSellOrderID($nid) {
 	$sale = \Drupal\node\Entity\Node::load($nid);
 	return $sale->title->value;
 }
+

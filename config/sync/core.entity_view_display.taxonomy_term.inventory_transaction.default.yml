@@ -1,0 +1,89 @@
+uuid: 446ff95d-8d3c-438d-a223-37618e129998
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.taxonomy_term.inventory_transaction.field_after_transaction
+    - field.field.taxonomy_term.inventory_transaction.field_before_transaction
+    - field.field.taxonomy_term.inventory_transaction.field_from_storage
+    - field.field.taxonomy_term.inventory_transaction.field_inventory_transaction_type
+    - field.field.taxonomy_term.inventory_transaction.field_product_goods
+    - field.field.taxonomy_term.inventory_transaction.field_quantity
+    - field.field.taxonomy_term.inventory_transaction.field_source
+    - field.field.taxonomy_term.inventory_transaction.field_to_storage
+    - taxonomy.vocabulary.inventory_transaction
+  module:
+    - options
+id: taxonomy_term.inventory_transaction.default
+targetEntityType: taxonomy_term
+bundle: inventory_transaction
+mode: default
+content:
+  field_after_transaction:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_before_transaction:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 6
+    region: content
+  field_from_storage:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_inventory_transaction_type:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_product_goods:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_quantity:
+    type: number_integer
+    label: above
+    settings:
+      thousand_separator: ''
+      prefix_suffix: true
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_source:
+    type: string
+    label: above
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    weight: 0
+    region: content
+  field_to_storage:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 4
+    region: content
+hidden:
+  description: true

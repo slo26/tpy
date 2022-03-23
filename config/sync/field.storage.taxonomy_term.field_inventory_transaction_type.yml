@@ -1,0 +1,33 @@
+uuid: fad80b9c-0872-47bc-bdbd-bd52879408fb
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - taxonomy
+id: taxonomy_term.field_inventory_transaction_type
+field_name: field_inventory_transaction_type
+entity_type: taxonomy_term
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: inbound
+      label: 入倉
+    -
+      value: transfer
+      label: 轉倉
+    -
+      value: outbound
+      label: 出倉
+    -
+      value: return
+      label: 退倉
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

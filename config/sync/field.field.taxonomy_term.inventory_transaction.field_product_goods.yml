@@ -1,0 +1,25 @@
+uuid: a665d5ff-8546-4532-9d0f-ef371854ebe8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_product_goods
+    - taxonomy.vocabulary.inventory_transaction
+id: taxonomy_term.inventory_transaction.field_product_goods
+field_name: field_product_goods
+entity_type: taxonomy_term
+bundle: inventory_transaction
+label: 產品/零件/物件
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: views
+  handler_settings:
+    view:
+      view_name: product_and_goods_entities_for_view
+      display_name: entity_reference_1
+      arguments: {  }
+field_type: entity_reference

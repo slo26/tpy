@@ -1,0 +1,57 @@
+uuid: 86ac16fc-0673-4eb5-afe3-0993af27b99e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.ourbound_inbound_warehouse.field_from_storage
+    - field.field.node.ourbound_inbound_warehouse.field_long_comment
+    - field.field.node.ourbound_inbound_warehouse.field_product_goods
+    - field.field.node.ourbound_inbound_warehouse.field_taxonomy
+    - field.field.node.ourbound_inbound_warehouse.field_to_storage
+    - field.field.node.ourbound_inbound_warehouse.field_transaction_date
+    - field.field.node.ourbound_inbound_warehouse.field_warehouse_form_type
+    - node.type.ourbound_inbound_warehouse
+  module:
+    - datetime
+    - options
+    - user
+id: node.ourbound_inbound_warehouse.default
+targetEntityType: node
+bundle: ourbound_inbound_warehouse
+mode: default
+content:
+  field_long_comment:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+  field_taxonomy:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 2
+    region: content
+  field_transaction_date:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: short
+    third_party_settings: {  }
+    weight: 1
+    region: content
+  field_warehouse_form_type:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 0
+    region: content
+hidden:
+  field_from_storage: true
+  field_product_goods: true
+  field_to_storage: true
+  links: true

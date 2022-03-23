@@ -1,0 +1,17 @@
+uuid: cb6ada77-3e62-4380-9f72-05622627388d
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 提貨/入庫
+type: ourbound_inbound_warehouse
+description: 入/提庫單
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: true

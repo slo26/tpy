@@ -1,0 +1,19 @@
+uuid: 005a09ab-bdae-4dbe-9f01-f182333fc7f6
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_taxonomy
+    - node.type.ourbound_inbound_warehouse
+id: node.ourbound_inbound_warehouse.field_taxonomy
+field_name: field_taxonomy
+entity_type: node
+bundle: ourbound_inbound_warehouse
+label: Taxonomy
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

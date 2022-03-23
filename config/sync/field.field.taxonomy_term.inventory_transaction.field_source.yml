@@ -1,0 +1,19 @@
+uuid: 1624bba9-2210-4f3b-a37b-1bf0e0347f51
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_source
+    - taxonomy.vocabulary.inventory_transaction
+id: taxonomy_term.inventory_transaction.field_source
+field_name: field_source
+entity_type: taxonomy_term
+bundle: inventory_transaction
+label: 交易來源
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

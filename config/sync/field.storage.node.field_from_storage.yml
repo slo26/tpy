@@ -1,11 +1,11 @@
-uuid: e4665d4b-d669-4e20-88e2-a850087a9372
+uuid: b2aee6db-c6d6-4745-a2bc-92c0330aa02d
 langcode: en
 status: true
 dependencies:
   module:
     - node
-id: node.field_product_goods
-field_name: field_product_goods
+id: node.field_from_storage
+field_name: field_from_storage
 entity_type: node
 type: entity_reference
 settings:

@@ -1,0 +1,29 @@
+uuid: 711fd158-0d0d-4d87-b3e6-3922b91adeb8
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_to_storage
+    - node.type.ourbound_inbound_warehouse
+    - node.type.storage
+id: node.ourbound_inbound_warehouse.field_to_storage
+field_name: field_to_storage
+entity_type: node
+bundle: ourbound_inbound_warehouse
+label: 入倉庫
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      storage: storage
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

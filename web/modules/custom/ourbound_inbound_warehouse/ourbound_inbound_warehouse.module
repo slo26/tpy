@@ -1,0 +1,515 @@
+<?php
+use \Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\CssCommand;
+use \Drupal\node\Entity\Node;
+
+function ourbound_inbound_warehouse_node_presave(Drupal\Core\Entity\EntityInterface $node) {
+    if ( $node->type->target_id == "ourbound_inbound_warehouse" ) {
+        $field_taxonomy = $node->field_taxonomy->value;
+        $json_taxonomy = json_decode($field_taxonomy, true);
+        for($i=0; $i < count($json_taxonomy); $i++) {
+            $item_nid = $json_taxonomy[$i]["ProductsGoodsNid"];
+            $quantity = $json_taxonomy[$i]["Quantity"];
+            $from_storage_nid = $json_taxonomy[$i]["FromStorage"]["code"];
+            $to_storage_nid = $json_taxonomy[$i]["ToStorage"]["code"];
+            $node->field_product_goods[] = \Drupal\node\Entity\Node::load($item_nid);
+            $node->set('field_warehouse_form_type', $_SESSION['form_type']);
+
+            if ( $node->field_warehouse_form_type->value == "inbound" ) {
+                $inventory_nids = \Drupal::entityQuery("node")->condition('type', 'stock_up')
+                                                                ->condition('field_storage_id', $to_storage_nid)
+                                                                ->condition('field_product_goods', $item_nid)
+                                                                ->execute();
+                if ( count($inventory_nids) == 0 ) {
+                    $inventory = \Drupal\node\Entity\Node::create(['type' => "stock_up",]);
+                    $inventory->set('field_storage_id', $to_storage_nid);
+                    $inventory->set('field_product_goods', $item_nid);
+                    $inventory->set('field_stock', $quantity);
+                    $inventory->save();
+                    \Drupal::messenger()->addMessage(get_product_or_goods_name_by_nid($item_nid) . " 品項在 " . get_storage_name_by_nid($to_storage_nid) . " 倉庫建立.");
+                    \Drupal::messenger()->addMessage(get_product_or_goods_name_by_nid($item_nid) . "  以入庫 " . get_storage_name_by_nid($to_storage_nid) . ", 最新庫存數量 " . $quantity);
+                    $transaction = \Drupal\taxonomy\Entity\Term::create(['vid' => 'inventory_transaction']);
+
+                    $time = strtotime($node->field_transaction_date->value);
+                    $transaction->set('name', \Drupal::service('date.formatter')->format($time, 'custom', 'Y-m-d H:i'));
+                    $transaction->set('field_source', $node->title->value);
+                    $transaction->set('field_to_storage', $to_storage_nid);
+                    $transaction->set('field_quantity', $quantity);
+                    $transaction->set('field_inventory_transaction_type', $node->field_warehouse_form_type->value);
+                    $transaction->set('field_product_goods', $item_nid);
+                    $transaction->set('field_before_transaction', 0);
+                    $transaction->set('field_after_transaction', $quantity);
+                    $transaction->save();
+                } else {
+                    foreach($inventory_nids as $inventory_nid) {
+                        $inventory = \Drupal\node\Entity\Node::load($inventory_nid);
+                        $field_stock = $inventory->field_stock->value;
+                        $new_quantity = $field_stock + $quantity;
+                        $inventory->set('field_stock', $new_quantity);
+                        $inventory->save();
+                        break;
+                    }
+                    \Drupal::messenger()->addMessage(get_product_or_goods_name_by_nid($item_nid) . "  以入庫 " . get_storage_name_by_nid($to_storage_nid) . ", 最新庫存數量 " . $new_quantity);
+                    $transaction = \Drupal\taxonomy\Entity\Term::create(['vid' => 'inventory_transaction']);
+                    $time = strtotime($node->field_transaction_date->value);
+                    $transaction->set('name', \Drupal::service('date.formatter')->format($time, 'custom', 'Y-m-d H:i'));
+                    //$transaction->set('name', $node->field_transaction_date->value);
+                    $transaction->set('field_source', $node->title->value);
+                    $transaction->set('field_to_storage', $to_storage_nid);
+                    $transaction->set('field_quantity', $quantity);
+                    $transaction->set('field_inventory_transaction_type', $node->field_warehouse_form_type->value);
+                    $transaction->set('field_product_goods', $item_nid);
+                    $transaction->set('field_before_transaction', $field_stock);
+                    $transaction->set('field_after_transaction', $new_quantity);
+                    $transaction->save();
+                }   
+            } else if ( $node->field_warehouse_form_type->value == "transfer" ) {     
+                $source_inventory_nids = \Drupal::entityQuery("node")->condition('type', 'stock_up')
+                                                                ->condition('field_storage_id', $from_storage_nid)
+                                                                ->condition('field_product_goods', $item_nid)
+                                                                ->execute();
+                $destination_inventory_nids = \Drupal::entityQuery("node")->condition('type', 'stock_up')
+                                                                ->condition('field_storage_id', $to_storage_nid)
+                                                                ->condition('field_product_goods', $item_nid)
+                                                                ->execute();
+                foreach($source_inventory_nids as $source_inventory_nid) {
+                    $source_inventory = \Drupal\node\Entity\Node::load($source_inventory_nid);
+                    $source_quantity = $source_inventory->field_stock->value;
+                    $new_quantity = $source_quantity - $quantity;
+                    $source_inventory->set('field_stock', $new_quantity);
+                    $source_inventory->save();
+                    \Drupal::messenger()->addMessage(get_product_or_goods_name_by_nid($item_nid) . "  有 " . $quantity . " 數量從 " . get_storage_name_by_nid($from_storage_nid) . "轉出, 最新庫存數量是 " . $new_quantity . ".");
+                    break;
+                }
+                $transaction = \Drupal\taxonomy\Entity\Term::create(['vid' => 'inventory_transaction']);
+                $time = strtotime($node->field_transaction_date->value);
+                $transaction->set('name', \Drupal::service('date.formatter')->format($time, 'custom', 'Y-m-d H:i'));
+                $transaction->set('field_source', $node->title->value);
+                $transaction->set('field_from_storage', $from_storage_nid);
+                $transaction->set('field_quantity', $quantity);
+                $transaction->set('field_inventory_transaction_type', $node->field_warehouse_form_type->value);
+                $transaction->set('field_product_goods', $item_nid);
+                $transaction->set('field_before_transaction', $source_quantity);
+                $transaction->set('field_after_transaction', $new_quantity);
+                $transaction->save();
+                if ( count($destination_inventory_nids) == 0 ) {
+                    $stock_up = Node::create(['type' => "stock_up"]);
+                    $stock_up->set('field_storage_id', $to_storage_nid);
+                    $stock_up->set('field_stock', $quantity);
+                    $stock_up->set('field_product_goods', $item_nid);
+                    $stock_up->save();
+                    \Drupal::messenger()->addMessage(get_product_or_goods_name_by_nid($item_nid) . "  有 " . $quantity . " 數量轉入 " . get_storage_name_by_nid($to_storage_nid) . " 最新庫存數量是 " . $quantity . ".");
+                } else {
+                    foreach ($destination_inventory_nids as $destination_inventory_nid) {
+                        $destination_inventory = \Drupal\node\Entity\Node::load($destination_inventory_nid);                             
+                        $destination_quantity = $destination_inventory->field_stock->value;
+                        $new_quantity = $destination_quantity + $quantity;
+                        $destination_inventory->set('field_stock', $new_quantity);
+                        $destination_inventory->save();
+                        \Drupal::messenger()->addMessage(get_product_or_goods_name_by_nid($item_nid) . "  有 " . $quantity . " 數量轉入 " . get_storage_name_by_nid($to_storage_nid) . " 最新庫存數量是 " . $new_quantity . ".");
+                        break;
+                    }
+                }
+                            
+                $transaction = \Drupal\taxonomy\Entity\Term::create(['vid' => 'inventory_transaction']);
+                $time = strtotime($node->field_transaction_date->value);
+                $transaction->set('name', \Drupal::service('date.formatter')->format($time, 'custom', 'Y-m-d H:i'));
+                $transaction->set('field_source', $node->title->value);
+                $transaction->set('field_to_storage', $to_storage_nid);
+                $transaction->set('field_quantity', $quantity);
+                $transaction->set('field_inventory_transaction_type', $node->field_warehouse_form_type->value);
+                $transaction->set('field_product_goods', $item_nid);
+                $transaction->set('field_before_transaction', $destination_quantity);
+                $transaction->set('field_after_transaction', $new_quantity);
+                $transaction->save();    
+            } else if ( $node->field_warehouse_form_type->value == "outbound" ) {
+                $inventory_nids = \Drupal::entityQuery("node")->condition('type', 'stock_up')
+                                                                ->condition('field_storage_id', $from_storage_nid)
+                                                                ->condition('field_product_goods', $item_nid)
+                                                                ->execute();
+                foreach($inventory_nids as $inventory_nid) {
+                    $inventory = \Drupal\node\Entity\Node::load($inventory_nid);
+                    $original_quantity = $inventory->field_stock->value;
+                    $new_quantity = $original_quantity - $quantity;
+                    $inventory->set('field_stock', $new_quantity);
+                    $inventory->save();
+                    \Drupal::messenger()->addMessage(get_product_or_goods_name_by_nid($item_nid) . "  有 " . $quantity . " 個數量從 " . get_storage_name_by_nid($from_storage_nid) . " 領出, 最新庫存數是 " . $new_quantity . ".");
+                    break;
+                }
+                $transaction = \Drupal\taxonomy\Entity\Term::create(['vid' => 'inventory_transaction']);
+                $time = strtotime($node->field_transaction_date->value);
+                $transaction->set('name', \Drupal::service('date.formatter')->format($time, 'custom', 'Y-m-d H:i'));
+                $transaction->set('field_source', $node->title->value);
+                $transaction->set('field_from_storage', $from_storage_nid);
+                $transaction->set('field_quantity', $quantity);
+                $transaction->set('field_inventory_transaction_type', $node->field_warehouse_form_type->value);
+                $transaction->set('field_product_goods', $item_nid);
+                $transaction->set('field_before_transaction', $original_quantity);
+                $transaction->set('field_after_transaction', $new_quantity);
+                $transaction->save();
+            } else if ( $node->field_warehouse_form_type->value == "return" ) {
+                $inventory_nids = \Drupal::entityQuery("node")->condition('type', 'stock_up')
+                                                                ->condition('field_storage_id', $to_storage_nid)
+                                                                ->condition('field_product_goods', $item_nid)
+                                                                ->execute();
+                foreach($inventory_nids as $inventory_nid) {
+                    $inventory = \Drupal\node\Entity\Node::load($inventory_nid);
+                    $original_quantity = $inventory->field_stock->value;
+                    $new_quantity = $original_quantity + $quantity;
+                    $inventory->set('field_stock', $new_quantity);
+                    $inventory->save();
+                    \Drupal::messenger()->addMessage(get_product_or_goods_name_by_nid($item_nid) . "  有 " . $quantity . " 個數量從 " . get_storage_name_by_nid($to_storage_nid) . " 入庫, 最新庫存數是 " . $new_quantity . ".");
+                    break;
+                }
+                $transaction = \Drupal\taxonomy\Entity\Term::create(['vid' => 'inventory_transaction']);
+                $time = strtotime($node->field_transaction_date->value);
+                $transaction->set('name', \Drupal::service('date.formatter')->format($time, 'custom', 'Y-m-d H:i'));
+                $transaction->set('field_source', $node->title->value);
+                $transaction->set('field_to_storage', $to_storage_nid);
+                $transaction->set('field_quantity', $quantity);
+                $transaction->set('field_inventory_transaction_type', $node->field_warehouse_form_type->value);
+                $transaction->set('field_product_goods', $item_nid);
+                $transaction->set('field_before_transaction', $original_quantity);
+                $transaction->set('field_after_transaction', $new_quantity);
+                $transaction->save();
+            }
+        }
+    }
+}
+
+function ourbound_inbound_warehouse_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
+    if ( $form_id === 'node_ourbound_inbound_warehouse_form' || $form_id == 'node_ourbound_inbound_warehouse_edit_form' ) {
+        $node = $form_state->getFormObject()->getEntity();
+
+        if ( $node->isNew() ) {
+            $form['title']['widget'][0]['value']['#default_value'] = gen_warehouse_transaction_id();
+        } else {
+            $form['actions']['submit']['#disabled'] = true;
+        }
+		$form ['title']['#disabled'] = true;
+        $form['field_transaction_date']['#group'] = 'advanced';
+
+        $form['form_name'] = array(
+			'#type' => 'markup',
+			'#markup' => '<div class="form-name"><strong>表單名稱</strong></div>',
+			'#weight' => 0,
+        );
+
+        $form['field_warehouse_form_type']['widget']['#ajax'] = [
+			'callback' => 'ajax_form_type_changed',
+			'event' => 'change',
+		];
+
+        $form['product_goods'] = [
+			'#type' => 'entity_autocomplete',
+			'#target_type' => 'node',
+			'#title' => t('產品型號/零件或物件媥號'),
+			'#selection_settings' => array(
+				'target_bundles' => array('goods', 'product'),
+			),
+			'#ajax' => [
+				'callback' => 'ajax_product_goods_loading',
+				'event' => 'autocompleteclose change',
+			],
+			'#weight' => '3',
+			'#size' => 23,
+			'#prefix' => '<div class="warehouse-product-goods">',
+			'#suffix' => '</div>',
+		];
+
+        $form['product_goods_name'] = array(
+            '#title' => '產品/零件名稱',
+            '#type' => 'textfield',
+			'#weight' => 4,
+            '#size' => 26,
+			'#disabled' => true,
+			'#prefix' => '<div class="warehouse-product-goods-name">',
+			'#suffix' => '</div>',
+        );
+
+        $form['quantity'] = array(
+            '#title' => '數量',
+            '#type' => 'textfield',
+			'#ajax' => array(
+				'callback' => 'ajax_calculate_price',
+				'event' => 'change',
+			),
+            '#attributes' => array(
+                'min' => '-10000000',
+				'max' => '10000000',
+        		' type' => 'number',
+    		),
+			'#weight' => 5,
+			'#prefix' => '<div class="warehouse-quantity">',
+			'#suffix' => '</div>',
+        );
+
+        $storage_list = array('_none' => '- None -');
+		$storage_nids = \Drupal::entityQuery("node")->condition('type', 'storage')->execute();
+		foreach($storage_nids as $storage_nid) {
+			$storage = \Drupal\node\Entity\Node::load($storage_nid);
+			$storage_list[$storage_nid] = $storage->field_storage_name->value;
+		}
+
+        $form['from_storage'] = array(
+			'#type' => 'select',
+          	'#title' => t('出倉庫'),
+			'#weight' => 6,
+			'#options' => $storage_list,
+            //'#disabled' => true,
+			'#ajax' => array(
+				'callback' => 'ajax_from_storage_changed',
+				'event' => 'change',
+			),
+			'#prefix' => '<div class="warehouse-from-storage">',
+			'#suffix' => '</div>',  
+		);
+
+		$form['to_storage'] = array(
+			'#type' => 'select',
+          	'#title' => t('入倉庫'),
+			'#weight' => 7,
+			'#options' => $storage_list,
+            //'#disabled' => true,
+			'#ajax' => array(
+				'callback' => 'ajax_to_storage_changed',
+				'event' => 'change',
+			),
+			'#prefix' => '<div class="warehouse-to-storage">',
+			'#suffix' => '</div>',  
+		);
+
+		$form['create_single_item'] = array(
+			'#type' => 'submit',
+			'#value' => t('新增'),
+			'#weight' => 8,
+			'#attributes' => [
+				'class' => [
+					'use-ajax',
+				],
+			],
+			'#ajax' => [
+				'callback' => 'ajax_create_single_item_callback',
+				'event' => 'click',
+			],
+			'#prefix' => '<div class="warehouse-create-single-item">',
+			'#suffix' => '</div>',
+		);
+
+        if ( !$node->isNew() ) {
+            $form['create_single_item']['#disabled'] = true;
+        }
+
+        $form['warehouse_table'] = array(
+              '#weight' => 11,
+			  '#prefix' => '<div id="warehouse-inbound-outbound-table"></div>',
+        );
+        if ( !$node->isNew() ) {
+			$form['warehouse_table']['#prefix'] = outbound_inbound_warehouse_table_generate($node->field_taxonomy->value);
+        }
+
+        $form['message'] = array(
+			'#type' => 'markup',
+			'#markup' => '<div class="message"></div>',
+			'#weight' => 9,
+        );
+
+        $form['#attached']['library'][] = 'ourbound_inbound_warehouse/ourbound_inbound_warehouse';
+    }
+}
+
+function outbound_inbound_warehouse_table_generate($field_taxonomy) {
+    $json_taxonomy = json_decode($field_taxonomy, true);
+    $table = "";
+    if ( count($json_taxonomy) == 0 ) {
+        $table = '<div id="warehouse-inbound-outbound-table"></div>';
+        return $table;
+    }
+    //$table = '<div id="warehouse-inbound-outbound-table"><table>-BODY-</table></div>';
+    $table = '<table>-BODY-</table>';
+    $table_head = "<thead><tr><td>產品型號/零件或物件媥號</td><td>產品/零件名稱</td><td>數量</td><td>出倉庫</td><td>入倉庫</td><td></td></tr></thead>";
+    $table_body_begin = '<tbody>';
+	$table_body = '';
+    for ($i = 0; $i < count($json_taxonomy); $i++) {
+        $action_button = '<button class="warehouse-delete" id="warehouse-delete-' . $i . '" value="' .$i . '"' . ' type="button">delete</button>';
+        $table_body .= '<tr><td>' . get_product_or_goods_model_by_nid($json_taxonomy[$i]["ProductsGoodsNid"]) . '</td><td>' . get_product_name_by_nid($json_taxonomy[$i]["ProductsGoodsNid"]) . '</td><td>' . $json_taxonomy[$i]["Quantity"] . '</td><td>' . get_storage_name_by_nid($json_taxonomy[$i]["FromStorage"]['code']) . '</td><td>' . get_storage_name_by_nid($json_taxonomy[$i]["ToStorage"]['code']) . '</td><td>' . $action_button . '</td></tr>';
+    }
+	$table_body_end = '</tbody>';
+    
+    $table_body = $table_head . $table_body_begin . $table_body . $table_body_end;
+	$table = str_replace('-BODY-', $table_body, $table);
+
+	return $table;
+}
+
+function ajax_create_single_item_callback(array $form, FormStateInterface $form_state) {
+    $ajax_response = new AjaxResponse();
+    $field_taxonomy = $form_state->getValue('field_taxonomy')[0]['value'];
+    $json_taxonomy = json_decode($field_taxonomy, true);
+    
+    $product_nid = $form_state->getValue('product_goods');
+    $form_type = $form_state->getValue('field_warehouse_form_type')[0]['value'];
+    if ( !empty($field_taxonomy) ) {
+        $form_type = $_SESSION['form_type'];
+    }
+    $from_storage_nid = $form_state->getValue('from_storage');
+    $to_storage_nid = $form_state->getValue('to_storage');
+    $quantity = $form_state->getValue('quantity');
+
+    
+    $taxonomy = array();
+    $taxonomy["ProductsGoodsNid"] = $product_nid;
+    $taxonomy["ProductsGoods"] = ["code" => get_product_or_goods_model_by_nid($product_nid), "label" => get_product_name_by_nid($product_nid)];
+    if ( !empty($field_taxonomy) ) {
+        $taxonomy["FormType"] = $_SESSION['form_type'];
+    } else {
+        $taxonomy["FormType"] = $form_type;
+    }
+    $taxonomy["Quantity"] = $quantity;
+    $taxonomy["FromStorage"] = ["code" => $from_storage_nid, "label" => get_storage_name_by_nid($from_storage_nid)];
+    $taxonomy["ToStorage"] = ["code" => $to_storage_nid, "label" => get_storage_name_by_nid($to_storage_nid)];
+
+    $json_taxonomy[] = (object)$taxonomy;
+    $field_taxonomy = json_encode($json_taxonomy);
+    $ajax_response->addCommand(new InvokeCommand('#edit-field-taxonomy-0-value', 'val', [$field_taxonomy]));
+    $ajax_response->addCommand(new HtmlCommand('.message', ''));
+    $ajax_response->addCommand(new InvokeCommand('#edit-product-goods', 'val', ['']));
+    $ajax_response->addCommand(new InvokeCommand('#edit-product-goods-name', 'val', ['']));
+    $ajax_response->addCommand(new InvokeCommand('#edit-quantity', 'val', ['']));
+    $ajax_response->addCommand(new InvokeCommand('#edit-from-storage', 'val', ['_none']));
+    $ajax_response->addCommand(new InvokeCommand('#edit-to-storage', 'val', ['_none']));
+
+    if ( !empty($field_taxonomy) ) {
+        $_SESSION['form_type'] = $form_type;
+        $ajax_response->addCommand(new InvokeCommand('#edit-field-warehouse-form-type', 'attr', ['disabled', true]));
+    }
+    $ajax_response->addCommand(new HtmlCommand('#warehouse-inbound-outbound-table', outbound_inbound_warehouse_table_generate($field_taxonomy)));
+    
+    return $ajax_response;
+}
+
+function ajax_product_goods_loading(array $form, FormStateInterface $form_state) {
+    $ajax_response = new AjaxResponse();
+    $product_nid = $form_state->getValue('product_goods');
+    $product = \Drupal\node\Entity\Node::load($product_nid);
+    $ajax_response->addCommand(new InvokeCommand('#edit-product-goods-name', 'val', [$product->field_product_name->value]));
+    $ajax_response->addCommand(new HtmlCommand('.message', ''));
+    $ajax_response->addCommand(new InvokeCommand('#edit-quantity', 'val', ['']));
+    $ajax_response->addCommand(new InvokeCommand('#edit-from-storage', 'val', ['_none']));
+    $ajax_response->addCommand(new InvokeCommand('#edit-to-storage', 'val', ['_none']));
+
+    return $ajax_response;
+}
+
+function ajax_form_type_changed(array $form, FormStateInterface $form_state) {
+	$ajax_response = new AjaxResponse();
+    $ajax_response->addCommand(new InvokeCommand('#edit-quantity', 'val', ['']));
+    $ajax_response->addCommand(new InvokeCommand('#edit-from-storage', 'val', ['_none']));
+    $ajax_response->addCommand(new InvokeCommand('#edit-to-storage', 'val', ['_none']));
+    $ajax_response->addCommand(new HtmlCommand('.message', ''));
+    $ajax_response->addCommand(new InvokeCommand('#edit-create-single-item', 'attr', ['disabled', false]));
+
+    $form_type = $form_state->getValue('field_warehouse_form_type')[0]['value'];
+    if ( $form_type == "inbound" ) {
+        $ajax_response->addCommand(new HtmlCommand('.form-name', '<strong>表單名稱  產品/零件入庫單</strong>'));
+        $ajax_response->addCommand(new InvokeCommand('#edit-from-storage', 'attr', ['disabled', true]));
+        $ajax_response->addCommand(new InvokeCommand('#edit-to-storage', 'attr', ['disabled', false]));
+    } else if ( $form_type == "outbound" ) {
+        $ajax_response->addCommand(new HtmlCommand('.form-name', '<strong>表單名稱  產品/零件出庫單</strong>'));
+        $ajax_response->addCommand(new InvokeCommand('#edit-from-storage', 'attr', ['disabled', false]));
+        $ajax_response->addCommand(new InvokeCommand('#edit-to-storage', 'attr', ['disabled', true]));
+    } else if ( $form_type == "transfer" ) {
+        $ajax_response->addCommand(new HtmlCommand('.form-name', '<strong>表單名稱  產品轉庫單</strong>'));
+        $ajax_response->addCommand(new InvokeCommand('#edit-from-storage', 'attr', ['disabled', false]));
+        $ajax_response->addCommand(new InvokeCommand('#edit-to-storage', 'attr', ['disabled', false]));
+    } else if ( $form_type == "return" ) {
+        $ajax_response->addCommand(new HtmlCommand('.form-name', '<strong>表單名稱  退貨入庫單</strong>'));
+        $ajax_response->addCommand(new InvokeCommand('#edit-from-storage', 'attr', ['disabled', true]));
+        $ajax_response->addCommand(new InvokeCommand('#edit-to-storage', 'attr', ['disabled', false]));
+    } else {
+        $ajax_response->addCommand(new HtmlCommand('.form-name', '<strong>表單名稱</strong>'));
+        $ajax_response->addCommand(new InvokeCommand('#edit-from-storage', 'attr', ['disabled', true]));
+        $ajax_response->addCommand(new InvokeCommand('#edit-to-storage', 'attr', ['disabled', true]));
+    }
+
+	return $ajax_response;
+}
+
+function ajax_from_storage_changed(array $form, FormStateInterface $form_state) {
+	$ajax_response = new AjaxResponse();
+    $ajax_response->addCommand(new HtmlCommand('.message', ''));
+    $form_type = $form_state->getValue('field_warehouse_form_type')[0]['value'];
+    $field_taxonomy = $form_state->getValue('field_taxonomy')[0]['value'];
+    if ( !empty($field_taxonomy) ) {
+        $form_type = $_SESSION['form_type'];
+    }
+
+    if ( $form_type == "transfer" || $form_type == "outbound" ) {
+        $object_nid = $form_state->getValue('product_goods');
+        $from_storage_nid = $form_state->getValue('from_storage');
+        $query = \Drupal::entityQuery("node")->condition('type', 'stock_up')
+                                            ->condition('field_storage_id', $from_storage_nid)
+                                            ->condition('field_product_goods', $object_nid)
+                                            ->execute();
+        if ( count($query) == 0 ) {
+            $ajax_response->addCommand(new HtmlCommand('.message', '<p style="color:red;">商品在此出庫倉並沒有此庫存資料, 請重新確認. </p>'));
+            $ajax_response->addCommand(new InvokeCommand('#edit-create-single-item', 'attr', ['disabled', true]));
+        } else {
+            $ajax_response->addCommand(new InvokeCommand('#edit-create-single-item', 'attr', ['disabled', false]));
+        }
+    }
+
+	return $ajax_response;
+}
+
+function ajax_to_storage_changed(array $form, FormStateInterface $form_state) {
+	$ajax_response = new AjaxResponse();
+    $ajax_response->addCommand(new HtmlCommand('.message', ''));
+    $form_type = $form_state->getValue('field_warehouse_form_type')[0]['value'];
+    $field_taxonomy = $form_state->getValue('field_taxonomy')[0]['value'];
+    if ( !empty($field_taxonomy) ) {
+        $form_type = $_SESSION['form_type'];
+    }
+
+    if ( $form_type == "inbound" || $form_type == "transfer" || $form_type == "return" ) {
+        $object_nid = $form_state->getValue('product_goods');
+        $to_storage_nid = $form_state->getValue('to_storage');
+        $query = \Drupal::entityQuery("node")->condition('type', 'stock_up')
+                                            ->condition('field_storage_id', $to_storage_nid)
+                                            ->condition('field_product_goods', $object_nid)
+                                            ->execute();
+        if ( count($query) == 0 ) {
+            $ajax_response->addCommand(new HtmlCommand('.message', '<p style="color:red;">商品在此入庫倉並沒有此庫存資料, 當你按Save按鍵時此商品會在倉儲建立庫存資料. </p>'));
+        }
+    }
+
+	return $ajax_response;
+}
+
+function gen_warehouse_transaction_id() {
+    $transaction_id = "WT-" . date("Ymd");
+	while (true) {
+		$query = \Drupal::entityQuery("node")
+								->condition('type', 'ourbound_inbound_warehouse')
+								->condition('title', $transaction_id, "CONTAINS")
+								->execute();
+		if ( sizeof($query) == 0 ) {
+			$transaction_id = "$transaction_id-1";
+		} else {
+			$transaction_id =  $transaction_id . "-" . (count($query)+ 1);
+		}
+
+		$check = \Drupal::entityQuery("node")
+								->condition('type', 'ourbound_inbound_warehouse')
+								->condition('title', $transaction_id)
+								->execute();
+
+		if ( sizeof($check) == 0 ) {
+			break;
+		}
+	}
+	return $transaction_id;
+}

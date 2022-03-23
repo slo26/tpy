@@ -278,6 +278,16 @@ class CustomToolbarController extends ControllerBase {
         $markup .= '<div class="description">商品庫存列表</div>';
         $markup .= '</a></li>';
         $markup .= '<li>';
+        $markup .= '<a href="/node/add/ourbound_inbound_warehouse">';
+        $markup .= '<span class="label">提貨/入庫/轉貨單</span>';
+        $markup .= '<div class="description">領料/領貨, 入庫, 庫存轉倉庫, 退貨入庫</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/inventory-transaction-list">';
+        $markup .= '<span class="label">倉儲活動交易紀錄</span>';
+        $markup .= '<div class="description">倉儲活動交易紀錄</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
         $markup .= '<a href="/node/add/storage">';
         $markup .= '<span class="label">新增倉庫</span>';
         $markup .= '<div class="description">新增倉庫</div>';
@@ -415,6 +425,16 @@ class CustomToolbarController extends ControllerBase {
         $markup .= '<div class="description">商品庫存列表</div>';
         $markup .= '</a></li>';
         $markup .= '<li>';
+        $markup .= '<a href="/node/add/ourbound_inbound_warehouse">';
+        $markup .= '<span class="label">提貨/入庫/轉貨單</span>';
+        $markup .= '<div class="description">領料/領貨, 入庫, 庫存轉倉庫, 退貨入庫</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/inventory-transaction-list">';
+        $markup .= '<span class="label">倉儲活動交易紀錄</span>';
+        $markup .= '<div class="description">倉儲活動交易紀錄</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
         $markup .= '<a href="/node/add/storage">';
         $markup .= '<span class="label">新增倉庫</span>';
         $markup .= '<div class="description">新增倉庫</div>';
@@ -483,5 +503,6 @@ class CustomToolbarController extends ControllerBase {
         );
     }
 }
+
 
 

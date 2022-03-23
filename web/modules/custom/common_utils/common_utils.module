@@ -109,6 +109,11 @@ function get_product_or_goods_name_by_nid($nid) {
     return "";
 }
 
+function get_product_or_goods_model_by_nid($nid) {
+    $node = \Drupal\node\Entity\Node::load($nid);
+    return $node->title->value;
+}
+
 function view_gross_profit_margin() {
     $config = \Drupal::config ( 'common_utils.settings' );
     $auth = explode(",", $config->get('view_gross_profit_margin_info'));
@@ -129,4 +134,5 @@ function get_business_tax() {
     $business_tax = $config->get('sales_tax');
     return $business_tax;
 }
+
 

@@ -1,0 +1,25 @@
+uuid: b4347f1c-3885-4c5c-9424-950e1dce619d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_after_transaction
+    - taxonomy.vocabulary.inventory_transaction
+id: taxonomy_term.inventory_transaction.field_after_transaction
+field_name: field_after_transaction
+entity_type: taxonomy_term
+bundle: inventory_transaction
+label: 交易後數量
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

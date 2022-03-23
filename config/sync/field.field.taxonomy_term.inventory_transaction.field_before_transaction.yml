@@ -1,0 +1,25 @@
+uuid: 343da184-8a26-4d9a-8e3e-608224939211
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_before_transaction
+    - taxonomy.vocabulary.inventory_transaction
+id: taxonomy_term.inventory_transaction.field_before_transaction
+field_name: field_before_transaction
+entity_type: taxonomy_term
+bundle: inventory_transaction
+label: 交易前數量
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

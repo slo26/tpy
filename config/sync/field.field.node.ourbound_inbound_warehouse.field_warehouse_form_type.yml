@@ -1,0 +1,21 @@
+uuid: 3c2eedee-a9cb-4040-94b2-07bd15ace9cd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_warehouse_form_type
+    - node.type.ourbound_inbound_warehouse
+  module:
+    - options
+id: node.ourbound_inbound_warehouse.field_warehouse_form_type
+field_name: field_warehouse_form_type
+entity_type: node
+bundle: ourbound_inbound_warehouse
+label: 表單種類
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

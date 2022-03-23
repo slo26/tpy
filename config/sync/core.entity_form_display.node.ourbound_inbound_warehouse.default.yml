@@ -1,0 +1,67 @@
+uuid: 3f751f30-30e8-48b7-99bc-668b17e43e6a
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.ourbound_inbound_warehouse.field_from_storage
+    - field.field.node.ourbound_inbound_warehouse.field_long_comment
+    - field.field.node.ourbound_inbound_warehouse.field_product_goods
+    - field.field.node.ourbound_inbound_warehouse.field_taxonomy
+    - field.field.node.ourbound_inbound_warehouse.field_to_storage
+    - field.field.node.ourbound_inbound_warehouse.field_transaction_date
+    - field.field.node.ourbound_inbound_warehouse.field_warehouse_form_type
+    - node.type.ourbound_inbound_warehouse
+  module:
+    - datetime
+id: node.ourbound_inbound_warehouse.default
+targetEntityType: node
+bundle: ourbound_inbound_warehouse
+mode: default
+content:
+  field_long_comment:
+    type: string_textarea
+    weight: 13
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_taxonomy:
+    type: string_textarea
+    weight: 10
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
+  field_transaction_date:
+    type: datetime_default
+    weight: 2
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  field_warehouse_form_type:
+    type: options_select
+    weight: 1
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_from_storage: true
+  field_product_goods: true
+  field_to_storage: true
+  moderation_state: true
+  path: true
+  promote: true
+  status: true
+  sticky: true
+  uid: true

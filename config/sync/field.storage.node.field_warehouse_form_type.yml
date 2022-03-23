@@ -1,0 +1,33 @@
+uuid: 782a59a7-74d6-43e2-8856-dd6af2efe442
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_warehouse_form_type
+field_name: field_warehouse_form_type
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: inbound
+      label: 入倉
+    -
+      value: transfer
+      label: 轉倉
+    -
+      value: outbound
+      label: 出倉
+    -
+      value: return
+      label: 退倉
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

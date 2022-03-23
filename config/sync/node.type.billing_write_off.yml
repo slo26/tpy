@@ -8,7 +8,7 @@ third_party_settings:
   menu_ui:
     available_menus: {  }
     parent: ''
-name: 'billing write off'
+name: 帳款對沖
 type: billing_write_off
 description: 應收帳款沖銷/應付帳款沖銷
 help: ''

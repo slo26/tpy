@@ -26,7 +26,14 @@ function customer_content_type_form_alter(&$form, FormStateInterface &$form_stat
 				}
 			}
 			$form ['title']['widget'][0]['value']['#default_value'] = $customer_id;
+		} else {
+			$current_user = \Drupal::currentUser();
+			$roles = $current_user->getRoles();
+			if ( !in_array("manager", $roles) && !in_array("administrator", $roles) ) {
+				$form ['title']['#disabled'] = true;
+			}
 		}
+
 		$form['title']['widget'][0]['value']['#ajax'] = array(
                 'callback' => 'ajax_check_customer_unique_id',
 				'event' => 'change',
@@ -81,5 +88,6 @@ function gen_cu_id($length = 6) {
     }
     return "CU" . $randomString;
 }
+
 
 

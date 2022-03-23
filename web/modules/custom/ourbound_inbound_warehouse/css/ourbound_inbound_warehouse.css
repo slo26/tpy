@@ -1,0 +1,19 @@
+.warehouse-product-goods,
+.warehouse-product-goods-name,
+.warehouse-from-storage, 
+.warehouse-to-storage,
+.warehouse-quantity {
+    margin-right: 0.5em;
+    overflow: auto;
+    display: inline-block;
+}
+
+.warehouse-create-single-item {
+    margin-bottom: 1em;
+    overflow: auto;
+    display: inline-block;
+}
+
+#edit-field-taxonomy-wrapper {
+    display: none;
+}

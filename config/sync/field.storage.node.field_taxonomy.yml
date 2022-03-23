@@ -1,18 +1,18 @@
-uuid: e4665d4b-d669-4e20-88e2-a850087a9372
+uuid: 8c485ac0-4020-4386-ae42-471e35ce18ec
 langcode: en
 status: true
 dependencies:
   module:
     - node
-id: node.field_product_goods
-field_name: field_product_goods
+id: node.field_taxonomy
+field_name: field_taxonomy
 entity_type: node
-type: entity_reference
+type: string_long
 settings:
-  target_type: node
+  case_sensitive: false
 module: core
 locked: false
-cardinality: -1
+cardinality: 1
 translatable: true
 indexes: {  }
 persist_with_no_fields: false

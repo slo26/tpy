@@ -1,0 +1,29 @@
+uuid: 7486b9e1-89ab-45e1-b101-39c997417dc0
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_to_storage
+    - node.type.storage
+    - taxonomy.vocabulary.inventory_transaction
+id: taxonomy_term.inventory_transaction.field_to_storage
+field_name: field_to_storage
+entity_type: taxonomy_term
+bundle: inventory_transaction
+label: 入倉庫
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      storage: storage
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

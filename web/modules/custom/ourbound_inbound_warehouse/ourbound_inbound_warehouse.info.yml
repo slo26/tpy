@@ -1,0 +1,7 @@
+name: Ourbound/Inbound Warehouse 
+type: module
+description: This module is to handle warehouse outbound and inbound
+core_version_requirement: ^8 || ^9
+package: tpy
+
+

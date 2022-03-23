@@ -1,0 +1,25 @@
+uuid: 47c0fd95-a914-472a-8aa6-7a72b4e5a936
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_quantity
+    - taxonomy.vocabulary.inventory_transaction
+id: taxonomy_term.inventory_transaction.field_quantity
+field_name: field_quantity
+entity_type: taxonomy_term
+bundle: inventory_transaction
+label: 交易數量
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: ''
+  suffix: ''
+field_type: integer

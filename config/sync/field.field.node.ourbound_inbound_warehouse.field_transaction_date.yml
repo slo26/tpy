@@ -1,0 +1,24 @@
+uuid: e7ce158c-6b24-4fa2-ace7-340a104620a3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_transaction_date
+    - node.type.ourbound_inbound_warehouse
+  module:
+    - datetime
+id: node.ourbound_inbound_warehouse.field_transaction_date
+field_name: field_transaction_date
+entity_type: node
+bundle: ourbound_inbound_warehouse
+label: 轉移日期
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    default_date_type: now
+    default_date: now
+default_value_callback: ''
+settings: {  }
+field_type: datetime

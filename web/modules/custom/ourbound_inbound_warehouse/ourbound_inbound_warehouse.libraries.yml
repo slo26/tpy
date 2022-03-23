@@ -1,0 +1,5 @@
+ourbound_inbound_warehouse:
+  version: VERSION
+  css:
+    theme:
+      css/ourbound_inbound_warehouse.css: {}

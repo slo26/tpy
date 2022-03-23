@@ -1,0 +1,18 @@
+uuid: f4699db1-7888-41d6-bd02-10c92ecae37c
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.ourbound_inbound_warehouse
+id: node.ourbound_inbound_warehouse.title
+field_name: title
+entity_type: node
+bundle: ourbound_inbound_warehouse
+label: 單號
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string
