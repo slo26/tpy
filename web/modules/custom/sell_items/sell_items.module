@@ -54,6 +54,26 @@ function sell_items_taxonomy_term_presave($term) {
 	}
 }
 
+function sell_items_taxonomy_term_insert($term) {
+    if ($term->bundle() === "sell_items") {
+        $sell_form = \Drupal\node\Entity\Node::load($term->field_order_id->target_id);
+        if ( !empty($sell_form->field_bill->target_id) ) {
+            $bill = \Drupal\node\Entity\Node::load($sell_form->field_bill->target_id);
+            $bill->save();
+        }
+    }
+}
+
+function sell_items_taxonomy_term_update($term) {
+    if ($term->bundle() === "sell_items") {
+        $sell_form = \Drupal\node\Entity\Node::load($term->field_order_id->target_id);
+        if ( !empty($sell_form->field_bill->target_id) ) {
+            $bill = \Drupal\node\Entity\Node::load($sell_form->field_bill->target_id);
+            $bill->save();
+        }
+    }
+}
+
 function sell_items_taxonomy_term_delete($term) {
     if ($term->bundle() === "sell_items") {
         if ( !empty($term->field_requisition_status->value) ) {
@@ -103,6 +123,13 @@ function sell_items_form_alter(&$form, FormStateInterface &$form_state, $form_id
 			'callback' => 'ajax_requisition_status_changed',
 			'event' => 'change',
 		];
+
+        $current_user = \Drupal::currentUser();
+		$roles = $current_user->getRoles();
+        if ( !empty($term->field_requisition_status->value) && !in_array('manager', $roles) ) {
+            $form['actions']['submit']['#disabled'] = true;
+            $form['actions']["delete"]['#attributes']['style'] = 'display: none;';
+        }
 
         $form['field_order_id']['widget'][0]['target_id']['#ajax'] = array(
                 'callback' => 'ajax_order_id_was_input',
@@ -227,13 +254,17 @@ function revert_inventory($original) {
     foreach($inventory_nids as $inventory_nid) {
         $material = \Drupal\node\Entity\Node::load($inventory_nid);
         if ( $original->field_requisition_status->value == "returned_to_inventory" ) {
-            $quantity = $material->field_stock->value - $original->field_quantity->value;
-            $material->set('field_stock', $quantity);
-            $message = get_product_name_by_nid($original->field_product_id->target_id) . "退倉取消, 從倉庫移除成功. 儲存在 " . get_storage_name_by_nid($original->field_storage->target_id) . " 的庫存數量 " . $quantity; 
+            $before_quantity = $material->field_stock->value;
+            $after_quantity = $before_quantity - $original->field_quantity->value;
+            $material->set('field_stock', $after_quantity);
+            $message = get_product_name_by_nid($original->field_product_id->target_id) . "退倉取消, 從倉庫移除成功. 儲存在 " . get_storage_name_by_nid($original->field_storage->target_id) . " 的庫存數量 " . $after_quantity; 
+            create_warehouse_transaction_log($original->field_product_id->target_id, $original->field_storage->target_id, "", "return", $original->field_quantity->value, $before_quantity, $after_quantity, get_sell_order_number_by_nid($original->field_order_id->target_id), "");
         } else {
-            $quantity = $material->field_stock->value + $original->field_quantity->value;
-            $material->set('field_stock', $quantity);
-            $message = get_product_name_by_nid($original->field_product_id->target_id) . "退回倉庫成功 儲存在 " . get_storage_name_by_nid($original->field_storage->target_id) . " 的庫存數量 " . $quantity;             
+            $before_quantity = $material->field_stock->value;
+            $after_quantity = $material->field_stock->value + $original->field_quantity->value;
+            $material->set('field_stock', $after_quantity);
+            create_warehouse_transaction_log($original->field_product_id->target_id, "", $original->field_storage->target_id, "inbound", $original->field_quantity->value, $before_quantity, $after_quantity, get_sell_order_number_by_nid($original->field_order_id->target_id), "");
+            $message = get_product_name_by_nid($original->field_product_id->target_id) . "退回倉庫成功 儲存在 " . get_storage_name_by_nid($original->field_storage->target_id) . " 的庫存數量 " . $after_quantity;             
         }
         \Drupal::messenger()->addMessage($message);
         $material->save();
@@ -248,10 +279,12 @@ function revert_inventory($original) {
                                         ->execute();
         foreach($inventory_nids as $inventory_nid) {
             $temp_inventory = \Drupal\node\Entity\Node::load($inventory_nid);
-            $num = $temp_inventory->field_stock->value - $original->field_quantity->value;
-            $temp_inventory->set('field_stock', $num);
+            $before_quantity = $temp_inventory->field_stock->value;
+            $after_quantity =  $before_quantity - $original->field_quantity->value;
+            $temp_inventory->set('field_stock', $after_quantity);
             $temp_inventory->save();
-            $message = get_product_name_by_nid($original->field_product_id->target_id) . " 寄存在 " . get_storage_name_by_nid($original->field_temporary_storage->target_id) . "退回原倉庫, 剩餘數量 " . $num; 
+            create_warehouse_transaction_log($original->field_product_id->target_id, $original->field_storage->target_id, "", "transfer", $original->field_quantity->value, $before_quantity, $after_quantity, get_sell_order_number_by_nid($original->field_order_id->target_id), "");
+            $message = get_product_name_by_nid($original->field_product_id->target_id) . " 寄存在 " . get_storage_name_by_nid($original->field_temporary_storage->target_id) . "退回原倉庫, 剩餘數量 " . $after_quantity; 
             \Drupal::messenger()->addMessage($message);
             break;
         }
@@ -267,34 +300,51 @@ function update_inventory($term) {
     foreach($inventory_nids as $inventory_nid) {
         $material = \Drupal\node\Entity\Node::load($inventory_nid);
         if ( $term->field_sell_type->value == "return" ) {
-            $remain_num = $material->field_stock->value + $term->field_quantity->value;
-            $material->set('field_stock', $remain_num);
+            $before_quantity = $material->field_stock->value;
+            $after_quantity = $before_quantity + $term->field_quantity->value;
+            $material->set('field_stock', $after_quantity);
             $material->save();
-            $message = get_product_name_by_nid($term->field_product_id->target_id) . " 退倉成功, 儲存在 " . get_storage_name_by_nid($term->field_storage->target_id) . " 的庫數量 " . $remain_num; 
+            $message = get_product_name_by_nid($term->field_product_id->target_id) . " 退倉成功, 儲存在 " . get_storage_name_by_nid($term->field_storage->target_id) . " 的庫數量 " . $after_quantity; 
             \Drupal::messenger()->addMessage($message);
+            create_warehouse_transaction_log($term->field_product_id->target_id, "", $term->field_storage->target_id, "return", $term->field_quantity->value, $before_quantity, $after_quantity, get_sell_order_number_by_nid($term->field_order_id->target_id), "");
         } else {
             //if ( $material->field_stock->value >= $term->field_quantity->value ) {
-                $remain_num = $material->field_stock->value - $term->field_quantity->value;
-                $material->set('field_stock', $remain_num);
+                $before_quantity = $material->field_stock->value;
+                $after_quantity = $before_quantity - $term->field_quantity->value;
+                $material->set('field_stock', $after_quantity);
                 $material->save();
-                $message = get_product_name_by_nid($term->field_product_id->target_id) . " 儲存在 " . get_storage_name_by_nid($term->field_storage->target_id) . " 的庫存剩餘 " . $remain_num; 
+                $message = get_product_name_by_nid($term->field_product_id->target_id) . " 儲存在 " . get_storage_name_by_nid($term->field_storage->target_id) . " 的庫存剩餘 " . $after_quantity; 
                 \Drupal::messenger()->addMessage($message);
                 if ( $term->field_requisition_status->value == "transferred" ) {
+                    create_warehouse_transaction_log($term->field_product_id->target_id, $term->field_storage->target_id, "", "transfer", $term->field_quantity->value, $before_quantity, $after_quantity, get_sell_order_number_by_nid($term->field_order_id->target_id), "");
                     $inventory_nids = \Drupal::entityQuery("node")
                                             ->condition('type', 'stock_up')
                                             ->condition('field_product_goods', $term->field_product_id->target_id)
                                             ->condition('field_storage_id', $term->field_temporary_storage->target_id)
                                             ->execute();
+                    if ( count( $inventory_nids) == 0 ) {
+                        $inventory = \Drupal\node\Entity\Node::create(['type' => "stock_up",]);
+                        $inventory->set('field_storage_id', $term->field_temporary_storage->target_id);
+                        $inventory->set('field_product_goods', $term->field_product_id->target_id);
+                        $inventory->set('field_stock', 0);
+                        $inventory->save();
+                        $message = get_product_name_by_nid($term->field_product_id->target_id) . " 不存在寄存倉庫. 以在寄存倉庫 " . get_storage_name_by_nid($term->field_temporary_storage->target_id) . " 建立此物品."; 
+                        \Drupal::messenger()->addMessage($message);
+                        $inventory_nids[] = $inventory->id();
+                    }
                     foreach($inventory_nids as $inventory_nid) {
                         $temp_inventory = \Drupal\node\Entity\Node::load($inventory_nid);
-                        $num = $temp_inventory->field_stock->value + $term->field_quantity->value;
-                        $temp_inventory->set('field_stock', $num);
+                        $before_quantity = $temp_inventory->field_stock->value;
+                        $after_quantity =  $before_quantity + $term->field_quantity->value;
+                        $temp_inventory->set('field_stock', $after_quantity);
                         $temp_inventory->save();
-                        $message = get_product_name_by_nid($term->field_product_id->target_id) . " 寄存在 " . get_storage_name_by_nid($term->field_temporary_storage->target_id) . " 的庫存數量 " . $num; 
+                        $message = get_product_name_by_nid($term->field_product_id->target_id) . " 寄存在 " . get_storage_name_by_nid($term->field_temporary_storage->target_id) . " 的庫存數量 " . $after_quantity; 
                         \Drupal::messenger()->addMessage($message);
+                        create_warehouse_transaction_log($term->field_product_id->target_id, "", $term->field_temporary_storage->target_id, "transfer", $term->field_quantity->value, $before_quantity, $after_quantity, get_sell_order_number_by_nid($term->field_order_id->target_id), "");
                         break;
                     }
-                    $temp_inventory->save();
+                } else {
+                    create_warehouse_transaction_log($term->field_product_id->target_id, $term->field_storage->target_id, "", "outbound", $term->field_quantity->value, $before_quantity, $after_quantity, get_sell_order_number_by_nid($term->field_order_id->target_id), "");
                 }
             //} else {
             //    $message = get_product_name_by_nid($term->field_product_id->target_id) . " 儲存在 " . get_storage_name_by_nid($term->field_storage->target_id) . " 的庫存剩餘 " . $remain_num . " 不足, 儲存失敗"; 
@@ -310,3 +360,4 @@ function update_inventory($term) {
 function calculate_gross_profit_margin_for_each_sell($price, $discount, $cost) {
     return ($price * ( 1 - ($discount/100)) - $cost) / ( $price * (1- ($discount/100)));
 }
+

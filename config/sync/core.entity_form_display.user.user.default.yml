@@ -34,6 +34,11 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+  timezone:
+    weight: 4
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   user_picture:
     type: image_image
     weight: 2
@@ -44,4 +49,3 @@ content:
     third_party_settings: {  }
 hidden:
   language: true
-  timezone: true

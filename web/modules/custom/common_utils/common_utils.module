@@ -135,4 +135,28 @@ function get_business_tax() {
     return $business_tax;
 }
 
+function create_warehouse_transaction_log($item_nid, $from_storage_nid, $to_storage_nid, $trans_type, $quantity, $before_trans, $after_trans, $source, $trans_time) {
+    $transaction = \Drupal\taxonomy\Entity\Term::create(['vid' => 'inventory_transaction']);
+    if ( empty($trans_time) ) {
+        $time = strtotime(date("Y-m-d H:i"));    
+    } else {
+        $time = strtotime($trans_time);
+    }
+    $transaction->set('name', \Drupal::service('date.formatter')->format($time, 'custom', 'Y-m-d H:i'));
+    $transaction->set('field_source', $source);
+    if ( !empty($to_storage_nid) ) {
+        $transaction->set('field_to_storage', $to_storage_nid);
+    }
+    if ( !empty($from_storage_nid) ) {
+        $transaction->set('field_from_storage', $from_storage_nid);
+    }
+    
+    $transaction->set('field_quantity', $quantity);
+    $transaction->set('field_inventory_transaction_type', $trans_type);
+    $transaction->set('field_product_goods', $item_nid);
+    $transaction->set('field_before_transaction', $before_trans);
+    $transaction->set('field_after_transaction', $after_trans);
+    $transaction->save();
+}
+
 

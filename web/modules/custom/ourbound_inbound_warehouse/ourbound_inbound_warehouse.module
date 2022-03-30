@@ -99,6 +99,8 @@ function ourbound_inbound_warehouse_node_presave(Drupal\Core\Entity\EntityInterf
                     $stock_up = Node::create(['type' => "stock_up"]);
                     $stock_up->set('field_storage_id', $to_storage_nid);
                     $stock_up->set('field_stock', $quantity);
+                    $destination_quantity = 0;
+                    $new_quantity = $quantity;
                     $stock_up->set('field_product_goods', $item_nid);
                     $stock_up->save();
                     \Drupal::messenger()->addMessage(get_product_or_goods_name_by_nid($item_nid) . "  有 " . $quantity . " 數量轉入 " . get_storage_name_by_nid($to_storage_nid) . " 最新庫存數量是 " . $quantity . ".");

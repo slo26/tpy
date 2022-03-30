@@ -283,6 +283,11 @@ class CustomToolbarController extends ControllerBase {
         $markup .= '<div class="description">領料/領貨, 入庫, 庫存轉倉庫, 退貨入庫</div>';
         $markup .= '</a></li>';
         $markup .= '<li>';
+        $markup .= '<a href="/admin/picking-input-return-form">';
+        $markup .= '<span class="label">提貨/入庫/轉貨單列表</span>';
+        $markup .= '<div class="description">提貨/入庫/轉貨單列表</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
         $markup .= '<a href="/admin/inventory-transaction-list">';
         $markup .= '<span class="label">倉儲活動交易紀錄</span>';
         $markup .= '<div class="description">倉儲活動交易紀錄</div>';
@@ -430,6 +435,11 @@ class CustomToolbarController extends ControllerBase {
         $markup .= '<div class="description">領料/領貨, 入庫, 庫存轉倉庫, 退貨入庫</div>';
         $markup .= '</a></li>';
         $markup .= '<li>';
+        $markup .= '<a href="/admin/picking-input-return-form">';
+        $markup .= '<span class="label">提貨/入庫/轉貨單列表</span>';
+        $markup .= '<div class="description">提貨/入庫/轉貨單列表</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
         $markup .= '<a href="/admin/inventory-transaction-list">';
         $markup .= '<span class="label">倉儲活動交易紀錄</span>';
         $markup .= '<div class="description">倉儲活動交易紀錄</div>';
@@ -470,6 +480,57 @@ class CustomToolbarController extends ControllerBase {
         $markup .= '<div class="description">採購項目列表</div>';
         $markup .= '</a></li>';
         $markup .= '</ul></div></div>';
+
+        $markup .= '</div></div>';
+
+        return array(
+            '#type' => 'markup',
+            '#markup' => $markup,
+        );
+    }
+
+    public function fundamental_info() {
+        $markup = '<div id="block-seven-content" class="block block-system block-system-main-block">';
+        $markup .= '<div class="clearfix">';
+
+        $markup .= '<div class="layout-column layout-column--half">';
+        $markup .= '<div class="panel">';
+        $markup .= '<h3 class="panel__title">產品/零件</h3>';
+        $markup .= '<div class="panel__content">';
+        $markup .= '<ul class="admin-list">';
+        $markup .= '<li><a href="/node/add/product"><span class="label">新增產品</span>';
+        $markup .= '<div class="description">新增產品</div>';
+        $markup .= '</a></li>';
+        if ( view_gross_profit_margin() ) {
+            $markup .= '<li><a href="/admin/all-products-for-admin"><span class="label">產品列表</span>';    
+        } else {
+            $markup .= '<li><a href="/admin/all-products"><span class="label">產品列表</span>';
+        }
+        $markup .= '<div class="description">列出所有產品</div></a></li>';
+        $markup .= '<li><a href="/node/add/goods"><span class="label">新增零件／物品</span>';
+        $markup .= '<div class="description">新增零件／物品</div></a></li>';
+        $markup .= '<li><a href="/admin/parts-goods"><span class="label">零件/物品列表</span>';
+        $markup .= '<div class="description">列出所有零件和物品</div></a></li>';
+        $markup .= '</ul></div></div>';    
+
+        $markup .= '</div>';
+
+        $markup .= '<div class="layout-column layout-column--half">';
+        $markup .= '<div class="panel">';
+        $markup .= '<h3 class="panel__title">客戶/廠商</h3>';
+        $markup .= '<div class="panel__content">';
+        $markup .= '<ul class="admin-list">';
+        $markup .= '<li><a href="/node/add/customer"><span class="label">新增客戶</span>';
+        $markup .= '<div class="description">新增客戶</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li><a href="/admin/all-customers"><span class="label">客戶列表</span>';
+        $markup .= '<div class="description">列出所有客戶</div></a></li>';
+        $markup .= '<li><a href="/node/add/vendor"><span class="label">新增廠商</span>';
+        $markup .= '<div class="description">新增廠商</div></a></li>';
+        $markup .= '<li><a href="/admin/vendor"><span class="label">廠商列表</span>';
+        $markup .= '<div class="description">列出所有廠商</div></a></li>';
+        $markup .= '</ul></div></div>';
+        $markup .= '</div>';
 
         $markup .= '</div></div>';
 

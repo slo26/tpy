@@ -15,30 +15,31 @@ function billing_node_presave(Drupal\Core\Entity\EntityInterface $node) {
 		$connection = \Drupal::database();
 		$tids = \Drupal::entityQuery("taxonomy_term")->condition("vid", "sell_items")
 													->condition('field_order_id', $node->field_order_id->target_id)->execute();
-		foreach($tids as $tid) {
-			$obj = $connection->query("SELECT field_total_amount_value FROM {taxonomy_term__field_total_amount} Where 
-														entity_id = :tid and bundle = :bundle", 
-														[':tid' => $tid, ':bundle' => 'sell_items'])->fetchAll();
-			
-			for($i=0; $i < count($obj); $i++) {
-				$total_amount = $total_amount + $obj[$i]->field_total_amount_value;
-			}										
-		}
-        if ( $node->field_bill_type->value == "return" ) {
-            $total_amount = $total_amount * -1;
-        }
-        $node->set('field_total_amount_without_tax', round($total_amount));
-    
-        $total_amount_without_tax = $node->field_total_amount_without_tax->value;
-        $tax_rate = $node->field_tax_rate->value;
-        $deposit = $node->field_deposit->value;
-        $write_off_amount = $node->field_write_off_amount->value;
-        $tax = calculate_for_tax($total_amount_without_tax, $tax_rate);
-        $discount = $node->field_discount->value;
-        $remain = calculate_remain_to_pay_amount($total_amount_without_tax, $tax, $deposit, $discount, $write_off_amount);    
-        $node->set('field_tax', round($tax));
-        $node->set('field_remain_unpaid_amount', round($remain));
-        $node->set('field_total_amount_with_tax', round($total_amount_without_tax+$tax));
+        if ( count($tids) > 0 ) {
+            foreach($tids as $tid) {
+                $obj = $connection->query("SELECT field_total_amount_value FROM {taxonomy_term__field_total_amount} Where 
+                                                            entity_id = :tid and bundle = :bundle", 
+                                                            [':tid' => $tid, ':bundle' => 'sell_items'])->fetchAll();             
+                for($i=0; $i < count($obj); $i++) {
+                    $total_amount = $total_amount + $obj[$i]->field_total_amount_value;
+                }										
+            }
+            if ( $node->field_bill_type->value == "return" ) {
+                $total_amount = $total_amount * -1;
+            }
+            $node->set('field_total_amount_without_tax', round($total_amount));
+        
+            $total_amount_without_tax = $node->field_total_amount_without_tax->value;
+            $tax_rate = $node->field_tax_rate->value;
+            $deposit = $node->field_deposit->value;
+            $write_off_amount = $node->field_write_off_amount->value;
+            $tax = calculate_for_tax($total_amount_without_tax, $tax_rate);
+            $discount = $node->field_discount->value;
+            $remain = calculate_remain_to_pay_amount($total_amount_without_tax, $tax, $deposit, $discount, $write_off_amount);    
+            $node->set('field_tax', round($tax));
+            $node->set('field_remain_unpaid_amount', round($remain));
+            $node->set('field_total_amount_with_tax', round($total_amount_without_tax+$tax));
+        }	
     }
 }
 
@@ -166,3 +167,4 @@ function calculate_remain_to_pay_amount($total_amount_without_tax, $tax, $deposi
     }
     return $remain;
 }
+

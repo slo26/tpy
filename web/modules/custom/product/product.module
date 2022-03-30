@@ -181,6 +181,11 @@ function _ProductSubmit(array &$form, FormStateInterface $form_state) {
             $inventory->set('field_stock', $stock_up_number);
             $inventory->field_product_goods->target_id = $node->id();
             $inventory->save();
+
+            \Drupal::messenger()->addMessage(get_product_or_goods_name_by_nid($node->id()) . "  以入庫 " . get_storage_name_by_nid($storage_nid) . ", 最新庫存數量 " . $stock_up_number);
+            create_warehouse_transaction_log($node->id(), "", $storage_nid, "inbound", $stock_up_number, 0, 
+                                                $stock_up_number, "產品新增", "");
         }
     }
 }
+

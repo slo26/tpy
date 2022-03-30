@@ -116,16 +116,18 @@ function sales_order_table_generator_in_view($node) {
 			$index = 0;
 			foreach($tids as $tid) {
 				$item = \Drupal\taxonomy\Entity\Term::load($tid);
-				$product = \Drupal\node\Entity\Node::load($item->field_product_id->target_id);
-				$index++;
-				$table_body .= '<tr><td>' . $index . '</td><td><a href="/taxonomy/term/' .$tid . '/edit" target="blank">' . $product->title->value . '</a></td><td>' . $product->field_product_name->value . 
-								'</td><td align="right">' . number_format($item->field_quantity->value) . 
-								'</td><td  align="right">' . $item->field_price->value . 
-								'</td><td  align="right">' . $item->field_total_amount->value . '</td></tr>';
-				if ( !empty($item->field_comments->value) ) {
-					$table_body .= '<tr><td colspan="6" align="left">加註: ' . $item->field_comments->value . '</td></tr>';
+				if ( $item->field_quantity->value != 0) {
+					$product = \Drupal\node\Entity\Node::load($item->field_product_id->target_id);
+					$index++;
+					$table_body .= '<tr><td>' . $index . '</td><td><a href="/taxonomy/term/' .$tid . '/edit" target="blank">' . $product->title->value . '</a></td><td>' . $product->field_product_name->value . 
+									'</td><td align="right">' . number_format($item->field_quantity->value) . 
+									'</td><td  align="right">' . $item->field_price->value . 
+									'</td><td  align="right">' . $item->field_total_amount->value . '</td></tr>';
+					if ( !empty($item->field_comments->value) ) {
+						$table_body .= '<tr><td colspan="6" align="left">加註: ' . $item->field_comments->value . '</td></tr>';
+					}
+					$total_amount_before_tax = $total_amount_before_tax + $item->field_total_amount->value;
 				}
-				$total_amount_before_tax = $total_amount_before_tax + $item->field_total_amount->value;
 			}
 			$table_body .= '<tr class="sales-oder-table-list-bottom"><td colspan="6" align="center"> (以下空白) </td></tr>'; 
 			$table_end = "</tbody></table>"; 
@@ -199,6 +201,20 @@ function sales_order_content_type_node_presave(Drupal\Core\Entity\EntityInterfac
 					}
 				}
 				$bill->save();
+			} else {
+				$bill = \Drupal\node\Entity\Node::create(['type' => "billing",]);
+				$bill->set('title', generate_unique_id_for_bill());
+				if ( $node->moderation_state->value == "shipment" ) {
+					$bill->set('field_expected_receive_payment', date('Y-m-d', time()));
+				}
+				$bill->field_order_id->target_id = $node->id();
+				$bill->field_customer_entity->target_id = $node->field_customer_entity->target_id;
+				$customer = \Drupal\node\Entity\Node::load($bill->field_customer_entity->target_id);
+				if ( $customer->field_suggest_to_tax->value ) {
+					$bill->set('field_tax_rate', get_business_tax());	
+				}
+				$bill->save();
+				$node->set('field_bill', $bill->id());
 			}
 		} else if ( $node->moderation_state->value == "done" ) {
 			$node->set('field_completed_date', date('Y-m-d', time()));
@@ -211,6 +227,13 @@ function sales_order_content_type_node_presave(Drupal\Core\Entity\EntityInterfac
 			$label = "銷退完成";
 		} else if ( $node->moderation_state->value == "draft" ) {
 			$label = "草稿";
+			if ( !empty($node->field_bill->target_id) ) {
+				$bill = \Drupal\node\Entity\Node::load($node->field_bill->target_id);
+				if ( !empty($bill->field_expected_receive_payment->value) ) {
+					$bill->set('field_expected_receive_payment', "");
+					$bill->save();
+				} 
+			}
 		}
 		if ( !$node->isNew() ) {
 			$node->set('revision_log', "$label 狀態儲存.");
@@ -1068,9 +1091,12 @@ function create_single_item_callback(array $form, FormStateInterface $form_state
 			$discount = (double)$form_state->getValue('discount');
 			$item->set('field_discount', $discount);
 			//$item->set('field_gross_profit_margin', $form_state->getValue('gross_profit_margin'));
-			$gpm = round(caculate_gpm_for_item_sell($price, $discount, $cost), 2);
+			if ( $price > 0 ) {
+				$gpm = round(caculate_gpm_for_item_sell($price, $discount, $cost), 2);
+			} else {
+				$gpm = 0;
+			}
 			$item->set('field_gross_profit_margin', $gpm);
-			
 			$item->set('field_total_amount', $form_state->getValue('total_amount'));
 			$item->save();
 			//$form_state->set('field_sell_products', $item->id());
@@ -1159,38 +1185,40 @@ function purchase_items_table_generate($order_id) {
 	
 	foreach($tids as $tid) {
 		$item = \Drupal\taxonomy\Entity\Term::load($tid);
-		$product = \Drupal\node\Entity\Node::load($item->field_product_id->target_id);
-		$storage = \Drupal\node\Entity\Node::load($item->field_storage->target_id);
+		if ( $item->field_quantity->value != 0 ) {
+			$product = \Drupal\node\Entity\Node::load($item->field_product_id->target_id);
+			$storage = \Drupal\node\Entity\Node::load($item->field_storage->target_id);
 
-		if ( !$is_closed ) {
-			$dropdown_button = '<div class="dropbutton-wrapper dropbutton-multiple">
-					<div class="dropbutton-widget">
-						<ul class="dropbutton">
-							<li class="edit dropbutton-action">
-								<a href="/taxonomy/term/' . $tid .'/edit?destination=/node/' . $order_id .'/edit" hreflang="en">Edit</a>
-							</li>
-							<li class="dropbutton-toggle">
-								<button type="button">
-									<span class="dropbutton-arrow">
-										<span class="visually-hidden">List additional actions</span>
-									</span>
-								</button>
-							</li>
-							<li class="delete dropbutton-action secondary-action">
-								<a href="/taxonomy/term/' . $tid .'/delete?destination=/node/' . $order_id .'/edit" hreflang="en">Delete</a>
-							</li>
-						</ul>
-					</div>
-				</div>';
+			if ( !$is_closed ) {
+				$dropdown_button = '<div class="dropbutton-wrapper dropbutton-multiple">
+						<div class="dropbutton-widget">
+							<ul class="dropbutton">
+								<li class="edit dropbutton-action">
+									<a href="/taxonomy/term/' . $tid .'/edit?destination=/node/' . $order_id .'/edit" hreflang="en">Edit</a>
+								</li>
+								<li class="dropbutton-toggle">
+									<button type="button">
+										<span class="dropbutton-arrow">
+											<span class="visually-hidden">List additional actions</span>
+										</span>
+									</button>
+								</li>
+								<li class="delete dropbutton-action secondary-action">
+									<a href="/taxonomy/term/' . $tid .'/delete?destination=/node/' . $order_id .'/edit" hreflang="en">Delete</a>
+								</li>
+							</ul>
+						</div>
+					</div>';
+			}
+			if ( view_gross_profit_margin() ) {
+				$table_body .= '<tr><td>' . $item->name->value . '</td><td>' . $product->title->value . '</td><td>' . $product->field_product_name->value . '</td><td>' . $storage->field_storage_name->value . '</td><td>' . number_format($item->field_quantity->value) . '</td><td>' . $item->field_price->value . '</td><td>' . $item->field_discount->value . '</td><td>' . $item->field_gross_profit_margin->value . '</td><td>' . $item->field_total_amount->value . '</td><td>' . $dropdown_button . '</td></tr>';
+			} else {
+				$table_body .= '<tr><td>' . $item->name->value . '</td><td>' . $product->title->value . '</td><td>' . $product->field_product_name->value . '</td><td>' . $storage->field_storage_name->value . '</td><td>' . number_format($item->field_quantity->value) . '</td><td>' . $item->field_price->value . '</td><td>' . $item->field_discount->value . '</td><td></td><td>' . $item->field_total_amount->value . '</td><td>' . $dropdown_button . '</td></tr>';
+			}
+			$total_quantity = $total_quantity + $item->field_quantity->value;
+			$sum = $sum + $item->field_price->value;
+			$total_cost = $total_cost + $item->field_total_amount->value;
 		}
-		if ( view_gross_profit_margin() ) {
-			$table_body .= '<tr><td>' . $item->name->value . '</td><td>' . $product->title->value . '</td><td>' . $product->field_product_name->value . '</td><td>' . $storage->field_storage_name->value . '</td><td>' . number_format($item->field_quantity->value) . '</td><td>' . $item->field_price->value . '</td><td>' . $item->field_discount->value . '</td><td>' . $item->field_gross_profit_margin->value . '</td><td>' . $item->field_total_amount->value . '</td><td>' . $dropdown_button . '</td></tr>';
-		} else {
-			$table_body .= '<tr><td>' . $item->name->value . '</td><td>' . $product->title->value . '</td><td>' . $product->field_product_name->value . '</td><td>' . $storage->field_storage_name->value . '</td><td>' . number_format($item->field_quantity->value) . '</td><td>' . $item->field_price->value . '</td><td>' . $item->field_discount->value . '</td><td></td><td>' . $item->field_total_amount->value . '</td><td>' . $dropdown_button . '</td></tr>';
-		}
-		$total_quantity = $total_quantity + $item->field_quantity->value;
-		$sum = $sum + $item->field_price->value;
-		$total_cost = $total_cost + $item->field_total_amount->value;
 	}
 	$table_body .= '<tr><td><strong>總合</strong></td><td></td><td></td><td></td><td><strong>' . number_format($total_quantity) . '</strong></td><td><strong>$' . $sum . '</strong></td><td></td><td></td><td><strong>$' . $total_cost . '</strong></td><td></td></tr>';
 	$table_body_end = '</tbody>';
@@ -1300,16 +1328,18 @@ function shipping($node) {
 	$index = 0;
 	foreach($tids as $tid) {
 		$item = \Drupal\taxonomy\Entity\Term::load($tid);
-		$product = \Drupal\node\Entity\Node::load($item->field_product_id->target_id);
-		$index++;
-		$table_body .= '<tr><td>' . $index . '</td><td><a href="/taxonomy/term/' .$tid . '/edit" target="blank">' . $product->title->value . '</a></td><td>' . $product->field_product_name->value . 
-						'</td><td align="right">' . number_format($item->field_quantity->value) . 
-						'</td><td  align="right">' . get_entity_storage_label($item, "field_requisition_status", $item->field_requisition_status->value) . 
-						'</td><td  align="right">' . get_storage_name_by_nid($item->field_storage->target_id) . 
-						'</td><td  align="right">' . get_storage_name_by_nid($item->field_temporary_storage->target_id) .'</td></tr>'
-						;
-		if ( !empty($item->field_comments->value) ) {
-			$table_body .= '<tr><td colspan="7" align="left">加註: ' . $item->field_comments->value . '</td></tr>';
+		if ( $item->field_quantity->value != 0 ) {
+			$product = \Drupal\node\Entity\Node::load($item->field_product_id->target_id);
+			$index++;
+			$table_body .= '<tr><td>' . $index . '</td><td><a href="/taxonomy/term/' .$tid . '/edit" target="blank">' . $product->title->value . '</a></td><td>' . $product->field_product_name->value . 
+							'</td><td align="right">' . number_format($item->field_quantity->value) . 
+							'</td><td  align="right">' . get_entity_storage_label($item, "field_requisition_status", $item->field_requisition_status->value) . 
+							'</td><td  align="right">' . get_storage_name_by_nid($item->field_storage->target_id) . 
+							'</td><td  align="right">' . get_storage_name_by_nid($item->field_temporary_storage->target_id) .'</td></tr>'
+							;
+			if ( !empty($item->field_comments->value) ) {
+				$table_body .= '<tr><td colspan="7" align="left">加註: ' . $item->field_comments->value . '</td></tr>';
+			}
 		}
 	}
 	$table_body .= '<tr class="sales-oder-table-list-bottom"><td colspan="7" align="center"> (以下空白) </td></tr>'; 

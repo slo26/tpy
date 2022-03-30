@@ -24,6 +24,7 @@ function purchase_items_taxonomy_term_presave($term) {
                 $total_num = $stock_up->field_stock->value + $term->field_quantity->value;
                 $stock_up->set('field_stock', $total_num);
                 $stock_up->save();
+                create_warehouse_transaction_log($term->field_product_goods->target_id, "", $term->field_storage->target_id, "inbound", $term->field_quantity->value, $stock_up->field_stock->value, $total_num, $term->name->value, "");
                 $message = get_product_or_goods_name_by_nid($term->field_product_goods->target_id) . " 儲存在 " . get_storage_name_by_nid($term->field_storage->target_id) . " 的庫存是 " . $total_num; 
                 \Drupal::messenger()->addMessage($message);
             }
@@ -38,6 +39,7 @@ function purchase_items_taxonomy_term_presave($term) {
                 $total_num = $stock_up->field_stock->value - $term->field_quantity->value;
                 $stock_up->set('field_stock', $total_num);
                 $stock_up->save();
+                create_warehouse_transaction_log($term->field_product_goods->target_id, $term->field_storage->target_id, "", "return", $term->field_quantity->value, $stock_up->field_stock->value, $total_num, $term->name->value, "");
                 $message = "以入庫被取消, 原入庫數量" . $term->field_quantity->value . "以從倉庫移除."; 
                 \Drupal::messenger()->addMessage($message);
             }
@@ -141,4 +143,5 @@ function gen_purchase_item_id($order_id = null) {
         return str_replace($replace, "PI-", $order_id) . "-" . (count($total)+1);
     }
 }
+
 

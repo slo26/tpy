@@ -111,6 +111,7 @@ function billing_write_off_form_alter(&$form, FormStateInterface &$form_state, $
 
         $form['field_cash_amount']['widget'][0]['value']['#prefix'] = '<div id="sign">+</div>';
         $form['field_cash_amount']['widget'][0]['value']['#ajax'] = array('callback' => 'ajax_calculate_prepaid_callback','event' => 'change',);
+
         $form['field_check_amount']['widget'][0]['value']['#prefix'] = '<div id="sign">+</div>';
         $form['field_check_amount']['widget'][0]['value']['#ajax'] = array('callback' => 'ajax_calculate_prepaid_callback','event' => 'change',);
         $form['field_remittance_amount']['widget'][0]['value']['#prefix'] = '<div id="sign">+</div>';
@@ -122,6 +123,7 @@ function billing_write_off_form_alter(&$form, FormStateInterface &$form_state, $
         $form['field_total_discount']['widget'][0]['value']['#prefix'] = '<div id="sign">+</div>';
         $form['field_total_discount']['widget'][0]['value']['#ajax'] = array('callback' => 'ajax_calculate_prepaid_callback','event' => 'change',);
         $form['field_accumulated_advance']['widget'][0]['value']['#prefix'] = '<div id="sign">-</div>';
+
         $form['field_offset_amount']['widget'][0]['value']['#prefix'] = '<div id="sign">=</div>';
 
         $form['customer_title'] = array(
@@ -174,88 +176,93 @@ function billing_write_off_form_alter(&$form, FormStateInterface &$form_state, $
             '#header' => array('索引', '帳款日期', '單據', '銷售憑證', '銷售總計', '未收金額', '發票編號', '折讓金額', '沖帳金額'),
         );
 
-        $query = \Drupal::entityQuery("node");
-        $query->condition('type', 'billing');
-        $query->condition('field_expected_receive_payment', [$begin_date, $end_date], "BETWEEN");
-        $query->condition("field_customer_entity", $customer_nid);
-        $bill_nids = $query->execute();
-
         $field_receivable_balance = 0;
         $field_advance_balance = 0;
-        $index = 1;
+        $field_deposit = 0;
         $sale_entities = [];
-        foreach($bill_nids as $bill_nid) {
-            $bill = \Drupal\node\Entity\Node::load($bill_nid);
-            $sale_entities[] = array('target_id' => $bill->field_order_id->target_id);
-            $field_receivable_balance = $field_receivable_balance + $bill->field_remain_unpaid_amount->value;
-            $form['sell_list_in_table'][$index]['index'] = array(
-                '#type' => 'textfield',
-                '#title' => t('索引'),
-                '#title_display' => 'invisible',
-                '#size' => 15,
-                '#disabled' => true,
-                '#default_value' => $index,
-            );
-            $form['sell_list_in_table'][$index]['field_expected_receive_payment'] = array(
-                '#type' => 'textfield',
-                '#title' => t('帳款日期'),
-                '#title_display' => 'invisible',
-                '#disabled' => true,
-                '#default_value' => $bill->field_expected_receive_payment->value,
-            );
-            $form['sell_list_in_table'][$index]['field_bill_type'] = array(
-                '#type' => 'textfield',
-                '#title' => t('單據'),
-                '#size' => 20,
-                '#title_display' => 'invisible',
-                '#disabled' => true,
-                '#default_value' => get_entity_storage_label($bill, 'field_bill_type', $bill->field_bill_type->value),
-            );
-            $form['sell_list_in_table'][$index]['field_order_id'] = array(
-                '#title' => t('銷售憑證'),
-                '#title_display' => 'invisible',
-                '#size' => 90,
-                '#prefix' => '<a href="/node/' . $bill->field_order_id->target_id .'/edit" target="_blank">' . getSellOrderID($bill->field_order_id->target_id) . '</a>',
-            );
-            $form['sell_list_in_table'][$index]['field_total_amount_with_tax'] = array(
-                '#type' => 'textfield',
-                '#title' => t('銷售總計'),
-                '#title_display' => 'invisible',
-                '#disabled' => true,
-                '#default_value' => $bill->field_total_amount_with_tax->value,
-            );
-            $form['sell_list_in_table'][$index]['field_remain_unpaid_amount'] = array(
-                '#type' => 'textfield',
-                '#title' => t('未收金額'),
-                '#title_display' => 'invisible',
-                '#disabled' => true,
-                '#default_value' => $bill->field_remain_unpaid_amount->value,
-            );
-            $form['sell_list_in_table'][$index]['field_receipt_number'] = array(
-                '#type' => 'textfield',
-                '#title' => t('發票編號'),
-                '#title_display' => 'invisible',
-                '#default_value' => $bill->field_receipt_number->value,
-            );
-            $form['sell_list_in_table'][$index]['field_discount'] = array(
-                '#type' => 'textfield',
-                '#title' => t('折讓金額'),
-                '#title_display' => 'invisible',
-                '#default_value' => $bill->field_discount->value,
-                '#ajax' => [
-                    'callback' => 'ajax_calculate_total_discount_callback',
-                    'event' => 'change',
-                ],
-            );
-            $form['sell_list_in_table'][$index]['field_offset_amount'] = array(
-                '#type' => 'textfield',
-                '#title' => t('沖帳金額'),
-                '#title_display' => 'invisible',
-                '#default_value' => $bill->field_write_off_amount->value,
-            );
-            $index++;
-        };
         if ( $node->isNew() ) {
+            $index = 1;
+            $query = \Drupal::entityQuery("node");
+            $query->condition('type', 'billing');
+            $query->condition('field_expected_receive_payment', [$begin_date, $end_date], "BETWEEN");
+            $query->condition("field_customer_entity", $customer_nid);
+            $bill_nids = $query->execute();
+            foreach($bill_nids as $bill_nid) {
+                $bill = \Drupal\node\Entity\Node::load($bill_nid);
+                $sale = \Drupal\node\Entity\Node::load($bill->field_order_id->target_id);
+                if ( $sale->moderation_state->value != "done" && $sale->moderation_state->value != "return_completed" ) {
+                    $field_deposit = $field_deposit + $bill->field_deposit->value;
+                    $sale_entities[] = array('target_id' => $bill->field_order_id->target_id);
+                    $field_receivable_balance = $field_receivable_balance + $bill->field_remain_unpaid_amount->value;
+                    $form['sell_list_in_table'][$index]['index'] = array(
+                        '#type' => 'textfield',
+                        '#title' => t('索引'),
+                        '#title_display' => 'invisible',
+                        '#size' => 15,
+                        '#disabled' => true,
+                        '#default_value' => $index,
+                    );
+                    $form['sell_list_in_table'][$index]['field_expected_receive_payment'] = array(
+                        '#type' => 'textfield',
+                        '#title' => t('帳款日期'),
+                        '#title_display' => 'invisible',
+                        '#disabled' => true,
+                        '#default_value' => $bill->field_expected_receive_payment->value,
+                    );
+                    $form['sell_list_in_table'][$index]['field_bill_type'] = array(
+                        '#type' => 'textfield',
+                        '#title' => t('單據'),
+                        '#size' => 20,
+                        '#title_display' => 'invisible',
+                        '#disabled' => true,
+                        '#default_value' => get_entity_storage_label($bill, 'field_bill_type', $bill->field_bill_type->value),
+                    );
+                    $form['sell_list_in_table'][$index]['field_order_id'] = array(
+                        '#title' => t('銷售憑證'),
+                        '#title_display' => 'invisible',
+                        '#size' => 90,
+                        '#prefix' => '<a href="/node/' . $bill->field_order_id->target_id .'/edit" target="_blank">' . getSellOrderID($bill->field_order_id->target_id) . '</a>',
+                    );
+                    $form['sell_list_in_table'][$index]['field_total_amount_with_tax'] = array(
+                        '#type' => 'textfield',
+                        '#title' => t('銷售總計'),
+                        '#title_display' => 'invisible',
+                        '#disabled' => true,
+                        '#default_value' => $bill->field_total_amount_with_tax->value,
+                    );
+                    $form['sell_list_in_table'][$index]['field_remain_unpaid_amount'] = array(
+                        '#type' => 'textfield',
+                        '#title' => t('未收金額'),
+                        '#title_display' => 'invisible',
+                        '#disabled' => true,
+                        '#default_value' => $bill->field_remain_unpaid_amount->value,
+                    );
+                    $form['sell_list_in_table'][$index]['field_receipt_number'] = array(
+                        '#type' => 'textfield',
+                        '#title' => t('發票編號'),
+                        '#title_display' => 'invisible',
+                        '#default_value' => $bill->field_receipt_number->value,
+                    );
+                    $form['sell_list_in_table'][$index]['field_discount'] = array(
+                        '#type' => 'textfield',
+                        '#title' => t('折讓金額'),
+                        '#title_display' => 'invisible',
+                        '#default_value' => $bill->field_discount->value,
+                        '#ajax' => [
+                            'callback' => 'ajax_calculate_total_discount_callback',
+                            'event' => 'change',
+                        ],
+                    );
+                    $form['sell_list_in_table'][$index]['field_offset_amount'] = array(
+                        '#type' => 'textfield',
+                        '#title' => t('沖帳金額'),
+                        '#title_display' => 'invisible',
+                        '#default_value' => $bill->field_write_off_amount->value,
+                    );
+                    $index++;
+                }
+            };
+            $form['field_cash_amount']['widget'][0]['value']['#default_value'] = $field_deposit;
             $node->field_sale_purchase_entity = $sale_entities;
             $form ['field_receivable_balance']['widget'][0]['value']['#default_value'] = $field_receivable_balance;
             $store_credit_tids = \Drupal::entityQuery("taxonomy_term")
@@ -265,12 +272,101 @@ function billing_write_off_form_alter(&$form, FormStateInterface &$form_state, $
                                         ->execute();
             foreach($store_credit_tids as $store_credit_tid) {
                 $store_credit = \Drupal\taxonomy\Entity\Term::load($store_credit_tid);
-                $form ['field_advance_balance']['widget'][0]['value']['#default_value'] = round($store_credit->field_store_credit->value);
-                $form ['field_offset_amount']['widget'][0]['value']['#default_value'] = round($store_credit->field_store_credit->value);
+                $field_advance_balance = $field_advance_balance + round($store_credit->field_store_credit->value);
+                $form ['field_advance_balance']['widget'][0]['value']['#default_value'] = $field_advance_balance;
                 $node->field_store_credit_entity = array('target_id' => $store_credit_tid);
                 break;
             }
+            $paid = round($field_advance_balance+$field_deposit);
+            if ( paid == 0 ) {
+                $form ['field_offset_amount']['widget'][0]['value']['#default_value'] = 0;
+            } else {
+                $prepaid = round($paid - $field_receivable_balance);
+                if ( $prepaid > 0 ) {
+                    $form['field_accumulated_advance']['widget'][0]['value']['#default_value'] = $prepaid;
+                    $form ['field_offset_amount']['widget'][0]['value']['#default_value'] = $field_receivable_balance;    
+                } else if ( $prepaid < 0 ) {
+                    $prepaid = $prepaid * -1;
+                    $form ['field_offset_amount']['widget'][0]['value']['#default_value'] = $prepaid;
+                } else {
+                    $form ['field_offset_amount']['widget'][0]['value']['#default_value'] = 0;
+                }    
+            }
+        } else {
+            $sale_entities = $node->field_sale_purchase_entity;
+            $index = 1;
+            foreach($sale_entities as $sale_entity) {
+                $sale = \Drupal\node\Entity\Node::load($sale_entity->target_id);
+                $bill = \Drupal\node\Entity\Node::load($sale->field_bill->target_id);
+                $form['sell_list_in_table'][$index]['index'] = array(
+                        '#type' => 'textfield',
+                        '#title' => t('索引'),
+                        '#title_display' => 'invisible',
+                        '#size' => 15,
+                        '#disabled' => true,
+                        '#default_value' => $index,
+                    );
+                $form['sell_list_in_table'][$index]['field_expected_receive_payment'] = array(
+                    '#type' => 'textfield',
+                    '#title' => t('帳款日期'),
+                    '#title_display' => 'invisible',
+                    '#disabled' => true,
+                    '#default_value' => $bill->field_expected_receive_payment->value,
+                );
+                $form['sell_list_in_table'][$index]['field_bill_type'] = array(
+                    '#type' => 'textfield',
+                    '#title' => t('單據'),
+                    '#size' => 20,
+                    '#title_display' => 'invisible',
+                    '#disabled' => true,
+                    '#default_value' => get_entity_storage_label($bill, 'field_bill_type', $bill->field_bill_type->value),
+                );
+                $form['sell_list_in_table'][$index]['field_order_id'] = array(
+                    '#title' => t('銷售憑證'),
+                    '#title_display' => 'invisible',
+                    '#size' => 90,
+                    '#prefix' => '<a href="/node/' . $bill->field_order_id->target_id .'/edit" target="_blank">' . getSellOrderID($bill->field_order_id->target_id) . '</a>',
+                );
+                $form['sell_list_in_table'][$index]['field_total_amount_with_tax'] = array(
+                    '#type' => 'textfield',
+                    '#title' => t('銷售總計'),
+                    '#title_display' => 'invisible',
+                    '#disabled' => true,
+                    '#default_value' => $bill->field_total_amount_with_tax->value,
+                );
+                $form['sell_list_in_table'][$index]['field_remain_unpaid_amount'] = array(
+                    '#type' => 'textfield',
+                    '#title' => t('未收金額'),
+                    '#title_display' => 'invisible',
+                    '#disabled' => true,
+                    '#default_value' => $bill->field_remain_unpaid_amount->value,
+                );
+                $form['sell_list_in_table'][$index]['field_receipt_number'] = array(
+                    '#type' => 'textfield',
+                    '#title' => t('發票編號'),
+                    '#title_display' => 'invisible',
+                    '#default_value' => $bill->field_receipt_number->value,
+                );
+                $form['sell_list_in_table'][$index]['field_discount'] = array(
+                    '#type' => 'textfield',
+                    '#title' => t('折讓金額'),
+                    '#title_display' => 'invisible',
+                    '#default_value' => $bill->field_discount->value,
+                    '#ajax' => [
+                        'callback' => 'ajax_calculate_total_discount_callback',
+                        'event' => 'change',
+                    ],
+                );
+                $form['sell_list_in_table'][$index]['field_offset_amount'] = array(
+                    '#type' => 'textfield',
+                    '#title' => t('沖帳金額'),
+                    '#title_display' => 'invisible',
+                    '#default_value' => $bill->field_write_off_amount->value,
+                );
+                $index++;
+            }
         }
+
         $form['comment_section'] = [
 			'#group' => 'advanced',
 			'#type' => 'details',
@@ -303,27 +399,15 @@ function _mySubmit(array &$form, FormStateInterface $form_state) {
     $query->condition("field_customer_entity", $customer_nid);
     $bill_nids = $query->execute();
     $index=1;
-    $is_updated = false;
     foreach($bill_nids as $bill_nid) {
         $bill = \Drupal\node\Entity\Node::load($bill_nid);
         $field_receipt_number = $form_state->getValue('sell_list_in_table')[$index]['field_receipt_number'];
         $field_discount = $form_state->getValue('sell_list_in_table')[$index]['field_discount'];
         $field_offset_amount = $form_state->getValue('sell_list_in_table')[$index]['field_offset_amount'];
-        if ( $bill->field_receipt_number->value != field_receipt_number) {
-            $bill->set('field_receipt_number', $field_receipt_number);
-            $is_updated = true;
-        }
-        if ( $bill->field_discount->value != $field_discount) {
-            $bill->set('field_discount', $field_discount);
-            $is_updated = true;
-        }
-        if ( $bill->field_write_off_amount->value != $field_offset_amount) {
-            $bill->set('field_write_off_amount', $field_offset_amount);
-            $is_updated = true;
-        }
-        if ( $is_updated == true ) {
-            $bill->save();
-        }
+        $bill->set('field_receipt_number', $field_receipt_number);
+        $bill->set('field_discount', $field_discount);
+        $bill->set('field_write_off_amount', $field_offset_amount);
+        $bill->save();
         $index++;
     }
 }
@@ -462,3 +546,4 @@ function generate_billing_write_off_id($customer_nid) {
 	}
 	return $billing_write_off_id;
 }
+

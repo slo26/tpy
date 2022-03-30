@@ -12,7 +12,7 @@ third_party_settings:
     status: true
     scheme: private
     directory: inline-files
-    extensions: 'bat cbl cmd csv dat dll doc docx ear epub html gz ics ini jacl jar java jcl js jsp lic lwp mp3 odp ods odt pdf ppt pptx properties ps1 py rar rtf savf sh sql src svg swf tar tgz txt xls xlsx xml xsd xsl zip bin'
+    extensions: 'bat cbl cmd csv dat dll doc docx ear epub html gz ics ini jacl jar java jcl js jsp lic lwp mp3 odp ods odt pdf ppt pptx properties ps1 py rar rtf savf sh sql src svg swf tar tgz txt xls xlsx xml xsd xsl zip bin mp4'
     max_size: '10 MB'
 _core:
   default_config_hash: 967ijj7p6i7rwrYl7r08WQFeCY_c23YAh0h8u-w_CXM

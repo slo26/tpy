@@ -30,6 +30,14 @@ custom_toolbar.products_goods:
   requirements:
     _role: 'authenticated'
 
+custom_toolbar.fundamental_info:
+  path: '/admin/fundamental-info'
+  defaults:
+    _controller: '\Drupal\custom_toolbar\Controller\CustomToolbarController::fundamental_info'
+    _title: '基本資料'
+  requirements:
+    _role: 'authenticated'
+
 custom_toolbar.main:
   path: '/admin/main'
   defaults:
@@ -76,4 +84,5 @@ custom_toolbar.show_detail_monthly_bill_statement:
     _title: '月份應收帳款明細表'
   requirements:
     _role: 'authenticated'
+
 

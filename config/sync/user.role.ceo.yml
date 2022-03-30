@@ -8,6 +8,7 @@ dependencies:
     - node.type.customer
     - node.type.documentation
     - node.type.goods
+    - node.type.ourbound_inbound_warehouse
     - node.type.page
     - node.type.product
     - node.type.purchase_order
@@ -32,6 +33,7 @@ permissions:
   - 'delete customer revisions'
   - 'delete documentation revisions'
   - 'delete goods revisions'
+  - 'delete ourbound_inbound_warehouse revisions'
   - 'delete page revisions'
   - 'delete product revisions'
   - 'delete purchase_order revisions'

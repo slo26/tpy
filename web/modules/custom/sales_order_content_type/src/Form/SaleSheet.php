@@ -87,6 +87,7 @@ class SaleSheet extends ConfigFormBase {
             
             /***************table footer***************/
             {
+                $sales = \Drupal\user\Entity\User::load($customer->field_sales->target_id);
                 $table_footer = "";
                 $bill = \Drupal\node\Entity\Node::load($sale->field_bill->target_id);
                 $table_start = '<table id="sales-oder-table-footer"><tbody>';
@@ -100,7 +101,7 @@ class SaleSheet extends ConfigFormBase {
                                 '</td></tr>';
                 $table_body .= '<tr><td align="left" width="110px">應收總金額:</td><td align="right">' . number_format($bill->field_total_amount_with_tax->value) . 
                                 '</td><td align="left" width="110px">取用預收: </td><td align="right">0' .
-                                '</td><td align="left" width="110px">業務代表: </td><td align="right">' . $sale->field_full_name->value .
+                                '</td><td align="left" width="110px">業務代表: </td><td align="right">' . $sales->field_full_name->value .
                                 '</td></tr>'; 
                 $table_end = "</tbody></table>";
                 $table_footer = $table_start . $table_body . $table_end;
@@ -135,4 +136,5 @@ class SaleSheet extends ConfigFormBase {
      */
     public function submitForm(array &$form, FormStateInterface $form_state) {}
 }
+
 
