@@ -1,0 +1,19 @@
+quick_node_clone.node.quick_clone:
+  path: '/node/{node}/copy'
+  defaults:
+    _controller: '\Drupal\quick_node_clone\Controller\QuickNodeCloneController::cloneNode'
+  requirements:
+    _custom_access: '\Drupal\quick_node_clone\Controller\QuickNodeCloneAccess::cloneNode'
+  options:
+    _admin_route: TRUE
+    parameters:
+      node:
+        type: 'entity:node'
+quick_node_clone.settings:
+  path: '/admin/config/quick_node_clone'
+  defaults:
+    _form: '\Drupal\quick_node_clone\Form\QuickNodeCloneSettingForm'
+    _title: 'Quick Node Clone Configuration'
+  requirements:
+    _permission: 'administer site configuration'
+

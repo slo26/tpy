@@ -30,3 +30,4 @@ function custom_toolbar_form_alter(&$form, FormStateInterface &$form_state, $for
         }
     }
 }
+

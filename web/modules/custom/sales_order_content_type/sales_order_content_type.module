@@ -819,6 +819,7 @@ function ajax_return_process(array $form, FormStateInterface $form_state) {
 	$return_node->field_customer_entity->target_id = $node->field_customer_entity->target_id;
 	$return_node->set('field_original_sales_order_id', $node->id());
 	$return_node->set('moderation_state', "return");
+	$return_node->uid = \Drupal\user\Entity\User::load(\Drupal::currentUser()->id());
 	$return_node->save();
 	$return_node_nid = $return_node->id();
 
@@ -1188,7 +1189,7 @@ function purchase_items_table_generate($order_id) {
 		if ( $item->field_quantity->value != 0 ) {
 			$product = \Drupal\node\Entity\Node::load($item->field_product_id->target_id);
 			$storage = \Drupal\node\Entity\Node::load($item->field_storage->target_id);
-
+			$dropdown_button = "";
 			if ( !$is_closed ) {
 				$dropdown_button = '<div class="dropbutton-wrapper dropbutton-multiple">
 						<div class="dropbutton-widget">
@@ -1404,4 +1405,5 @@ function getSellOrderID($nid) {
 	$sale = \Drupal\node\Entity\Node::load($nid);
 	return $sale->title->value;
 }
+
 

@@ -1,0 +1,8 @@
+name: Quick Node Clone
+package: Custom
+type: module
+description: 'Quickly clone a Node with regular fields.'
+core_version_requirement: ^8 || ^9
+dependencies:
+  - node
+configure: quick_node_clone.settings

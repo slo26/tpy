@@ -1,0 +1,5 @@
+quick_node_clone.node.quick_clone:
+  route_name: 'quick_node_clone.node.quick_clone'
+  title: '複製'
+  base_route: 'entity.node.canonical'
+  weight: 30

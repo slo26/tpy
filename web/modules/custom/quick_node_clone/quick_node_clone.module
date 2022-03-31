@@ -1,0 +1,47 @@
+<?php
+use \Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_entity_type_build().
+ */
+function quick_node_clone_entity_type_build(array &$entity_types) {
+    if(isset($entity_types['node'])) {
+        $entity_types['node']->setFormClass('quick_node_clone', 'Drupal\quick_node_clone\Form\QuickNodeCloneNodeForm');
+    }
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function quick_node_clone_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
+    if ( $form_id == "node_sales_order_quick_node_clone_form" ) {
+        $form['title']['widget'][0]['value']['#access'] = FALSE;
+    }   
+}
+
+/**
+ * Implements hook_entity_operation().
+ */
+function quick_node_clone_entity_operation(\Drupal\Core\Entity\EntityInterface $entity) {
+  $operations = [];
+  $config = \Drupal::config('quick_node_clone.settings');
+  $enabled_node = explode(",", $config->get('enable_node'));
+
+  // Only add an operation for node entities.
+  if ($entity->getEntityTypeId() !== 'node') {
+    return $operations;
+  }
+
+  if ( !in_array($entity->bundle(), $enabled_node) ) {
+    return $operations;
+  }
+
+  $operations['quick_clone'] = [
+    'title' => t('Copy'),
+    'weight' => '100',
+    'url' => Url::fromRoute('quick_node_clone.node.quick_clone',  ['node' => $entity->id()]),
+  ];
+
+  return $operations;
+}
