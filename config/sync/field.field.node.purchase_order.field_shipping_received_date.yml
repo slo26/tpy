@@ -1,17 +1,17 @@
-uuid: c8c36f83-2274-40aa-b2f3-60ffe376fc9c
+uuid: a9318261-9c47-4b9d-8635-d22591d6104b
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_date_actual_arrived
+    - field.storage.node.field_shipping_received_date
     - node.type.purchase_order
   module:
     - datetime
-id: node.purchase_order.field_date_actual_arrived
-field_name: field_date_actual_arrived
+id: node.purchase_order.field_shipping_received_date
+field_name: field_shipping_received_date
 entity_type: node
 bundle: purchase_order
-label: 到貨日
+label: 貨物簽收日期
 description: ''
 required: false
 translatable: false

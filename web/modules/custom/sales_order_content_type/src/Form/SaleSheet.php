@@ -33,7 +33,11 @@ class SaleSheet extends ConfigFormBase {
      */
     public function buildForm(array $form, FormStateInterface $form_state, $node = null) {
         $result = "";
-        $sale = \Drupal\node\Entity\Node::load($node);
+        if ( $node instanceof \Drupal\node\NodeInterface ) {
+            $sale = \Drupal\node\Entity\Node::load($node->id());    
+        } else {
+            $sale = \Drupal\node\Entity\Node::load($node);
+        }
         if ( $sale->moderation_state->value == "stocking" || $sale->moderation_state->value == "shipment" || $sale->moderation_state->value == "done" ) {
             $customer_nid = $sale->field_customer_entity->target_id;
             $customer = \Drupal\node\Entity\Node::load($customer_nid);
@@ -68,17 +72,19 @@ class SaleSheet extends ConfigFormBase {
                 $index = 0;
                 foreach($tids as $tid) {
                     $item = \Drupal\taxonomy\Entity\Term::load($tid);
-                    $product = \Drupal\node\Entity\Node::load($item->field_product_id->target_id);
-                    $index++;
-                    $table_body .= '<tr><td>' . $index . '</td><td><a href="/taxonomy/term/' .$tid . '/edit" target="blank">' . $product->title->value . '</a></td><td>' . $product->field_product_name->value . 
-                                    '</td><td align="right">' . number_format($item->field_quantity->value) . 
-                                    '</td><td align="right">' . $product->field_unit->value .
-                                    '</td><td  align="right">' . number_format($item->field_price->value) . 
-                                    '</td><td  align="right">' . number_format($item->field_total_amount->value) . '</td></tr>';
-                    if ( !empty($item->field_comments->value) ) {
-                        $table_body .= '<tr><td colspan="7" align="left">加註: ' . $item->field_comments->value . '</td></tr>';
+                    if ( $item->field_quantity->value > 0 ) {
+                        $product = \Drupal\node\Entity\Node::load($item->field_product_id->target_id);
+                        $index++;
+                        $table_body .= '<tr><td>' . $index . '</td><td><a href="/taxonomy/term/' .$tid . '/edit" target="blank">' . $product->title->value . '</a></td><td>' . $product->field_product_name->value . 
+                                        '</td><td align="right">' . number_format($item->field_quantity->value) . 
+                                        '</td><td align="right">' . $product->field_unit->value .
+                                        '</td><td  align="right">' . number_format($item->field_price->value) . 
+                                        '</td><td  align="right">' . number_format($item->field_total_amount->value) . '</td></tr>';
+                        if ( !empty($item->field_comments->value) ) {
+                            $table_body .= '<tr><td colspan="7" align="left">加註: ' . $item->field_comments->value . '</td></tr>';
+                        }
+                        $total_discount = $total_discount + (($item->field_price->value * $item->field_quantity->value) * ($item->field_discount->value/100));
                     }
-                    $total_discount = $total_discount + (($item->field_price->value * $item->field_quantity->value) * ($item->field_discount->value/100));
                 }
                 $table_body .= '<tr class="sales-oder-table-list-bottom"><td colspan="7" align="center"> (以下空白) </td></tr>'; 
                 $table_end = "</tbody></table>"; 
@@ -136,5 +142,6 @@ class SaleSheet extends ConfigFormBase {
      */
     public function submitForm(array &$form, FormStateInterface $form_state) {}
 }
+
 
 

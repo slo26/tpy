@@ -1,0 +1,26 @@
+uuid: 682811de-5700-4cfd-8544-7b8d70840acb
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_rich_comment
+    - node.type.purchase_order
+  module:
+    - allowed_formats
+    - text
+third_party_settings:
+  allowed_formats:
+    allowed_formats:
+      - comment
+id: node.purchase_order.field_rich_comment
+field_name: field_rich_comment
+entity_type: node
+bundle: purchase_order
+label: 採購單備註
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: text_long

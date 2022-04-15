@@ -9,6 +9,7 @@ module:
   better_exposed_filters: 0
   big_pipe: 0
   billing: 0
+  billing_purchase: 0
   billing_write_off: 0
   block: 0
   block_content: 0
@@ -62,6 +63,7 @@ module:
   path_alias: 0
   pdf_api: 0
   product: 0
+  purchase_billing_write_off: 0
   purchase_items: 0
   purchase_order: 0
   quick_node_clone: 0

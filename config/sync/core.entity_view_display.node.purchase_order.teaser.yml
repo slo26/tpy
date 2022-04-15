@@ -4,11 +4,17 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
-    - field.field.node.purchase_order.field_date_actual_arrived
-    - field.field.node.purchase_order.field_date_actual_delivered
+    - field.field.node.purchase_order.field_appraise_date
+    - field.field.node.purchase_order.field_bill_purchase
+    - field.field.node.purchase_order.field_completed_date
+    - field.field.node.purchase_order.field_created_date
+    - field.field.node.purchase_order.field_inbound_date
     - field.field.node.purchase_order.field_logistics
-    - field.field.node.purchase_order.field_purchase_status
+    - field.field.node.purchase_order.field_material
+    - field.field.node.purchase_order.field_rich_comment
+    - field.field.node.purchase_order.field_shipping_date
     - field.field.node.purchase_order.field_shipping_number
+    - field.field.node.purchase_order.field_shipping_received_date
     - field.field.node.purchase_order.field_vendor_entity
     - node.type.purchase_order
   module:
@@ -18,15 +24,26 @@ targetEntityType: node
 bundle: purchase_order
 mode: teaser
 content:
+  content_moderation_control:
+    settings: {  }
+    third_party_settings: {  }
+    weight: -20
+    region: content
   links:
     settings: {  }
     third_party_settings: {  }
     weight: 100
     region: content
 hidden:
-  field_date_actual_arrived: true
-  field_date_actual_delivered: true
+  field_appraise_date: true
+  field_bill_purchase: true
+  field_completed_date: true
+  field_created_date: true
+  field_inbound_date: true
   field_logistics: true
-  field_purchase_status: true
+  field_material: true
+  field_rich_comment: true
+  field_shipping_date: true
   field_shipping_number: true
+  field_shipping_received_date: true
   field_vendor_entity: true

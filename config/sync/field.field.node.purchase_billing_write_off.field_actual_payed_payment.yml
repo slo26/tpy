@@ -1,0 +1,24 @@
+uuid: 3bd1954c-8aca-40a5-b785-d182dd7d1def
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_actual_payed_payment
+    - node.type.purchase_billing_write_off
+  module:
+    - datetime
+id: node.purchase_billing_write_off.field_actual_payed_payment
+field_name: field_actual_payed_payment
+entity_type: node
+bundle: purchase_billing_write_off
+label: 付款日期
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    default_date_type: now
+    default_date: now
+default_value_callback: ''
+settings: {  }
+field_type: datetime

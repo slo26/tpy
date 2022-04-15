@@ -1,0 +1,25 @@
+uuid: a7300b6a-c8cc-4e10-8f64-24e8ba669b44
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_payable_balance
+    - node.type.purchase_billing_write_off
+id: node.purchase_billing_write_off.field_payable_balance
+field_name: field_payable_balance
+entity_type: node
+bundle: purchase_billing_write_off
+label: 應付餘額
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: !!float 0
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: $
+  suffix: ''
+field_type: decimal

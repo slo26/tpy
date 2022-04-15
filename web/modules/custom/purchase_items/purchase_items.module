@@ -13,35 +13,64 @@ function purchase_items_taxonomy_term_presave($term) {
         }
 
         $original_term = $term->original;
-        if ( $term->field_has_inventoried_->value == true && $original_term->field_has_inventoried_->value == false ) {
-            $stock_up_nids = \Drupal::entityQuery("node")
-                        ->condition('type', 'stock_up')
-                        ->condition('field_product_goods', $term->field_product_goods->target_id)
-                        ->condition('field_storage_id', $term->field_storage->target_id)
-                        ->execute();
+
+        //1. history status 沒有, current status 有
+        //2. history status 有, current status 沒有
+
+        if ( empty($original_term->field_purchase_requisition_statu->value) && !empty($term->field_purchase_requisition_statu->value) ) {
+            pi_update_inventory($term);
+        } else if ( !empty($original_term->field_purchase_requisition_statu->value) && empty($term->field_purchase_requisition_statu->value) ) {
+            pi_revert_inventory($original_term);
+        }
+    }
+}
+
+function pi_revert_inventory($original) {
+    $inventory_nids = \Drupal::entityQuery("node")->condition('type', 'stock_up')
+                            ->condition('field_product_goods', $original->field_product_goods->target_id)
+                            ->condition('field_storage_id', $original->field_storage->target_id)->execute();
+    foreach($inventory_nids as $inventory_nid) {
+        $inventory = \Drupal\node\Entity\Node::load($inventory_nid);
+        $before_quantity = $inventory->field_stock->value;
+        $after_quantity = $inventory->field_stock->value - $original->field_quantity->value;
+        $inventory->set('field_stock', $after_quantity);
+        $inventory->save();
+        create_warehouse_transaction_log($original->field_product_goods->target_id, "", $original->field_storage->target_id, "return", $original->field_quantity->value, $before_quantity, $after_quantity, get_purchase_order_number_by_nid($original->field_order_id->target_id), "");
+        $message = get_goods_name_by_nid($original->field_product_goods->target_id) . "退倉取消, 從倉庫移除成功. 儲存在 " . get_storage_name_by_nid($original->field_storage->target_id) . " 的庫存數量 " . $after_quantity; 
+        \Drupal::messenger()->addMessage($message);
+        break;
+    }
+}
+
+function pi_update_inventory($term) {
+    $stock_up_nids = \Drupal::entityQuery("node")->condition('type', 'stock_up')
+                            ->condition('field_product_goods', $term->field_product_goods->target_id)
+                            ->condition('field_storage_id', $term->field_storage->target_id)->execute();
+    if ( $term->field_purchase_requisition_statu->value == "put" ) {
+        if ( count($stock_up_nids) == 0 ) {
+            $inventory = \Drupal\node\Entity\Node::create(['type' => "stock_up",]);
+            $inventory->set('field_storage_id', $term->field_storage->target_id);
+            $inventory->set('field_product_goods', $term->field_product_goods->target_id);
+            $inventory->set('field_stock', 0);
+            $inventory->save();
+            $message = get_goods_name_by_nid($term->field_product_goods->target_id) . " 不存在存入倉庫. 以在存入倉庫 " . get_storage_name_by_nid($term->field_storage->target_id) . " 建立此物品."; 
+            \Drupal::messenger()->addMessage($message);
+            $inventory->set('field_stock', $term->field_quantity->value);
+            $inventory->save();
+            $message = get_goods_name_by_nid($term->field_product_goods->target_id) . " 存入在 " . get_storage_name_by_nid($term->field_storage->target_id) . " 的庫存數量 " . $term->field_quantity->value; 
+            \Drupal::messenger()->addMessage($message);
+            create_warehouse_transaction_log($term->field_product_goods->target_id, "", $term->field_storage->target_id, "inbound", 0, $before_quantity, $term->field_quantity->value, get_purchase_order_number_by_nid($term->field_order_id->target_id), "");
+        } else {
             foreach($stock_up_nids as $stock_up_nid) {
                 $stock_up = \Drupal\node\Entity\Node::load($stock_up_nid);
-                $total_num = $stock_up->field_stock->value + $term->field_quantity->value;
-                $stock_up->set('field_stock', $total_num);
+                $before_quantity = $stock_up->field_stock->value;
+                $after_quantity = $stock_up->field_stock->value + $term->field_quantity->value;
+                $stock_up->set('field_stock', $after_quantity);
                 $stock_up->save();
-                create_warehouse_transaction_log($term->field_product_goods->target_id, "", $term->field_storage->target_id, "inbound", $term->field_quantity->value, $stock_up->field_stock->value, $total_num, $term->name->value, "");
-                $message = get_product_or_goods_name_by_nid($term->field_product_goods->target_id) . " 儲存在 " . get_storage_name_by_nid($term->field_storage->target_id) . " 的庫存是 " . $total_num; 
+                create_warehouse_transaction_log($term->field_product_goods->target_id, "", $term->field_storage->target_id, "inbound", $term->field_quantity->value, $before_quantity, $after_quantity, get_purchase_order_number_by_nid($term->field_order_id->target_id), "");
+                $message = get_product_or_goods_name_by_nid($term->field_product_goods->target_id) . " 儲存在 " . get_storage_name_by_nid($term->field_storage->target_id) . " 的庫存是 " . $after_quantity; 
                 \Drupal::messenger()->addMessage($message);
-            }
-        } else if ( $term->field_has_inventoried_->value == false && $original_term->field_has_inventoried_->value == true ) {
-            $stock_up_nids = \Drupal::entityQuery("node")
-                        ->condition('type', 'stock_up')
-                        ->condition('field_product_goods', $term->field_product_goods->target_id)
-                        ->condition('field_storage_id', $term->field_storage->target_id)
-                        ->execute();
-            foreach($stock_up_nids as $stock_up_nid) {
-                $stock_up = \Drupal\node\Entity\Node::load($stock_up_nid);
-                $total_num = $stock_up->field_stock->value - $term->field_quantity->value;
-                $stock_up->set('field_stock', $total_num);
-                $stock_up->save();
-                create_warehouse_transaction_log($term->field_product_goods->target_id, $term->field_storage->target_id, "", "return", $term->field_quantity->value, $stock_up->field_stock->value, $total_num, $term->name->value, "");
-                $message = "以入庫被取消, 原入庫數量" . $term->field_quantity->value . "以從倉庫移除."; 
-                \Drupal::messenger()->addMessage($message);
+                break;
             }
         }
     }
@@ -52,13 +81,15 @@ function purchase_items_form_alter(&$form, FormStateInterface &$form_state, $for
         $term = $form_state->getFormObject()->getEntity();
         if ( $term->isNew() ) {
             $form ['name']['widget'][0]['value']['#default_value'] = gen_purchase_item_id();
-			$form ['name']['widget'][0]['value']['#disabled'] = true;
         }
+        $form ['name']['widget'][0]['value']['#disabled'] = true;
+        $form ['field_order_id']['#disabled'] = true;
+        $form ['field_product_goods']['#disabled'] = true;
 
-        $form['field_storage']['widget']['#ajax'] = array(
+        /*$form['field_storage']['widget']['#ajax'] = array(
             'callback' => 'ajax_storage',
             'event' => 'change',
-        );
+        );*/
 
         $form['message_for_storage'] = array(
 			'#type' => 'markup',
@@ -66,34 +97,40 @@ function purchase_items_form_alter(&$form, FormStateInterface &$form_state, $for
             '#weight' => 3,
         );
 
-        $form['field_has_inventoried_']['widget']['value']['#ajax'] = array(
-            'callback' => 'ajax_checkbox',
-            'event' => 'change',
+        $form['field_quantity']['widget'][0]['value']['#ajax'] = array(
+            'callback' => 'ajax_purchase_items_calculate_price',
+			'event' => 'change',
         );
 
-        $form['message_for_checkbox'] = array(
-			'#type' => 'markup',
-			'#markup' => '<div class="message-for-checkbox"></div>',
-            '#weight' => $form['field_has_inventoried_']['#weight'] + 1,
+        $form['field_price']['widget'][0]['value']['#ajax'] = array(
+            'callback' => 'ajax_purchase_items_calculate_price',
+			'event' => 'change',
         );
+
+        $form['field_purchase_requisition_statu']['widget']['#ajax'] = [
+			'callback' => 'ajax_purchase_requisition_status_changed',
+			'event' => 'change',
+		];
 
         $form['#validate'][] = 'purchase_items_form_validate';
     }
 }
 
-function ajax_checkbox(array $form, FormStateInterface $form_state) {
-    $ajax_response = new AjaxResponse();
-    $message = "";
-    if ( $form_state->getValue('field_has_inventoried_')['value'] == 1 && empty($form_state->getValue('field_storage')[0]['target_id']) == 1 ) {
-        $message = '<font color="red">儲存沒有成功, 無法入庫, 請填寫要入庫的倉庫</font>';
-        $ajax_response->addCommand(new HtmlCommand('.message-for-checkbox', $message));
-    } else {
-        $ajax_response->addCommand(new HtmlCommand('.message-for-checkbox', $message));
-    }
-    return $ajax_response;
+function ajax_purchase_items_calculate_price(array $form, FormStateInterface $form_state) {
+	$ajax_response = new AjaxResponse();
+	$quantity = (int)$form_state->getValue('field_quantity')[0]['value'];
+	$price = (int)$form_state->getValue('field_price')[0]['value'];
+	$discount = (double)$form_state->getValue('field_discount')[0]['value'];
+	$total_amount = 0;
+	
+	$tota_amount = $quantity*$price;
+
+	$ajax_response->addCommand(new InvokeCommand('#edit-field-total-amount-0-value', 'val', [$tota_amount]));
+
+	return $ajax_response;
 }
 
-function ajax_storage(array $form, FormStateInterface $form_state) {
+/*function ajax_storage(array $form, FormStateInterface $form_state) {
     $ajax_response = new AjaxResponse();
     $message = "";
     $storage_nid = $form_state->getValue('field_storage')[0]['target_id'];
@@ -112,23 +149,11 @@ function ajax_storage(array $form, FormStateInterface $form_state) {
     
     $ajax_response->addCommand(new HtmlCommand('.message-for-storage', $message));
     return $ajax_response;
-}
+}*/
 
 function purchase_items_form_validate($form, &$form_state) {
-    if ( $form_state->getValue('field_has_inventoried_')['value'] == 1 && empty($form_state->getValue('field_storage')[0]['target_id']) == 1 ) {
-        $form_state->setError($form , t('儲存沒有成功, 無法入庫, 請填寫要入庫的倉庫.'));
-    }
-
-    $storage_nid = $form_state->getValue('field_storage')[0]['target_id'];
-    $product_goods_nid = $form_state->getValue('field_product_goods')[0]['target_id'];
-    $stock_up_nids = \Drupal::entityQuery("node")
-                            ->condition('type', 'stock_up')
-                            ->condition('field_storage_id', $storage_nid)
-                            ->condition('field_product_goods', $product_goods_nid)
-                            ->execute();
-    if ( count($stock_up_nids) == 0 ) {
-        $message = '倉儲沒有這物品, 請先以手動建立此物品在倉儲.';
-        $form_state->setError($form , $message);
+    if ( $form_state->getValue('field_purchase_requisition_statu')[0]['value'] == "put" && empty($form_state->getValue('field_storage')) ) {
+        $form_state->setError($form , t('無法儲存, 存入倉庫沒選.'));
     }
 }
 
@@ -143,5 +168,6 @@ function gen_purchase_item_id($order_id = null) {
         return str_replace($replace, "PI-", $order_id) . "-" . (count($total)+1);
     }
 }
+
 
 

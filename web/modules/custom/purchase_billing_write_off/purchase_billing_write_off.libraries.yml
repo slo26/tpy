@@ -1,0 +1,6 @@
+purchase_billing_write_off:
+  version: VERSION
+  css:
+    theme:
+      css/purchase_billing_write_off.css: {}
+

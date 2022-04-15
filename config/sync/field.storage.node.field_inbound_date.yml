@@ -1,12 +1,12 @@
-uuid: bbe466b0-ae04-4f36-a5ae-61f3a52f3090
+uuid: 97633ecd-7da7-4dba-a53f-944bd16f8c13
 langcode: en
 status: true
 dependencies:
   module:
     - datetime
     - node
-id: node.field_date_actual_delivered
-field_name: field_date_actual_delivered
+id: node.field_inbound_date
+field_name: field_inbound_date
 entity_type: node
 type: datetime
 settings:

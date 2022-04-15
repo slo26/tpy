@@ -54,7 +54,8 @@ function sales_order_content_type_menu_local_tasks_alter(&$data, $route_name) {
 	if ($route_match->getRouteName() == 'entity.node.canonical') {
     	$node = $route_match->getParameter('node');
 		if ( $node->bundle() != "sales_order") {
-			unset($data['tabs'][0]['sales_order_content_type.sale_sheet']);
+			//unset($data['tabs'][0]['sales_order_content_type.sale_sheet']);
+			//$data['tabs']['sales_order_content_type.sale_sheet']['#access'] = false;
 		}
 	}
 }
@@ -928,7 +929,7 @@ function ajax_order_status_changed_validation(array $form, FormStateInterface $f
 				}
 				foreach($sell_items_tids as $sell_items_tid) {
 					$sell_item = \Drupal\taxonomy\Entity\Term::load($sell_items_tid);
-					if ( empty($sell_item->field_requisition_status->value) ) {
+					if ( $sell_item->field_quantity->value > 0 && empty($sell_item->field_requisition_status->value) ) {
 						$message = '<div><font color="red">此銷售單還有一或多個訂單項目還沒打包出貨或轉寄倉, 無法選擇' . $selected_value . '選項</font></div>';
 						$ajax_response->addCommand(new HtmlCommand('#edit-moderation-state-0-state--description', $message));
 						$ajax_response->addCommand(new InvokeCommand('#edit-moderation-state-0-state', 'val', [$node->moderation_state->value]));
@@ -1071,10 +1072,10 @@ function create_single_item_callback(array $form, FormStateInterface $form_state
 	$status = "";
 	$entity = $form_state->getFormObject()->getEntity();
 	if ( !empty($entity->id()) ) {
-		if ( empty($form_state->getValue('list_product'))  ) {
+		if ( empty($form_state->getValue('list_product')) || $form_state->getValue('storage') == '_none' ) {
 		//if ( empty($form_state->getValue('list_product')) || empty($form_state->getValue('quantity')) || $form_state->getValue('storage') == '_none' ) {
 			//$status = '<font color="red">產品編號, 倉庫和數量必填!</font>';
-			$status = '<font color="red">產品編號必填!</font>';
+			$status = '<font color="red">產品編號和倉庫必填!</font>';
 		} else {
 			$item_id = gen_sell_item_id($entity->title->value);
 			$item = \Drupal\taxonomy\Entity\Term::create(['vid' => 'sell_items']);
@@ -1083,20 +1084,24 @@ function create_single_item_callback(array $form, FormStateInterface $form_state
 			$item->field_order_id->target_id = $entity->id();
 
 			$product = \Drupal\node\Entity\Node::load($form_state->getValue('list_product'));
-			$cost = $product->field_cost_price->value;
 			$item->set('field_product_id', $form_state->getValue('list_product'));
 			$item->set('field_storage', $form_state->getValue('storage'));
-			$item->set('field_quantity', $form_state->getValue('quantity'));
+			$gpm = 0;
+			if ( empty($form_state->getValue('quantity')) || $form_state->getValue('quantity') == 0 ) {
+				$item->set('field_quantity', 0);
+			} else {
+				$item->set('field_quantity', $form_state->getValue('quantity'));
+				if ( $price > 0 ) {
+					$gpm = round(caculate_gpm_for_item_sell($price, $discount, $cost), 2);
+				}
+			}
+			$cost = $product->field_cost_price->value;
 			$price = (double)$form_state->getValue('price');
 			$item->set('field_price', $price);
 			$discount = (double)$form_state->getValue('discount');
 			$item->set('field_discount', $discount);
 			//$item->set('field_gross_profit_margin', $form_state->getValue('gross_profit_margin'));
-			if ( $price > 0 ) {
-				$gpm = round(caculate_gpm_for_item_sell($price, $discount, $cost), 2);
-			} else {
-				$gpm = 0;
-			}
+			
 			$item->set('field_gross_profit_margin', $gpm);
 			$item->set('field_total_amount', $form_state->getValue('total_amount'));
 			$item->save();
@@ -1186,7 +1191,7 @@ function purchase_items_table_generate($order_id) {
 	
 	foreach($tids as $tid) {
 		$item = \Drupal\taxonomy\Entity\Term::load($tid);
-		if ( $item->field_quantity->value != 0 ) {
+		//if ( $item->field_quantity->value != 0 ) {
 			$product = \Drupal\node\Entity\Node::load($item->field_product_id->target_id);
 			$storage = \Drupal\node\Entity\Node::load($item->field_storage->target_id);
 			$dropdown_button = "";
@@ -1219,7 +1224,7 @@ function purchase_items_table_generate($order_id) {
 			$total_quantity = $total_quantity + $item->field_quantity->value;
 			$sum = $sum + $item->field_price->value;
 			$total_cost = $total_cost + $item->field_total_amount->value;
-		}
+		//}
 	}
 	$table_body .= '<tr><td><strong>總合</strong></td><td></td><td></td><td></td><td><strong>' . number_format($total_quantity) . '</strong></td><td><strong>$' . $sum . '</strong></td><td></td><td></td><td><strong>$' . $total_cost . '</strong></td><td></td></tr>';
 	$table_body_end = '</tbody>';
@@ -1405,5 +1410,6 @@ function getSellOrderID($nid) {
 	$sale = \Drupal\node\Entity\Node::load($nid);
 	return $sale->title->value;
 }
+
 
 

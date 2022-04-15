@@ -1,0 +1,7 @@
+billing_purchase:
+  version: VERSION
+  css:
+    theme:
+      css/billing_purchase.css: {}
+
+

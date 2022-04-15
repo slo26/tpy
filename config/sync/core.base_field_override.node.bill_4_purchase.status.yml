@@ -1,0 +1,22 @@
+uuid: 32363758-d61f-4c83-9ce8-287de74a0351
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.bill_4_purchase
+id: node.bill_4_purchase.status
+field_name: status
+entity_type: node
+bundle: bill_4_purchase
+label: Published
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

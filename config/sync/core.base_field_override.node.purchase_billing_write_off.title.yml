@@ -1,0 +1,18 @@
+uuid: 0517648c-3ed7-489b-8860-379379d29d8c
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.purchase_billing_write_off
+id: node.purchase_billing_write_off.title
+field_name: title
+entity_type: node
+bundle: purchase_billing_write_off
+label: 對帳編號
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

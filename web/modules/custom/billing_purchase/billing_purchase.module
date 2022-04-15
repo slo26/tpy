@@ -1,0 +1,132 @@
+<?php
+use \Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax;
+
+function billing_purchase_node_presave(Drupal\Core\Entity\EntityInterface $node) {
+    if ( $node->type->target_id == "bill_4_purchase" ) {
+        if ( empty($node->title->value) ) {
+            $node->set('title', generate_unique_id_for_bill_purchase());
+        }
+
+        $total_amount = 0;
+		$connection = \Drupal::database();
+		$tids = \Drupal::entityQuery("taxonomy_term")->condition("vid", "purchase_items")
+													->condition('field_order_id', $node->field_order_id->target_id)->execute();
+        if ( count($tids) > 0 ) {
+            foreach($tids as $tid) {
+                $obj = $connection->query("SELECT field_total_amount_value FROM {taxonomy_term__field_total_amount} Where 
+                                                            entity_id = :tid and bundle = :bundle", 
+                                                            [':tid' => $tid, ':bundle' => 'purchase_items'])->fetchAll();             
+                for($i=0; $i < count($obj); $i++) {
+                    $total_amount = $total_amount + $obj[$i]->field_total_amount_value;
+                }										
+            }
+            $node->set('field_total_amount_with_tax', round($total_amount));
+        
+            $deposit = $node->field_deposit->value;
+            $write_off_amount = $node->field_write_off_amount->value;
+            $remain = calculate_remain_to_pay_amount_purchase($total_amount, $deposit, $write_off_amount);    
+            $node->set('field_remain_unpaid_amount', round($remain));
+        }	
+    }
+}
+
+function billing_purchase_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
+    if ( $form_id == "node_bill_4_purchase_form" || $form_id == "node_bill_4_purchase_edit_form" ) {
+        $node = $form_state->getFormObject()->getEntity();
+        if ( !empty($node->field_actual_received_payment->value) ) {
+            $form['actions']['submit']['#disabled'] = true;
+            $form['actions']["delete"]['#attributes']['style'] = 'display: none;';
+        }
+        
+        if ( $node->isNew() ) {
+            $unique_id = generate_unique_id_for_bill_purchase();
+            $form ['title']['widget'][0]['value']['#default_value'] = $unique_id;
+        }
+        $form ['field_bill_type']['#disabled'] = true;
+        $form ['title']['#disabled'] = true;
+        $form ['field_order_id']['#disabled'] = true;
+        $form ['field_vendor_entity']['#disabled'] = true;
+        $form ['field_total_amount_with_tax']['#disabled'] = true;
+        $form['field_write_off_amount']['#disabled'] = true;
+        $form['field_remain_unpaid_amount']['#disabled'] = true;
+
+        $form['field_deposit']['widget'][0]['value']['#prefix'] = '<div id="sign">-</div>';
+        $form['field_write_off_amount']['widget'][0]['value']['#prefix'] = '<div id="sign">-</div>';
+        $form['field_remain_unpaid_amount']['widget'][0]['value']['#prefix'] = '<div id="end-sign">=</div>';
+
+        $form['field_deposit']['widget'][0]['value']['#ajax'] = array(
+                'callback' => 'ajax_calculate_remain_to_pay_amount_purchase',
+				'event' => 'change',
+        );
+        $form['#attached']['library'][] = 'billing_purchase/billing_purchase';
+    }
+}
+
+function ajax_calculate_remain_to_pay_amount_purchase(array $form, FormStateInterface $form_state) {
+	$ajax_response = new AjaxResponse();
+    $field_total_amount_with_tax = $form_state->getValue('field_total_amount_with_tax')[0]['value'];
+    $deposit = $form_state->getValue('field_deposit')[0]['value'];
+    $write_off_amount = $form_state->getValue('field_write_off_amount')[0]['value'];
+
+    $remain = calculate_remain_to_pay_amount_purchase($field_total_amount_with_tax, $deposit, $write_off_amount);
+    
+    $ajax_response->addCommand(new InvokeCommand('#edit-field-remain-unpaid-amount-0-value', 'val', [round($remain)]));
+	return $ajax_response;
+}
+
+function billing_purchase_node_delete(Drupal\Core\Entity\EntityInterface $node) {
+    if ($node->bundle() == "bill_4_purchase") {
+        \Drupal::messenger()->addMessage($node->title->value . "成功刪除.", "status");
+
+        $order_nid = $node->field_order_id->target_id;
+        $order = \Drupal\node\Entity\Node::load($order_nid);
+        $order_vid = $order->vid->value;
+
+        $connection = \Drupal::database();
+        $connection->delete('node__field_bill_purchase')
+                            ->condition("entity_id", $order_nid)
+                            ->condition("revision_id", $order_vid)
+                            ->condition("field_bill_purchase_target_id", $node->id())
+                            ->execute();
+        $connection->delete('node_revision__field_bill_purchase')
+                            ->condition("entity_id", $order_nid)
+                            ->condition("revision_id", $order_vid)
+                            ->condition("field_bill_purchase_target_id", $node->id())
+                            ->execute();
+        \Drupal::service('cache.entity')->invalidateAll();
+        \Drupal::service('cache.data')->invalidateAll();
+        \Drupal::service('cache.render')->invalidateAll();
+    }
+}
+
+function generate_unique_id_for_bill_purchase() {
+    $query = \Drupal::entityQuery("node")->condition('type', 'bill_4_purchase')->execute();
+    $index = count($query);
+    while (true) {
+        $index = $index + 1;
+        $unique_id = "PBill-" . str_pad($index, 5,"0",STR_PAD_LEFT);
+        $query = \Drupal::entityQuery("node")
+                                ->condition('type', 'bill_4_purchase')
+                                ->condition('title', $unique_id)
+                                ->execute();
+        if ( count($query) == 0 ) {
+            break;
+        }
+    }
+    return $unique_id;
+} 
+
+function calculate_remain_to_pay_amount_purchase($field_total_amount_with_tax, $deposit, $write_off_amount) {
+    $remain = round($field_total_amount_with_tax) - round($deposit) - round($write_off_amount);
+    if ( empty($remain) ) {
+        $remain = 0;
+    }
+    return $remain;
+}
+
+
+

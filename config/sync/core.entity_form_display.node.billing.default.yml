@@ -95,10 +95,11 @@ content:
     settings: {  }
     third_party_settings: {  }
   field_receipt_number:
-    type: number
+    type: string_textfield
     weight: 13
     region: content
     settings:
+      size: 20
       placeholder: ''
     third_party_settings: {  }
   field_remain_unpaid_amount:

@@ -29,7 +29,14 @@ sales_order_content_type.sale_sheet:
     _form: 'Drupal\sales_order_content_type\Form\SaleSheet'
     _title: '銷售單'
   requirements:
+    _custom_access: '\Drupal\sales_order_content_type\Controller\SalesOrderAccess::SalesOrderForm'
     _role: 'authenticated'
+  options:
+    #_admin_route: TRUE
+    parameters:
+      node:
+        type: 'entity:node'
+
 
 
 

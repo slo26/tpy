@@ -1,0 +1,25 @@
+uuid: 0a90fb2e-fb88-44b0-81d4-100aa1108b5d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_total_amount_with_tax
+    - node.type.bill_4_purchase
+id: node.bill_4_purchase.field_total_amount_with_tax
+field_name: field_total_amount_with_tax
+entity_type: node
+bundle: bill_4_purchase
+label: 含稅總價
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: !!float 0
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: $
+  suffix: ''
+field_type: decimal

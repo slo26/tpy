@@ -1,0 +1,22 @@
+uuid: 34b5c477-aaa6-4f03-b967-8bfa6a59574a
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.purchase_billing_write_off
+id: node.purchase_billing_write_off.promote
+field_name: promote
+entity_type: node
+bundle: purchase_billing_write_off
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

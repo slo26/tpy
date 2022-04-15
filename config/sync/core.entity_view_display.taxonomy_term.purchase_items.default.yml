@@ -3,28 +3,28 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.taxonomy_term.purchase_items.field_has_inventoried_
+    - field.field.taxonomy_term.purchase_items.field_comments
     - field.field.taxonomy_term.purchase_items.field_order_id
     - field.field.taxonomy_term.purchase_items.field_price
     - field.field.taxonomy_term.purchase_items.field_product_goods
+    - field.field.taxonomy_term.purchase_items.field_purchase_requisition_statu
     - field.field.taxonomy_term.purchase_items.field_quantity
     - field.field.taxonomy_term.purchase_items.field_storage
     - field.field.taxonomy_term.purchase_items.field_total_amount
     - taxonomy.vocabulary.purchase_items
+  module:
+    - options
 id: taxonomy_term.purchase_items.default
 targetEntityType: taxonomy_term
 bundle: purchase_items
 mode: default
 content:
-  field_has_inventoried_:
-    type: boolean
+  field_comments:
+    type: basic_string
     label: above
-    settings:
-      format: default
-      format_custom_false: ''
-      format_custom_true: ''
+    settings: {  }
     third_party_settings: {  }
-    weight: 3
+    weight: 7
     region: content
   field_order_id:
     type: entity_reference_label
@@ -52,6 +52,13 @@ content:
       link: true
     third_party_settings: {  }
     weight: 1
+    region: content
+  field_purchase_requisition_statu:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 8
     region: content
   field_quantity:
     type: number_integer

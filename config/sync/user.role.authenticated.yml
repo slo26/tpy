@@ -6,6 +6,7 @@ dependencies:
     - filter.format.comment
     - filter.format.full_html
     - node.type.article
+    - node.type.bill_4_purchase
     - node.type.billing
     - node.type.billing_write_off
     - node.type.customer
@@ -14,6 +15,7 @@ dependencies:
     - node.type.ourbound_inbound_warehouse
     - node.type.page
     - node.type.product
+    - node.type.purchase_billing_write_off
     - node.type.purchase_order
     - node.type.sales_order
     - node.type.stock_up
@@ -69,6 +71,7 @@ permissions:
   - 'create terms in purchase_items'
   - 'create terms in sell_items'
   - 'create vendor content'
+  - 'delete own bill_4_purchase content'
   - 'delete own billing content'
   - 'delete own billing_write_off content'
   - 'delete own customer content'
@@ -77,11 +80,13 @@ permissions:
   - 'delete own ourbound_inbound_warehouse content'
   - 'delete own page content'
   - 'delete own product content'
+  - 'delete own purchase_billing_write_off content'
   - 'delete own purchase_order content'
   - 'delete own sales_order content'
   - 'delete own stock_up content'
   - 'delete own storage content'
   - 'delete own vendor content'
+  - 'edit any bill_4_purchase content'
   - 'edit any billing content'
   - 'edit any billing_write_off content'
   - 'edit any customer content'
@@ -89,11 +94,13 @@ permissions:
   - 'edit any goods content'
   - 'edit any ourbound_inbound_warehouse content'
   - 'edit any page content'
+  - 'edit any purchase_billing_write_off content'
   - 'edit any purchase_order content'
   - 'edit any sales_order content'
   - 'edit any stock_up content'
   - 'edit any storage content'
   - 'edit any vendor content'
+  - 'edit own bill_4_purchase content'
   - 'edit own billing content'
   - 'edit own billing_write_off content'
   - 'edit own customer content'
@@ -102,6 +109,7 @@ permissions:
   - 'edit own ourbound_inbound_warehouse content'
   - 'edit own page content'
   - 'edit own product content'
+  - 'edit own purchase_billing_write_off content'
   - 'edit own purchase_order content'
   - 'edit own sales_order content'
   - 'edit own stock_up content'

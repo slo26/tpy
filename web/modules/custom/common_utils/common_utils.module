@@ -42,6 +42,11 @@ function get_entity_storage_label($entity, $field_name, $value) {
     return null;
 }
 
+function get_goods_name_by_nid($goods_nid) {
+    $goods = \Drupal\node\Entity\Node::load($goods_nid);
+    return $goods->field_goods_name->value;
+}
+
 function get_product_name_by_nid($product_nid) {
     $product = \Drupal\node\Entity\Node::load($product_nid);
     return $product->field_product_name->value;
@@ -56,6 +61,11 @@ function get_storage_name_by_nid($storage_nid) {
 }
 
 function get_sell_order_number_by_nid($order_nid) {
+    $order = \Drupal\node\Entity\Node::load($order_nid);
+    return $order->title->value;
+}
+
+function get_purchase_order_number_by_nid($order_nid) {
     $order = \Drupal\node\Entity\Node::load($order_nid);
     return $order->title->value;
 }
@@ -158,5 +168,6 @@ function create_warehouse_transaction_log($item_nid, $from_storage_nid, $to_stor
     $transaction->set('field_after_transaction', $after_trans);
     $transaction->save();
 }
+
 
 

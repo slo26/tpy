@@ -1,0 +1,21 @@
+uuid: fdfe8063-7cc4-40e0-9ffa-9dbf69ecf46c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_inbound_date
+    - node.type.purchase_order
+  module:
+    - datetime
+id: node.purchase_order.field_inbound_date
+field_name: field_inbound_date
+entity_type: node
+bundle: purchase_order
+label: 採購入倉日期
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

@@ -1,0 +1,25 @@
+uuid: 15fcc384-abae-4c6e-8b0c-666dddd0289d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_write_off_amount
+    - node.type.bill_4_purchase
+id: node.bill_4_purchase.field_write_off_amount
+field_name: field_write_off_amount
+entity_type: node
+bundle: bill_4_purchase
+label: 沖銷金額
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: !!float 0
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: $
+  suffix: ''
+field_type: decimal

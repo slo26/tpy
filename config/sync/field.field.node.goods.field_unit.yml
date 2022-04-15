@@ -1,0 +1,19 @@
+uuid: cfda320d-ab54-4d04-b7e2-2ecd74a8a95d
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_unit
+    - node.type.goods
+id: node.goods.field_unit
+field_name: field_unit
+entity_type: node
+bundle: goods
+label: 單位
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

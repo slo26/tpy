@@ -3,53 +3,100 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.node.purchase_order.field_date_actual_arrived
-    - field.field.node.purchase_order.field_date_actual_delivered
+    - field.field.node.purchase_order.field_appraise_date
+    - field.field.node.purchase_order.field_bill_purchase
+    - field.field.node.purchase_order.field_completed_date
+    - field.field.node.purchase_order.field_created_date
+    - field.field.node.purchase_order.field_inbound_date
     - field.field.node.purchase_order.field_logistics
-    - field.field.node.purchase_order.field_purchase_status
+    - field.field.node.purchase_order.field_material
+    - field.field.node.purchase_order.field_rich_comment
+    - field.field.node.purchase_order.field_shipping_date
     - field.field.node.purchase_order.field_shipping_number
+    - field.field.node.purchase_order.field_shipping_received_date
     - field.field.node.purchase_order.field_vendor_entity
     - node.type.purchase_order
   module:
     - datetime
     - options
+    - text
     - user
 id: node.purchase_order.default
 targetEntityType: node
 bundle: purchase_order
 mode: default
 content:
-  field_date_actual_arrived:
-    type: datetime_default
-    label: above
-    settings:
-      timezone_override: ''
-      format_type: medium
+  content_moderation_control:
+    settings: {  }
     third_party_settings: {  }
-    weight: 3
+    weight: 0
     region: content
-  field_date_actual_delivered:
+  field_appraise_date:
     type: datetime_default
     label: above
     settings:
       timezone_override: ''
       format_type: medium
     third_party_settings: {  }
-    weight: 2
+    weight: 10
+    region: content
+  field_completed_date:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 7
+    region: content
+  field_created_date:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_inbound_date:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 11
     region: content
   field_logistics:
     type: list_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 4
+    weight: 2
     region: content
-  field_purchase_status:
-    type: list_default
+  field_material:
+    type: entity_reference_label
+    label: above
+    settings:
+      link: true
+    third_party_settings: {  }
+    weight: 8
+    region: content
+  field_rich_comment:
+    type: text_default
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 0
+    weight: 6
+    region: content
+  field_shipping_date:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 5
     region: content
   field_shipping_number:
     type: string
@@ -57,7 +104,16 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-    weight: 5
+    weight: 3
+    region: content
+  field_shipping_received_date:
+    type: datetime_default
+    label: above
+    settings:
+      timezone_override: ''
+      format_type: medium
+    third_party_settings: {  }
+    weight: 9
     region: content
   field_vendor_entity:
     type: entity_reference_label
@@ -68,4 +124,5 @@ content:
     weight: 1
     region: content
 hidden:
+  field_bill_purchase: true
   links: true

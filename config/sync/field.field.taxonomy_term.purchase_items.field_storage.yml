@@ -10,7 +10,7 @@ id: taxonomy_term.purchase_items.field_storage
 field_name: field_storage
 entity_type: taxonomy_term
 bundle: purchase_items
-label: 倉庫
+label: 存入倉庫
 description: ''
 required: false
 translatable: true

@@ -1,0 +1,29 @@
+uuid: 15431013-9177-4aad-80e4-011236fc8a84
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_vendor_entity
+    - node.type.bill_4_purchase
+    - node.type.vendor
+id: node.bill_4_purchase.field_vendor_entity
+field_name: field_vendor_entity
+entity_type: node
+bundle: bill_4_purchase
+label: 廠商
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      vendor: vendor
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: vendor
+field_type: entity_reference

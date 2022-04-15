@@ -1,3 +1,41 @@
+table#purchase-oder-table-header{
+    margin-bottom: 0.1em;
+    line-height: 1.1;
+    
+}
+
+table#purchase-oder-table-footer td,
+table#purchase-oder-table-header td{
+    border: 0;
+}
+
+tr.purchase-oder-table-list-bottom td{
+    border-bottom: 1px solid black;
+}
+
+table#purchase-oder-table-list{
+    line-height: 1.1;
+    margin-bottom: 0.1em;
+    font-size: 13px;
+}
+
+tr#purchase-oder-table-header-tpy-name,
+tr#purchase-oder-table-header-status {
+    font-size: 22px;
+}
+
+tr#purchase-oder-table-header-sell-info,
+tr#purchase-oder-table-header-tpy-phone,
+tr#purchase-oder-table-header-tpy-add {
+    font-size: 13px;
+}
+
+table#purchase-oder-table-footer{
+    line-height: 1.1;
+    font-size: 13px;
+    margin-bottom: 0em;
+}
+
 .add-purchase-item-status-label {
     float: left;
     padding-top: 0.1em;
@@ -24,3 +62,4 @@
     float: left;
     margin-left: 1em;
 }
+

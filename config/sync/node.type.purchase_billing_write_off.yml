@@ -1,0 +1,17 @@
+uuid: ac1441a0-513f-4bca-89b9-e2069ec94a86
+langcode: en
+status: true
+dependencies:
+  module:
+    - menu_ui
+third_party_settings:
+  menu_ui:
+    available_menus: {  }
+    parent: ''
+name: 應付帳款對沖
+type: purchase_billing_write_off
+description: 應付帳款沖銷
+help: ''
+new_revision: false
+preview_mode: 1
+display_submitted: false

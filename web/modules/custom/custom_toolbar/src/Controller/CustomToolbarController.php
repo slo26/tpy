@@ -71,12 +71,6 @@ class CustomToolbarController extends ControllerBase {
         $markup .= '<div class="description">以下是目前的設定:</br>' .  implode(", ", $settings) .'</div>';
         $markup .= '</a></li>';
         $markup .= '<li>';
-        $markup .= '<a href="/admin/structure/types/manage/purchase_order/fields/node.purchase_order.field_purchase_status/storage">';
-        $markup .= '<span class="label">採購狀態</span>';
-        $settings = getFieldStorageSettingsAllowedValues('field_purchase_status', 'purchase_order');
-        $markup .= '<div class="description">以下是目前的設定:</br>' .  implode(", ", $settings) .'</div>';
-        $markup .= '</a></li>';
-        $markup .= '<li>';
         $markup .= '<a href="/admin/structure/types/manage/customer/fields/node.customer.field_delivery/storage">';
         $markup .= '<span class="label">出貨方式</span>';
         $settings = getFieldStorageSettingsAllowedValues('field_delivery', 'customer');
@@ -103,7 +97,7 @@ class CustomToolbarController extends ControllerBase {
 
         $markup .= '<div class="layout-column layout-column--half">';
         $markup .= '<div class="panel">';
-        $markup .= '<h3 class="panel__title">銷售帳單</h3>';
+        $markup .= '<h3 class="panel__title">銷售沖帳/帳單</h3>';
         $markup .= '<div class="panel__content">';
         $markup .= '<ul class="admin-list">';
         $markup .= '<li>';
@@ -138,13 +132,24 @@ class CustomToolbarController extends ControllerBase {
 
         $markup .= '<div class="layout-column layout-column--half">';
         $markup .= '<div class="panel">';
-        $markup .= '<h3 class="panel__title">採購帳單</h3>';
+        $markup .= '<h3 class="panel__title">採購沖帳/帳單</h3>';
         $markup .= '<div class="panel__content">';
         $markup .= '<ul class="admin-list">';
         $markup .= '<li>';
-        $markup .= '<a href="/node/add/purchase_order">';
+        $markup .= '<a href="/admin/billing/purchase-billing-statement">';
         $markup .= '<span class="label">建立付款對帳單</span>';
         $markup .= '<div class="description">建立付款對帳單</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/billing/purchase-billing-statement">';
+        $markup .= '<span class="label">已完成應付對帳列表</span>';
+        $markup .= '<div class="description">已完成應付對帳列表</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/billing/purchase-billing-statement">';
+        $markup .= '<span class="label">採購單帳單</span>';
+        $markup .= '<div class="description">採購單帳單</div>';
+        $markup .= '</a></li>';
         $markup .= '</ul></div></div>';
         $markup .= '</div>';
 
@@ -564,6 +569,7 @@ class CustomToolbarController extends ControllerBase {
         );
     }
 }
+
 
 
 

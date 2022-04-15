@@ -1,17 +1,17 @@
-uuid: 953bd035-33b8-4041-b678-87299ffaaada
+uuid: a33a6746-58b1-4673-a808-088b84c35aec
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_date_actual_delivered
+    - field.storage.node.field_appraise_date
     - node.type.purchase_order
   module:
     - datetime
-id: node.purchase_order.field_date_actual_delivered
-field_name: field_date_actual_delivered
+id: node.purchase_order.field_appraise_date
+field_name: field_appraise_date
 entity_type: node
 bundle: purchase_order
-label: 出貨日
+label: 詢價日期
 description: ''
 required: false
 translatable: true

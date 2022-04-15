@@ -1,0 +1,22 @@
+uuid: 02bc256e-85af-422a-bc24-d713576c02de
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.bill_4_purchase
+id: node.bill_4_purchase.promote
+field_name: promote
+entity_type: node
+bundle: bill_4_purchase
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

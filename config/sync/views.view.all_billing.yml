@@ -27,7 +27,7 @@ dependencies:
     - options
     - user
 id: all_billing
-label: 帳單列表
+label: 銷售帳單列表
 module: views
 description: ''
 tag: ''
@@ -40,7 +40,7 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: 帳單列表
+      title: 銷售帳單列表
       fields:
         field_bill_type:
           id: field_bill_type
@@ -1157,7 +1157,7 @@ display:
           role:
             authenticated: authenticated
       cache:
-        type: tag
+        type: none
         options: {  }
       empty: {  }
       sorts:

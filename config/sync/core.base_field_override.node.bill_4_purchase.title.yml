@@ -1,0 +1,18 @@
+uuid: 337ebaa9-d529-487a-ba78-65cb3620fa14
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.bill_4_purchase
+id: node.bill_4_purchase.title
+field_name: title
+entity_type: node
+bundle: bill_4_purchase
+label: 帳單號碼
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

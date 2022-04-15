@@ -1,0 +1,8 @@
+name: Purcahse Billing Write Off
+type: module
+description: This module is to handle Purchase Billing write off
+core_version_requirement: ^8 || ^9
+package: tpy 
+
+
+

@@ -1,0 +1,67 @@
+#edit-title-0-value {
+    width: 200px;
+}
+
+.layout-region-node-secondary {
+    width: 20%;
+}
+.layout-region-node-main {
+    width: 80%;
+}
+
+#edit-field-actual-payed-payment-wrapper,
+#edit-field-begin-account-date-wrapper {
+    float: left;
+    margin-right: 10px;
+}
+
+.form-item-field-vendor-entity-0-target-id {
+    float: left;
+}
+
+.form-item-field-vendor-entity-0-target-id {
+    width: 30%;
+}
+
+#edit-field-vendor-entity-0-target-id {
+    width:90%;
+}
+
+.form-item-field-cash-amount-0-value,
+.form-item-field-check-amount-0-value,
+.form-item-field-remittance-amount-0-value,
+.form-item-field-offset-amount-0-value {
+    margin: 0px;
+    padding-right: 5px;
+    float: left;
+}
+
+#edit-auto-hedgen {
+    float: left;
+    margin-left: 15px;
+}
+
+#edit-auto-hedgen,
+#edit-undo-hedgen {
+    margin-right:15px;
+    margin-bottom: 15px;
+    margin-top: 30px;
+}
+
+#edit-field-cash-amount-0-value,
+#edit-field-remittance-amount-0-value,
+#edit-field-check-amount-0-value,
+#edit-field-offset-amount-0-value,
+#edit-field-offset-amount-0-value {
+    width: 100px;
+}
+
+#sign{
+    margin-top: 34px;
+    float: left;
+    margin-left:3px;
+    margin-right:3px;
+}
+
+
+

@@ -1,0 +1,21 @@
+uuid: 6d3b88db-92b6-439f-9f3e-51e0d9eeb0dd
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_completed_date
+    - node.type.purchase_order
+  module:
+    - datetime
+id: node.purchase_order.field_completed_date
+field_name: field_completed_date
+entity_type: node
+bundle: purchase_order
+label: 採購完成日期
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

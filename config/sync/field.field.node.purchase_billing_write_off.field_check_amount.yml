@@ -1,0 +1,25 @@
+uuid: 9a3e8260-b239-463c-a234-9d4913f66ba1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_check_amount
+    - node.type.purchase_billing_write_off
+id: node.purchase_billing_write_off.field_check_amount
+field_name: field_check_amount
+entity_type: node
+bundle: purchase_billing_write_off
+label: 支票金額
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: !!float 0
+default_value_callback: ''
+settings:
+  min: null
+  max: null
+  prefix: $
+  suffix: ''
+field_type: decimal

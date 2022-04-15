@@ -5,13 +5,12 @@ dependencies:
   config:
     - field.storage.node.field_sale_purchase_entity
     - node.type.billing_write_off
-    - node.type.purchase_order
     - node.type.sales_order
 id: node.billing_write_off.field_sale_purchase_entity
 field_name: field_sale_purchase_entity
 entity_type: node
 bundle: billing_write_off
-label: 銷售/採購單
+label: 銷售單
 description: ''
 required: false
 translatable: false
@@ -21,7 +20,6 @@ settings:
   handler: 'default:node'
   handler_settings:
     target_bundles:
-      purchase_order: purchase_order
       sales_order: sales_order
     sort:
       field: _none

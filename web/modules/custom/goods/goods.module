@@ -4,15 +4,39 @@ use \Drupal\Core\Form\FormStateInterface;
 function goods_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
     if ( $form_id == "node_goods_form" || $form_id == "node_goods_edit_form" ) {
         $node = $form_state->getFormObject()->getEntity();
-        if ( $node->isNew() ) {
-            $unique_id = generate_unique_id_for_goods();
-            $form ['title']['widget'][0]['value']['#default_value'] = $unique_id;
-        }
-        $form ['title']['#disabled'] = true;
+        //if ( $node->isNew() ) {
+            //$unique_id = generate_unique_id_for_goods();
+        //    $form ['title']['widget'][0]['value']['#default_value'] = $unique_id;
+        //}
+        //$form ['title']['#disabled'] = true;
+        $form['title']['widget'][0]['value']['#ajax'] = array(
+                'callback' => 'ajax_check_goods_unique_id',
+				'event' => 'change',
+        );
+
+        $form['title_message'] = array(
+			'#type' => 'markup',
+			'#markup' => '<div class="title-message"></div>',
+            '#weight' => 2,
+        );
     }
 }
 
-function generate_unique_id_for_goods() {
+function ajax_check_goods_unique_id(array $form, FormStateInterface $form_state) {
+	$ajax_response = new AjaxResponse();
+	$title = $form_state->getValue('title')[0]['value'];
+    
+    $ajax_response->addCommand(new HtmlCommand('.title-message', ''));
+    $query = \Drupal::entityQuery("node")->condition('type', 'goods')->condition('title', trim($title))->execute();
+    if ( count($query) > 0 ) {
+        $ajax_response->addCommand(new HtmlCommand('.title-message', '<font color="red">零件/物品編號重複, 請重新命名</font>'));
+        $ajax_response->addCommand(new InvokeCommand('#edit-title-0-value', 'val', [""]));
+    }
+    
+	return $ajax_response;
+}
+
+/*function generate_unique_id_for_goods() {
     $query = \Drupal::entityQuery("node")->condition('type', 'goods')->execute();
     $index = count($query);
     while (true) {
@@ -27,4 +51,5 @@ function generate_unique_id_for_goods() {
         }
     }
     return $unique_id;
-} 
+}*/
+

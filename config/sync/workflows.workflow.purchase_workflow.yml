@@ -1,0 +1,132 @@
+uuid: 133a0218-35cc-4169-9a63-906dfd82fa20
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.purchase_order
+  module:
+    - content_moderation
+id: purchase_workflow
+label: 採購
+type: content_moderation
+type_settings:
+  states:
+    draft:
+      label: 草稿
+      weight: -4
+      published: false
+      default_revision: false
+    materials_arrived:
+      label: 採購貨物已簽收
+      weight: -1
+      published: false
+      default_revision: false
+    materials_inbound:
+      label: 採購貨物已入倉
+      weight: 0
+      published: false
+      default_revision: false
+    published:
+      label: Published
+      weight: 2
+      published: true
+      default_revision: true
+    purchase_done:
+      label: 採購已完成
+      weight: 1
+      published: false
+      default_revision: false
+    purchase_import:
+      label: 採購進貨
+      weight: -2
+      published: false
+      default_revision: false
+    purchase_rate:
+      label: 採購詢價
+      weight: -3
+      published: false
+      default_revision: false
+  transitions:
+    caigouhuowuyiqianshou_caigouhuowuyirucang:
+      label: 採購貨物已簽收-採購貨物已入倉
+      from:
+        - materials_arrived
+      to: materials_inbound
+      weight: 3
+    caigouwancheng_caigouwancheng:
+      label: 採購完成-採購完成
+      from:
+        - purchase_done
+      to: purchase_done
+      weight: 5
+    create_new_draft:
+      label: 'Create New Draft'
+      from:
+        - draft
+        - purchase_rate
+      to: draft
+      weight: -7
+    draft_purchase_import:
+      label: 草稿-採購進貨
+      from:
+        - draft
+      to: purchase_import
+      weight: -5
+    draft_purchase_rate:
+      label: 草稿-採購估價
+      from:
+        - draft
+      to: purchase_rate
+      weight: -6
+    materials_arrived_purchase_done:
+      label: 採購貨物已入倉-採購已完成
+      from:
+        - materials_inbound
+      to: purchase_done
+      weight: 4
+    purchase_done:
+      label: 採購進貨-採購已完成
+      from:
+        - purchase_import
+      to: purchase_done
+      weight: -1
+    purchase_import_material_arrived:
+      label: 採購進貨-採購貨物簽收
+      from:
+        - purchase_import
+      to: materials_arrived
+      weight: 0
+    purchase_import_purchase_import:
+      label: 採購進貨-採購進貨
+      from:
+        - purchase_import
+      to: purchase_import
+      weight: -2
+    purchase_rate_purchase_import:
+      label: 採購估價-採購進貨
+      from:
+        - purchase_rate
+      to: purchase_import
+      weight: -3
+    purchase_rate_purchase_rate:
+      label: 採購估價-採購估價
+      from:
+        - purchase_rate
+      to: purchase_rate
+      weight: -4
+    resignedforreceived_resignedforreceived:
+      label: 採購貨物已簽收-採購貨物已簽收
+      from:
+        - materials_arrived
+      to: materials_arrived
+      weight: 2
+    shipping_inbound:
+      label: 採購進貨-採購貨物已入倉
+      from:
+        - purchase_import
+      to: materials_inbound
+      weight: 1
+  entity_types:
+    node:
+      - purchase_order
+  default_moderation_state: draft

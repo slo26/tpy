@@ -1,0 +1,413 @@
+<?php
+use \Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\CssCommand;
+use Drupal\Core\Ajax\HtmlCommand;
+
+function purchase_billing_write_off_node_presave(Drupal\Core\Entity\EntityInterface $node) {
+    if ( $node->type->target_id == "purchase_billing_write_off" ) {
+        $query = \Drupal::entityQuery("node");
+        $query->condition('type', 'bill_4_purchase');
+        $query->condition('field_expected_receive_payment', [$node->field_begin_date->value, $node->field_end_date->value], "BETWEEN");
+        $query->condition("field_vendor_entity", $node->field_vendor_entity->target_id);
+        $bill_nids = $query->execute();
+        foreach($bill_nids as $bill_nid) {
+            $bill = \Drupal\node\Entity\Node::load($bill_nid);
+            $bill->set('field_actual_received_payment', date("Y-m-d"));
+            $bill->save();
+        }
+    }
+}
+
+function purchase_billing_write_off_node_insert(Drupal\Core\Entity\EntityInterface $node) {
+}
+
+function purchase_billing_write_off_node_update(Drupal\Core\Entity\EntityInterface $node) {
+}
+
+function purchase_billing_write_off_node_delete(Drupal\Core\Entity\EntityInterface $node) {
+    if ( $node->type->target_id == "purchase_billing_write_off" ) {
+        $field_sale_purchase_entities = $node->field_sale_purchase_entity;
+        for ($i=0; $i < count($field_sale_purchase_entities); $i++) {
+            $purchase_nid = $field_sale_purchase_entities[$i]->target_id;
+            $purchase = \Drupal\node\Entity\Node::load($purchase_nid);
+            $bill_nid = $purchase->field_bill_purchase->target_id;
+            $bill = \Drupal::entityTypeManager()->getStorage("node")->load($bill_nid);
+            $bill->delete();
+        }
+    }
+}
+
+function purchase_billing_write_off_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
+    if ( $form_id === 'node_purchase_billing_write_off_form' || $form_id == 'node_purchase_billing_write_off_edit_form' ) {
+        $node = $form_state->getFormObject()->getEntity();
+        $begin_date = $node->field_begin_date->value;
+        $end_date = $node->field_end_date->value;
+        $vendor_nid = $node->field_vendor_entity->target_id;
+        $vendor = \Drupal\node\Entity\Node::load($vendor_nid);
+
+        if ( !$node->isNew() ) {
+            $form['actions']['submit']['#disabled'] = true;
+            $form['actions']["delete"]['#attributes']['style'] = 'display: none;';
+        }
+        if ( $node->isNew() ) {
+            $form ['title']['widget'][0]['value']['#default_value'] = generate_purchase_billing_write_off_id($vendor_nid);
+            $form ['title']['#disabled'] = true;
+            $form ['field_actual_payed_payment']['widget'][0]['value']['#default_value'] = new \Drupal\Core\Datetime\DrupalDateTime();
+            $form ['field_vendor_entity']['widget'][0]['target_id']['#default_value'] = $vendor;
+            $form ['field_vendor_entity']['#disabled'] = true;
+        }
+        $form['field_payable_balance']['#disabled'] = true;
+
+        $form['field_cash_amount']['widget'][0]['value']['#ajax'] = array('callback' => 'ajax_purchase_calculate_prepaid_callback','event' => 'change',);
+        $form['field_check_amount']['widget'][0]['value']['#prefix'] = '<div id="sign">+</div>';
+        $form['field_check_amount']['widget'][0]['value']['#ajax'] = array('callback' => 'ajax_purchase_calculate_prepaid_callback','event' => 'change',);
+        $form['field_remittance_amount']['widget'][0]['value']['#prefix'] = '<div id="sign">+</div>';
+        $form['field_remittance_amount']['widget'][0]['value']['#ajax'] = array('callback' => 'ajax_purchase_calculate_prepaid_callback','event' => 'change',);
+        $form['field_offset_amount']['widget'][0]['value']['#prefix'] = '<div id="sign">=</div>';
+
+        $form['vendor_title'] = array(
+            '#title' => '名稱',
+            '#type' => 'textfield',
+            '#size' => 50,
+			'#weight' => 4,
+			'#disabled' => true,
+            '#default_value' => $vendor->field_vendor_name->value,
+        );
+
+
+        $form['auto_hedgen'] = array(
+			'#type' => 'submit',
+			'#value' => t('自動沖帳'),
+			'#weight' => 15,
+			'#attributes' => [
+				'class' => [
+					'use-ajax',
+				],
+			],
+			'#ajax' => [
+				'callback' => 'ajax_auto_hedgen_callback_for_purhcase',
+				'event' => 'click',
+			],
+			'#prefix' => '<div class="auto-hedgen-buttom">',
+			'#suffix' => '</div>',
+        );
+
+        $form['undo_hedgen'] = array(
+			'#type' => 'submit',
+			'#value' => t('清除沖帳'),
+			'#weight' => 16,
+			'#attributes' => [
+				'class' => [
+					'use-ajax',
+				],
+			],
+			'#ajax' => [
+				'callback' => 'ajax_undo_hedgen_callback_for_purhcase',
+				'event' => 'click',
+			],
+			'#prefix' => '<div class="undo-hedgen-buttom">',
+			'#suffix' => '</div>',
+        );
+
+        $form['message'] = array(
+			'#type' => 'markup',
+            '#weight' => 17,
+			'#markup' => '<div class="write-off-message"></div>',
+        );
+
+        $form['purchase_list_in_table'] = array(
+            '#type' => 'table',
+            '#weight' => 17,
+            '#header' => array('索引', '帳款日期', '單據', '採購憑證', '採購總計', '未付金額', '發票編號', '沖帳金額'),
+        );
+
+        $field_payable_balance = 0;
+        $field_deposit = 0;
+        $purchase_entities = [];
+        if ( $node->isNew() ) {
+            $index = 1;
+            $query = \Drupal::entityQuery("node");
+            $query->condition('type', 'bill_4_purchase');
+            $query->condition('field_expected_receive_payment', [$begin_date, $end_date], "BETWEEN");
+            $query->condition("field_vendor_entity", $vendor_nid);
+            $bill_nids = $query->execute();
+            foreach($bill_nids as $bill_nid) {
+                $bill = \Drupal\node\Entity\Node::load($bill_nid);
+                $purchase = \Drupal\node\Entity\Node::load($bill->field_order_id->target_id);
+                if ( $purchase->moderation_state->value != "purchase_done" ) {
+                    $field_deposit = $field_deposit + $bill->field_deposit->value;
+                    $purchase_entities[] = array('target_id' => $bill->field_order_id->target_id);
+                    $field_payable_balance = $field_payable_balance + $bill->field_remain_unpaid_amount->value;
+                    $form['purchase_list_in_table'][$index]['index'] = array(
+                        '#type' => 'textfield',
+                        '#title' => t('索引'),
+                        '#title_display' => 'invisible',
+                        '#size' => 15,
+                        '#disabled' => true,
+                        '#default_value' => $index,
+                    );
+                    $form['purchase_list_in_table'][$index]['field_expected_receive_payment'] = array(
+                        '#type' => 'textfield',
+                        '#title' => t('帳款日期'),
+                        '#title_display' => 'invisible',
+                        '#disabled' => true,
+                        '#default_value' => $bill->field_expected_receive_payment->value,
+                    );
+                    $form['purchase_list_in_table'][$index]['field_bill_type'] = array(
+                        '#type' => 'textfield',
+                        '#title' => t('單據'),
+                        '#size' => 20,
+                        '#title_display' => 'invisible',
+                        '#disabled' => true,
+                        '#default_value' => get_entity_storage_label($bill, 'field_bill_type', $bill->field_bill_type->value),
+                    );
+                    $form['purchase_list_in_table'][$index]['field_order_id'] = array(
+                        '#title' => t('採購憑證'),
+                        '#title_display' => 'invisible',
+                        '#size' => 90,
+                        '#prefix' => '<a href="/node/' . $bill->field_order_id->target_id .'/edit" target="_blank">' . getSellOrderID($bill->field_order_id->target_id) . '</a>',
+                    );
+                    $form['purchase_list_in_table'][$index]['field_total_amount_with_tax'] = array(
+                        '#type' => 'textfield',
+                        '#title' => t('採購總計'),
+                        '#title_display' => 'invisible',
+                        '#disabled' => true,
+                        '#default_value' => $bill->field_total_amount_with_tax->value,
+                    );
+                    $form['purchase_list_in_table'][$index]['field_remain_unpaid_amount'] = array(
+                        '#type' => 'textfield',
+                        '#title' => t('未付金額'),
+                        '#title_display' => 'invisible',
+                        '#disabled' => true,
+                        '#default_value' => $bill->field_remain_unpaid_amount->value,
+                    );
+                    $form['purchase_list_in_table'][$index]['field_receipt_number'] = array(
+                        '#type' => 'textfield',
+                        '#title' => t('發票編號'),
+                        '#title_display' => 'invisible',
+                        '#default_value' => $bill->field_receipt_number->value,
+                    );
+                    $form['purchase_list_in_table'][$index]['field_offset_amount'] = array(
+                        '#type' => 'textfield',
+                        '#title' => t('沖帳金額'),
+                        '#title_display' => 'invisible',
+                        '#default_value' => $bill->field_write_off_amount->value,
+                    );
+                    $index++;
+                }
+            };
+            $form['field_cash_amount']['widget'][0]['value']['#default_value'] = $field_deposit;
+            $node->field_sale_purchase_entity = $purchase_entities;
+            $form ['field_payable_balance']['widget'][0]['value']['#default_value'] = $field_payable_balance;
+            
+            $paid = round($field_deposit);
+            if ( paid == 0 ) {
+                $form ['field_offset_amount']['widget'][0]['value']['#default_value'] = 0;
+            } else {
+                $prepaid = round($paid - $field_payable_balance);
+                if ( $prepaid > 0 ) {
+                    $form ['field_offset_amount']['widget'][0]['value']['#default_value'] = $field_payable_balance;    
+                } else if ( $prepaid < 0 ) {
+                    $prepaid = $prepaid * -1;
+                    $form ['field_offset_amount']['widget'][0]['value']['#default_value'] = $prepaid;
+                } else {
+                    $form ['field_offset_amount']['widget'][0]['value']['#default_value'] = 0;
+                }    
+            }
+        } else {
+            $purchase_entities = $node->field_sale_purchase_entity;
+            $index = 1;
+            foreach($purchase_entities as $purchase_entity) {
+                $purchase = \Drupal\node\Entity\Node::load($purchase_entity->target_id);
+                $bill = \Drupal\node\Entity\Node::load($purchase->field_bill_purchase->target_id);
+                $form['purchase_list_in_table'][$index]['index'] = array(
+                        '#type' => 'textfield',
+                        '#title' => t('索引'),
+                        '#title_display' => 'invisible',
+                        '#size' => 15,
+                        '#disabled' => true,
+                        '#default_value' => $index,
+                    );
+                $form['purchase_list_in_table'][$index]['field_expected_receive_payment'] = array(
+                    '#type' => 'textfield',
+                    '#title' => t('帳款日期'),
+                    '#title_display' => 'invisible',
+                    '#disabled' => true,
+                    '#default_value' => $bill->field_expected_receive_payment->value,
+                );
+                $form['purchase_list_in_table'][$index]['field_bill_type'] = array(
+                    '#type' => 'textfield',
+                    '#title' => t('單據'),
+                    '#size' => 20,
+                    '#title_display' => 'invisible',
+                    '#disabled' => true,
+                    '#default_value' => get_entity_storage_label($bill, 'field_bill_type', $bill->field_bill_type->value),
+                );
+                $form['purchase_list_in_table'][$index]['field_order_id'] = array(
+                    '#title' => t('採購憑證'),
+                    '#title_display' => 'invisible',
+                    '#size' => 90,
+                    '#prefix' => '<a href="/node/' . $bill->field_order_id->target_id .'/edit" target="_blank">' . getSellOrderID($bill->field_order_id->target_id) . '</a>',
+                );
+                $form['purchase_list_in_table'][$index]['field_total_amount_with_tax'] = array(
+                    '#type' => 'textfield',
+                    '#title' => t('採購總計'),
+                    '#title_display' => 'invisible',
+                    '#disabled' => true,
+                    '#default_value' => $bill->field_total_amount_with_tax->value,
+                );
+                $form['purchase_list_in_table'][$index]['field_remain_unpaid_amount'] = array(
+                    '#type' => 'textfield',
+                    '#title' => t('未付金額'),
+                    '#title_display' => 'invisible',
+                    '#disabled' => true,
+                    '#default_value' => $bill->field_remain_unpaid_amount->value,
+                );
+                $form['purchase_list_in_table'][$index]['field_receipt_number'] = array(
+                    '#type' => 'textfield',
+                    '#title' => t('發票編號'),
+                    '#title_display' => 'invisible',
+                    '#default_value' => $bill->field_receipt_number->value,
+                );
+                $form['purchase_list_in_table'][$index]['field_offset_amount'] = array(
+                    '#type' => 'textfield',
+                    '#title' => t('沖帳金額'),
+                    '#title_display' => 'invisible',
+                    '#default_value' => $bill->field_write_off_amount->value,
+                );
+                $index++;
+            }
+        }
+
+        $form['comment_section'] = [
+			'#group' => 'advanced',
+			'#type' => 'details',
+			'#title' => t('備註'),
+			'#attributes' => [
+				'class' => ['node-form-options']
+			],
+			'#attached' => [
+				'library' => ['node/drupal.node'],
+			],
+			'#optional' => true,
+			'#open' => true,
+		];
+
+		$form['field_long_comment']['#group'] = 'comment_section';
+
+        array_unshift($form['actions']['submit']['#submit'], '_purchaseSubmit');
+        $form['#attached']['library'][] = 'purchase_billing_write_off/purchase_billing_write_off';
+    }
+}
+
+function _purchaseSubmit(array &$form, FormStateInterface $form_state) {
+    $node = $form_state->getFormObject()->getEntity();
+    $begin_date = $node->field_begin_date->value;
+    $end_date = $node->field_end_date->value;
+    $vendor_nid = $node->field_vendor_entity->target_id;
+    $query = \Drupal::entityQuery("node");
+    $query->condition('type', 'bill_4_purchase');
+    $query->condition('field_expected_receive_payment', [$begin_date, $end_date], "BETWEEN");
+    $query->condition("field_vendor_entity", $vendor_nid);
+    $bill_nids = $query->execute();
+    $index=1;
+    foreach($bill_nids as $bill_nid) {
+        $bill = \Drupal\node\Entity\Node::load($bill_nid);
+        $field_receipt_number = $form_state->getValue('purchase_list_in_table')[$index]['field_receipt_number'];
+        $field_offset_amount = $form_state->getValue('purchase_list_in_table')[$index]['field_offset_amount'];
+        $bill->set('field_receipt_number', $field_receipt_number);
+        $bill->set('field_write_off_amount', $field_offset_amount);
+        $bill->save();
+        $index++;
+    }
+}
+
+function ajax_purchase_calculate_prepaid_callback(array $form, FormStateInterface $form_state) {
+    $ajax_response = new AjaxResponse();
+    $field_payable_balance = $form_state->getValue('field_payable_balance')[0]['value'];
+    if ( $field_payable_balance > 0 ) {
+        $field_cash_amount = $form_state->getValue('field_cash_amount')[0]['value'];
+        $field_check_amount = $form_state->getValue('field_check_amount')[0]['value'];
+        $field_remittance_amount = $form_state->getValue('field_remittance_amount')[0]['value'];
+
+        $paid = round($field_cash_amount+$field_check_amount+$field_remittance_amount);
+        $ajax_response->addCommand(new InvokeCommand('#edit-field-offset-amount-0-value', 'val', [$paid]));
+
+        if ( $paid > $field_payable_balance ) {
+            $ajax_response->addCommand(new HtmlCommand('.write-off-message', '<font color="red">沖低帳款金額不應該大於應付餘額, 請做修正</font>'));
+            $ajax_response->addCommand(new InvokeCommand('#edit-field-check-amount-0-value', 'val', ['']));
+            $ajax_response->addCommand(new InvokeCommand('#edit-field-remittance-amount-0-value', 'val', [""]));
+            $ajax_response->addCommand(new InvokeCommand('#edit-field-offset-amount-0-value', 'val', [""]));
+        } else {
+            $ajax_response->addCommand(new HtmlCommand('.write-off-message', ''));
+        }
+    }
+    
+	return $ajax_response;
+}
+
+function ajax_auto_hedgen_callback_for_purhcase(array $form, FormStateInterface $form_state){
+    $ajax_response = new AjaxResponse();
+    $node = $form_state->getFormObject()->getEntity();
+    $begin_date = $node->field_begin_date->value;
+    $end_date = $node->field_end_date->value;
+    $vendor_nid = $node->field_vendor_entity->target_id;
+    $query = \Drupal::entityQuery("node");
+    $query->condition('type', 'bill_4_purchase');
+    $query->condition('field_expected_receive_payment', [$begin_date, $end_date], "BETWEEN");
+    $query->condition("field_vendor_entity", $vendor_nid);
+    $bill_nids = $query->execute();
+    for($i=1; $i <= count($bill_nids); $i++) {
+        $field_remain_unpaid_amount = $form_state->getValue('purchase_list_in_table')[$i]['field_remain_unpaid_amount'];
+        $ajax_response->addCommand(new InvokeCommand('#edit-purchase-list-in-table-' . $i . '-field-offset-amount', 'val', [$field_remain_unpaid_amount]));
+    }
+    
+    return $ajax_response;
+}
+
+function ajax_undo_hedgen_callback_for_purhcase(array $form, FormStateInterface $form_state){
+    $ajax_response = new AjaxResponse();
+    $node = $form_state->getFormObject()->getEntity();
+    $begin_date = $node->field_begin_date->value;
+    $end_date = $node->field_end_date->value;
+    $vendor_nid = $node->field_vendor_entity->target_id;
+    $query = \Drupal::entityQuery("node");
+    $query->condition('type', 'bill_4_purchase');
+    $query->condition('field_expected_receive_payment', [$begin_date, $end_date], "BETWEEN");
+    $query->condition("field_vendor_entity", $vendor_nid);
+    $bill_nids = $query->execute();
+    for($i=1; $i <= count($bill_nids); $i++) {
+        $ajax_response->addCommand(new InvokeCommand('#edit-purchase-list-in-table-' . $i . '-field-offset-amount', 'val', [""]));
+    }
+    
+    return $ajax_response;
+}
+
+function generate_purchase_billing_write_off_id($vendor_nid) {
+	$billing_write_off_id = "WP-$vendor_nid-" . date("Ym");
+	while (true) {
+		$query = \Drupal::entityQuery("node")
+								->condition('type', 'purchase_billing_write_off')
+								->condition('title', $billing_write_off_id, "CONTAINS")
+								->execute();
+		if ( sizeof($query) == 0 ) {
+			$billing_write_off_id = "$billing_write_off_id-1";
+		} else {
+			$billing_write_off_id =  $billing_write_off_id . "-" . (count($query)+ 1);
+		}
+
+		$check = \Drupal::entityQuery("node")
+								->condition('type', 'purchase_billing_write_off')
+								->condition('title', $billing_write_off_id)
+								->execute();
+
+		if ( sizeof($check) == 0 ) {
+			break;
+		}
+	}
+	return $billing_write_off_id;
+}
+
+

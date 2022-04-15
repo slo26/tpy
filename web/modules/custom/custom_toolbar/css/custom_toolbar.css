@@ -7,6 +7,7 @@
 	padding-left: 5px;
 }
 
+.bill-statement-vendor-number,
 .bill-statement-customer-number {
 	display: inline-flex;
 }
@@ -20,6 +21,10 @@
 	background-color: #F2F4F4;
 }
 
+#monthly-detail-purchase-bill-s1,
+#monthly-detail-purchase-bill-s2,
+#monthly-detail-purchase-bill-s3,
+#monthly-detail-purchase-bill-s4,
 #monthly-detail-bill-s1,
 #monthly-detail-bill-s2,
 #monthly-detail-bill-s3,
@@ -28,11 +33,17 @@
     line-height: 1.1;
 }
 
+#monthly-detail-purchase-bill-s1-tpy,
+#monthly-detail-purchase-bill-s1-title,
 #monthly-detail-bill-s1-tpy,
 #monthly-detail-bill-s1-title {
 	font-size: 22px;
 }
 
+#monthly-detail-purchase-bill-s1-tpy td, 
+#monthly-detail-purchase-bill-s1-addr td, 
+#monthly-detail-purchase-bill-s1-phone td,
+#monthly-detail-purchase-bill-s1-title td,
 #monthly-detail-bill-s1-tpy td, 
 #monthly-detail-bill-s1-addr td, 
 #monthly-detail-bill-s1-phone td,
@@ -41,6 +52,12 @@
 	padding: 3px;
 }
 
+#monthly-detail-purchase-bill-s1-tpy, 
+#monthly-detail-purchase-bill-s1-addr, 
+#monthly-detail-purchase-bill-s1-phone,
+#monthly-detail-purchase-bill-s1-title,
+#monthly-detail-purchase-bill-s2 tbody tr,
+#monthly-detail-purchase-bill-s4 tbody tr,
 #monthly-detail-bill-s1-tpy, 
 #monthly-detail-bill-s1-addr, 
 #monthly-detail-bill-s1-phone,
@@ -50,28 +67,37 @@
 	border-bottom: 0px;
 }
 
+#monthly-detail-purchase-bill-s2 tbody tr td,
+#monthly-detail-purchase-bill-s4 tbody tr td,
 #monthly-detail-bill-s2 tbody tr td,
 #monthly-detail-bill-s4 tbody tr td{
 	padding: 3px;
 }
 
+#monthly-detail-purchase-bill-s3 tbody tr td,
+#monthly-detail-purchase-bill-s3 tbody tr th,
 #monthly-detail-bill-s3 tbody tr td,
 #monthly-detail-bill-s3 tbody tr th {
 	padding: 5px;
 }
 
+#monthly-detail-purchase-bill-s3-begin, 
+#monthly-detail-purchase-bill-s3-mid,
 #monthly-detail-bill-s3-begin, 
 #monthly-detail-bill-s3-mid {
 	/*border-top: 1px solid;*/
 	border-bottom: 0px;
 }
 
+#monthly-detail-purchase-bill-s3-end,
 #monthly-detail-bill-s3-end {
 	border-top: 1px solid;
 	border-bottom: 0px solid;
 }
 
+#monthly-detail-purchase-bill-s3-end td,
 #monthly-detail-bill-s3-end td {
 	text-align: center;
 }
+
 

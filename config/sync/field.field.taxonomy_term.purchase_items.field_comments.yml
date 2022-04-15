@@ -1,0 +1,19 @@
+uuid: 20d3075b-378c-4526-abfb-46fe90ce1fba
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_comments
+    - taxonomy.vocabulary.purchase_items
+id: taxonomy_term.purchase_items.field_comments
+field_name: field_comments
+entity_type: taxonomy_term
+bundle: purchase_items
+label: 備註
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

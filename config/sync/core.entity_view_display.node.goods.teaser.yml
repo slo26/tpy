@@ -4,9 +4,11 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
+    - field.field.node.goods.field_cost_price
     - field.field.node.goods.field_goods_name
     - field.field.node.goods.field_long_comment
     - field.field.node.goods.field_product_model
+    - field.field.node.goods.field_unit
     - node.type.goods
   module:
     - user
@@ -21,6 +23,8 @@ content:
     weight: 100
     region: content
 hidden:
+  field_cost_price: true
   field_goods_name: true
   field_long_comment: true
   field_product_model: true
+  field_unit: true

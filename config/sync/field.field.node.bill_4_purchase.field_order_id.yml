@@ -1,0 +1,29 @@
+uuid: 03b3673f-e5e8-497a-8879-66654665931e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_order_id
+    - node.type.bill_4_purchase
+    - node.type.purchase_order
+id: node.bill_4_purchase.field_order_id
+field_name: field_order_id
+entity_type: node
+bundle: bill_4_purchase
+label: 採購單號碼
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      purchase_order: purchase_order
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

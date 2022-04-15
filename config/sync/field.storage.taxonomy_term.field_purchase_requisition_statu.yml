@@ -1,0 +1,24 @@
+uuid: ec626ec9-1430-445c-abf8-bf49bb85e735
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - taxonomy
+id: taxonomy_term.field_purchase_requisition_statu
+field_name: field_purchase_requisition_statu
+entity_type: taxonomy_term
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: put
+      label: 存入倉庫
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

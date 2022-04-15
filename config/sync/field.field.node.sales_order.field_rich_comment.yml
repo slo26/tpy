@@ -10,11 +10,8 @@ dependencies:
     - text
 third_party_settings:
   allowed_formats:
-    comment: comment
-    full_html: '0'
-    basic_html: '0'
-    restricted_html: '0'
-    plain_text: '0'
+    allowed_formats:
+      - comment
 id: node.sales_order.field_rich_comment
 field_name: field_rich_comment
 entity_type: node

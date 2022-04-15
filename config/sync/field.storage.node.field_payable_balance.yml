@@ -1,0 +1,20 @@
+uuid: 39f971dd-5692-4ae1-b8dd-d1b319a91fda
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: node.field_payable_balance
+field_name: field_payable_balance
+entity_type: node
+type: decimal
+settings:
+  precision: 10
+  scale: 3
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

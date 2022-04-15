@@ -1,4 +1,4 @@
-uuid: 0a071b0a-ba0d-4f0f-9c89-2fc037673d77
+uuid: 09f91231-1069-4fb3-8045-cc074e5c0693
 langcode: en
 status: true
 dependencies:
@@ -7,10 +7,11 @@ dependencies:
 id: node.field_receipt_number
 field_name: field_receipt_number
 entity_type: node
-type: integer
+type: string
 settings:
-  unsigned: false
-  size: normal
+  max_length: 20
+  case_sensitive: false
+  is_ascii: false
 module: core
 locked: false
 cardinality: 1

@@ -1,0 +1,29 @@
+uuid: 26d8d500-72d5-4471-9ce7-19520ff6c165
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_material
+    - node.type.purchase_order
+    - taxonomy.vocabulary.purchase_items
+id: node.purchase_order.field_material
+field_name: field_material
+entity_type: node
+bundle: purchase_order
+label: 採購物品
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      purchase_items: purchase_items
+    sort:
+      field: name
+      direction: asc
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

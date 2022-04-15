@@ -20,7 +20,7 @@ dependencies:
     - taxonomy
     - user
 id: sell_items
-label: 產品銷售列表
+label: 銷售產品列表
 module: views
 description: ''
 tag: ''

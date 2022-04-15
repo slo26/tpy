@@ -36,7 +36,7 @@ content:
       timezone_override: ''
       format_type: html_date
     third_party_settings: {  }
-    weight: 13
+    weight: 11
     region: content
   field_bill_type:
     type: list_default
@@ -62,7 +62,7 @@ content:
       scale: 2
       prefix_suffix: true
     third_party_settings: {  }
-    weight: 9
+    weight: 7
     region: content
   field_discount:
     type: number_decimal
@@ -73,7 +73,7 @@ content:
       scale: 2
       prefix_suffix: true
     third_party_settings: {  }
-    weight: 17
+    weight: 15
     region: content
   field_expected_receive_payment:
     type: datetime_default
@@ -82,14 +82,14 @@ content:
       timezone_override: ''
       format_type: html_date
     third_party_settings: {  }
-    weight: 12
+    weight: 10
     region: content
   field_long_comment:
     type: basic_string
     label: above
     settings: {  }
     third_party_settings: {  }
-    weight: 16
+    weight: 14
     region: content
   field_order_id:
     type: entity_reference_label
@@ -106,16 +106,15 @@ content:
       timezone_override: ''
       format_type: medium
     third_party_settings: {  }
-    weight: 14
+    weight: 12
     region: content
   field_receipt_number:
-    type: number_integer
+    type: string
     label: above
     settings:
-      thousand_separator: ''
-      prefix_suffix: true
+      link_to_entity: false
     third_party_settings: {  }
-    weight: 15
+    weight: 13
     region: content
   field_remain_unpaid_amount:
     type: number_decimal
@@ -126,7 +125,7 @@ content:
       scale: 2
       prefix_suffix: true
     third_party_settings: {  }
-    weight: 11
+    weight: 9
     region: content
   field_tax:
     type: number_decimal
@@ -179,7 +178,7 @@ content:
       scale: 2
       prefix_suffix: true
     third_party_settings: {  }
-    weight: 10
+    weight: 8
     region: content
 hidden:
   links: true

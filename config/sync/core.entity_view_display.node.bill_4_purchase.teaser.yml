@@ -1,0 +1,42 @@
+uuid: 8114b24e-8c75-46c9-b33f-6f31d5ab0e00
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.bill_4_purchase.field_actual_received_payment
+    - field.field.node.bill_4_purchase.field_bill_type
+    - field.field.node.bill_4_purchase.field_deposit
+    - field.field.node.bill_4_purchase.field_expected_receive_payment
+    - field.field.node.bill_4_purchase.field_long_comment
+    - field.field.node.bill_4_purchase.field_order_id
+    - field.field.node.bill_4_purchase.field_receipt_number
+    - field.field.node.bill_4_purchase.field_remain_unpaid_amount
+    - field.field.node.bill_4_purchase.field_total_amount_with_tax
+    - field.field.node.bill_4_purchase.field_vendor_entity
+    - field.field.node.bill_4_purchase.field_write_off_amount
+    - node.type.bill_4_purchase
+  module:
+    - user
+id: node.bill_4_purchase.teaser
+targetEntityType: node
+bundle: bill_4_purchase
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_actual_received_payment: true
+  field_bill_type: true
+  field_deposit: true
+  field_expected_receive_payment: true
+  field_long_comment: true
+  field_order_id: true
+  field_receipt_number: true
+  field_remain_unpaid_amount: true
+  field_total_amount_with_tax: true
+  field_vendor_entity: true
+  field_write_off_amount: true

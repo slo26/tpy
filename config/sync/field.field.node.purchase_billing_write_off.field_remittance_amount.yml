@@ -1,0 +1,25 @@
+uuid: fde33a26-3f0b-4d5e-90fc-6f943d05dd01
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_remittance_amount
+    - node.type.purchase_billing_write_off
+id: node.purchase_billing_write_off.field_remittance_amount
+field_name: field_remittance_amount
+entity_type: node
+bundle: purchase_billing_write_off
+label: 匯付金額
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: !!float 0
+default_value_callback: ''
+settings:
+  min: !!float 0
+  max: null
+  prefix: $
+  suffix: ''
+field_type: decimal

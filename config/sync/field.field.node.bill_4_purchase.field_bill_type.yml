@@ -1,0 +1,23 @@
+uuid: 4950f24d-b272-4292-9d67-fef47e35028c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_bill_type
+    - node.type.bill_4_purchase
+  module:
+    - options
+id: node.bill_4_purchase.field_bill_type
+field_name: field_bill_type
+entity_type: node
+bundle: bill_4_purchase
+label: 帳單種類
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: purchase
+default_value_callback: ''
+settings: {  }
+field_type: list_string

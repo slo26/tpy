@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - node.type.bill_4_purchase
     - node.type.billing
     - node.type.billing_write_off
     - node.type.customer
@@ -11,6 +12,7 @@ dependencies:
     - node.type.ourbound_inbound_warehouse
     - node.type.page
     - node.type.product
+    - node.type.purchase_billing_write_off
     - node.type.purchase_order
     - node.type.sales_order
     - node.type.stock_up
@@ -38,6 +40,7 @@ permissions:
   - 'cancel account'
   - 'change own username'
   - 'create product content'
+  - 'delete any bill_4_purchase content'
   - 'delete any billing content'
   - 'delete any billing_write_off content'
   - 'delete any customer content'
@@ -46,6 +49,7 @@ permissions:
   - 'delete any ourbound_inbound_warehouse content'
   - 'delete any page content'
   - 'delete any product content'
+  - 'delete any purchase_billing_write_off content'
   - 'delete any purchase_order content'
   - 'delete any sales_order content'
   - 'delete any stock_up content'

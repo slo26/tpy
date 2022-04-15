@@ -1,0 +1,19 @@
+uuid: e5c50404-93ea-4f41-96d4-fab37820fa32
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_long_comment
+    - node.type.purchase_billing_write_off
+id: node.purchase_billing_write_off.field_long_comment
+field_name: field_long_comment
+entity_type: node
+bundle: purchase_billing_write_off
+label: 備註
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

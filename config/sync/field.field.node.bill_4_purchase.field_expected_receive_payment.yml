@@ -1,0 +1,21 @@
+uuid: ea606d09-fa20-40ae-818d-9ffa3d1d9de3
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_expected_receive_payment
+    - node.type.bill_4_purchase
+  module:
+    - datetime
+id: node.bill_4_purchase.field_expected_receive_payment
+field_name: field_expected_receive_payment
+entity_type: node
+bundle: bill_4_purchase
+label: 帳款日
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

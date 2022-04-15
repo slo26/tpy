@@ -1,0 +1,21 @@
+uuid: d9e59e3b-2f4d-46e7-a8dc-98b45784ec54
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_closing_account_date
+    - node.type.purchase_billing_write_off
+  module:
+    - datetime
+id: node.purchase_billing_write_off.field_closing_account_date
+field_name: field_closing_account_date
+entity_type: node
+bundle: purchase_billing_write_off
+label: 終止帳款日
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

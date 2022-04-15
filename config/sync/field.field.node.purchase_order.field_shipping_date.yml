@@ -1,0 +1,21 @@
+uuid: 35a4ea2c-6fa4-4c37-b26c-03f40b834cc1
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_shipping_date
+    - node.type.purchase_order
+  module:
+    - datetime
+id: node.purchase_order.field_shipping_date
+field_name: field_shipping_date
+entity_type: node
+bundle: purchase_order
+label: 採購進貨日期
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

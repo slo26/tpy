@@ -28,7 +28,7 @@ dependencies:
     - node
     - user
 id: all_write_off_view
-label: 已完成應收對帳列表
+label: 銷售已完成應收對帳列表
 module: views
 description: ''
 tag: ''

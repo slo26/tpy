@@ -1,0 +1,21 @@
+uuid: 680167bb-8527-4c80-b423-ab86637aa13c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_actual_received_payment
+    - node.type.bill_4_purchase
+  module:
+    - datetime
+id: node.bill_4_purchase.field_actual_received_payment
+field_name: field_actual_received_payment
+entity_type: node
+bundle: bill_4_purchase
+label: 實際付款日期
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

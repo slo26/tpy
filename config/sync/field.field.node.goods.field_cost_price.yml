@@ -1,0 +1,25 @@
+uuid: 34e001ec-f579-41ae-9471-2e0c9976235f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_cost_price
+    - node.type.goods
+id: node.goods.field_cost_price
+field_name: field_cost_price
+entity_type: node
+bundle: goods
+label: 採購價格
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: !!float 0
+default_value_callback: ''
+settings:
+  min: !!float 0
+  max: null
+  prefix: $
+  suffix: ''
+field_type: decimal

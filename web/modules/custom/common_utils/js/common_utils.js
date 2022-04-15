@@ -122,3 +122,4 @@ function outbound_inbound_warehouse_table_generate(object) {
     jQuery('#warehouse-inbound-outbound-table').html(table);
 }
 
+

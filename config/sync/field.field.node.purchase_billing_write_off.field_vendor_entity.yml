@@ -1,0 +1,29 @@
+uuid: 807d2324-cfa3-4f44-8ca4-ebf33fd94704
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_vendor_entity
+    - node.type.purchase_billing_write_off
+    - node.type.vendor
+id: node.purchase_billing_write_off.field_vendor_entity
+field_name: field_vendor_entity
+entity_type: node
+bundle: purchase_billing_write_off
+label: 廠商
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      vendor: vendor
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

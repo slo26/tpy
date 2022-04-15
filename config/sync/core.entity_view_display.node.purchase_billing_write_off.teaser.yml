@@ -1,0 +1,46 @@
+uuid: 399ee996-1993-440f-8562-54e7906d9f61
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.purchase_billing_write_off.field_actual_payed_payment
+    - field.field.node.purchase_billing_write_off.field_begin_account_date
+    - field.field.node.purchase_billing_write_off.field_begin_date
+    - field.field.node.purchase_billing_write_off.field_cash_amount
+    - field.field.node.purchase_billing_write_off.field_check_amount
+    - field.field.node.purchase_billing_write_off.field_closing_account_date
+    - field.field.node.purchase_billing_write_off.field_end_date
+    - field.field.node.purchase_billing_write_off.field_long_comment
+    - field.field.node.purchase_billing_write_off.field_offset_amount
+    - field.field.node.purchase_billing_write_off.field_payable_balance
+    - field.field.node.purchase_billing_write_off.field_remittance_amount
+    - field.field.node.purchase_billing_write_off.field_sale_purchase_entity
+    - field.field.node.purchase_billing_write_off.field_vendor_entity
+    - node.type.purchase_billing_write_off
+  module:
+    - user
+id: node.purchase_billing_write_off.teaser
+targetEntityType: node
+bundle: purchase_billing_write_off
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_actual_payed_payment: true
+  field_begin_account_date: true
+  field_begin_date: true
+  field_cash_amount: true
+  field_check_amount: true
+  field_closing_account_date: true
+  field_end_date: true
+  field_long_comment: true
+  field_offset_amount: true
+  field_payable_balance: true
+  field_remittance_amount: true
+  field_sale_purchase_entity: true
+  field_vendor_entity: true

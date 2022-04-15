@@ -1,0 +1,21 @@
+uuid: bc4f347e-112d-4469-b1b2-694c027f36ca
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.taxonomy_term.field_purchase_requisition_statu
+    - taxonomy.vocabulary.purchase_items
+  module:
+    - options
+id: taxonomy_term.purchase_items.field_purchase_requisition_statu
+field_name: field_purchase_requisition_statu
+entity_type: taxonomy_term
+bundle: purchase_items
+label: 狀態
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

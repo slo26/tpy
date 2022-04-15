@@ -62,7 +62,7 @@ custom_toolbar.dropdown_setting:
   requirements:
     _role: 'authenticated'
 
-custom_toolbar.documents_export:
+custom_toolbar.sale_billing_statementt:
   path: '/admin/billing/sale-billing-statement'
   defaults:
     _form: 'Drupal\custom_toolbar\Form\GenerateMonthlySaleBillingStatement'
@@ -84,5 +84,29 @@ custom_toolbar.show_detail_monthly_bill_statement:
     _title: '月份應收帳款明細表'
   requirements:
     _role: 'authenticated'
+
+custom_toolbar.purchase_billing_statementt:
+  path: '/admin/billing/purchase-billing-statement'
+  defaults:
+    _form: 'Drupal\custom_toolbar\Form\purchase\GenerateMonthlyPurchaseBillingStatement'
+    _title: '產生應付月結對帳單'
+  requirements:
+    _role: 'authenticated'
+
+custom_toolbar.show_purchase_bill_statement:
+  path: '/admin/view/{vendor_nid}/show-purchase-bill-statement/{begin_date}/{end_date}'
+  defaults:
+    _form: '\Drupal\custom_toolbar\Form\purchase\ShowPurchaseBillStatementDialogForm'
+  requirements:
+    _role: 'authenticated'
+
+custom_toolbar.show_detail_monthly_purchase_bill_statement:
+  path: '/admin/bill/monthly-detail-purchase-bill-statementForm/{vendor_nid}/{begin_date}/{end_date}'
+  defaults:
+    _form: 'Drupal\custom_toolbar\Form\purchase\MonthlyDetailPurchaseBillStatementForm'
+    _title: '月份應付帳款明細表'
+  requirements:
+    _role: 'authenticated'
+
 
 

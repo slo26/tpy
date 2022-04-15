@@ -17,6 +17,9 @@ settings:
     -
       value: return
       label: 退貨
+    -
+      value: purchase
+      label: 採購
   allowed_values_function: ''
 module: options
 locked: false

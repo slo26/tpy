@@ -1,0 +1,10 @@
+purchase_billing_write_off.node_add:
+  path: '/node/add/purchase-billing-write-off/{begin_date}/{end_date}/{vendor_nid}'
+  defaults:
+    _controller: '\Drupal\purchase_billing_write_off\Controller\AddNodeController::addNodeForm'
+    _title: 'Create Purcahse billing write off'
+  options:
+    _admin_route: TRUE
+  requirements:
+    _role: 'authenticated'
+

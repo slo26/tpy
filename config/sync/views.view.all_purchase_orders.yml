@@ -3,15 +3,24 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_date_actual_arrived
-    - field.storage.node.field_date_actual_delivered
+    - field.storage.node.field_actual_received_payment
+    - field.storage.node.field_bill_purchase
+    - field.storage.node.field_completed_date
+    - field.storage.node.field_expected_receive_payment
+    - field.storage.node.field_inbound_date
     - field.storage.node.field_logistics
-    - field.storage.node.field_purchase_status
+    - field.storage.node.field_shipping_date
     - field.storage.node.field_shipping_number
+    - field.storage.node.field_shipping_received_date
     - field.storage.node.field_vendor_name
     - node.type.purchase_order
-    - user.role.authenticated
+    - user.role.administrator
+    - user.role.employee
+    - user.role.manager
+    - workflows.workflow.purchase_workflow
   module:
+    - better_exposed_filters
+    - content_moderation
     - datetime
     - node
     - options
@@ -160,263 +169,6 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        created:
-          id: created
-          table: node_field_data
-          field: created
-          relationship: none
-          group_type: group
-          admin_label: ''
-          entity_type: node
-          entity_field: created
-          plugin_id: field
-          label: 建單日期
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: timestamp
-          settings:
-            date_format: html_date
-            custom_date_format: ''
-            timezone: ''
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-        field_date_actual_delivered:
-          id: field_date_actual_delivered
-          table: node__field_date_actual_delivered
-          field: field_date_actual_delivered
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: field
-          label: 出貨日
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: datetime_default
-          settings:
-            timezone_override: ''
-            format_type: html_date
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-        field_date_actual_arrived:
-          id: field_date_actual_arrived
-          table: node__field_date_actual_arrived
-          field: field_date_actual_arrived
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: field
-          label: 到貨日
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: datetime_default
-          settings:
-            timezone_override: ''
-            format_type: html_date
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-        field_purchase_status:
-          id: field_purchase_status
-          table: node__field_purchase_status
-          field: field_purchase_status
-          relationship: none
-          group_type: group
-          admin_label: ''
-          plugin_id: field
-          label: 採購狀態
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: list_default
-          settings: {  }
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
         field_logistics:
           id: field_logistics
           table: node__field_logistics
@@ -542,19 +294,275 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        nothing:
-          id: nothing
-          table: views
-          field: nothing
+        field_shipping_date:
+          id: field_shipping_date
+          table: node__field_shipping_date
+          field: field_shipping_date
           relationship: none
           group_type: group
           admin_label: ''
-          plugin_id: custom
-          label: 連接
+          plugin_id: field
+          label: 採購出貨日期
           exclude: false
           alter:
-            alter_text: true
-            text: 採購項目列表
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: datetime_default
+          settings:
+            timezone_override: ''
+            format_type: html_date
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        field_shipping_received_date:
+          id: field_shipping_received_date
+          table: node__field_shipping_received_date
+          field: field_shipping_received_date
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: 貨物簽收日期
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: datetime_default
+          settings:
+            timezone_override: ''
+            format_type: html_date
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        field_inbound_date:
+          id: field_inbound_date
+          table: node__field_inbound_date
+          field: field_inbound_date
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: 採購商品入倉日期
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: datetime_default
+          settings:
+            timezone_override: ''
+            format_type: html_date
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        field_completed_date:
+          id: field_completed_date
+          table: node__field_completed_date
+          field: field_completed_date
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: 採購完成日期
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: datetime_default
+          settings:
+            timezone_override: ''
+            format_type: html_date
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        field_material:
+          id: field_material
+          table: node__field_material
+          field: field_material
+          relationship: none
+          group_type: count
+          admin_label: ''
+          plugin_id: field
+          label: 採購數量
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
             make_link: true
             path: '/admin/purchase-items?title={{title}}'
             absolute: false
@@ -562,7 +570,7 @@ display:
             replace_spaces: false
             path_case: none
             trim_whitespace: false
-            alt: ''
+            alt: 連接至明細
             rel: ''
             link_class: ''
             prefix: ''
@@ -590,7 +598,281 @@ display:
           empty: ''
           hide_empty: false
           empty_zero: false
-          hide_alter_empty: false
+          hide_alter_empty: true
+          click_sort_column: target_id
+          type: entity_reference_label
+          settings:
+            link: false
+          group_column: target_id
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          set_precision: false
+          precision: 0
+          decimal: .
+          format_plural: 0
+          format_plural_string: !!binary MQNAY291bnQ=
+          prefix: ''
+          suffix: ''
+        field_bill_purchase:
+          id: field_bill_purchase
+          table: node__field_bill_purchase
+          field: field_bill_purchase
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: 帳單
+          exclude: true
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: target_id
+          type: entity_reference_entity_id
+          settings: {  }
+          group_column: target_id
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        field_expected_receive_payment:
+          id: field_expected_receive_payment
+          table: node__field_expected_receive_payment
+          field: field_expected_receive_payment
+          relationship: field_bill_purchase
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: 帳款日
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: true
+            path: '/node/{{ field_bill_purchase}}/edit'
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: 連接至帳單
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: _blank
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: datetime_default
+          settings:
+            timezone_override: ''
+            format_type: html_date
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        field_actual_received_payment:
+          id: field_actual_received_payment
+          table: node__field_actual_received_payment
+          field: field_actual_received_payment
+          relationship: field_bill_purchase
+          group_type: group
+          admin_label: ''
+          plugin_id: field
+          label: 實際付款日期
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: true
+            path: '/node/{{ field_bill_purchase}}/edit'
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: 連接至帳單
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: _blank
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: datetime_default
+          settings:
+            timezone_override: ''
+            format_type: html_date
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+        moderation_state:
+          id: moderation_state
+          table: node_field_data
+          field: moderation_state
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          plugin_id: moderation_state_field
+          label: 採購狀態
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: content_moderation_state
+          settings: {  }
+          group_column: entity_id
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
         operations:
           id: operations
           table: node
@@ -664,7 +946,7 @@ display:
             offset_label: Offset
           quantity: 9
       exposed_form:
-        type: basic
+        type: bef
         options:
           submit_button: Apply
           reset_button: true
@@ -673,11 +955,64 @@ display:
           expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
+          text_input_required: 'Select any filter and click on Apply to see results'
+          text_input_required_format: full_html
+          bef:
+            general:
+              autosubmit: false
+              autosubmit_exclude_textfield: false
+              autosubmit_textfield_delay: 500
+              autosubmit_hide: false
+              input_required: false
+              allow_secondary: false
+              secondary_label: 'Advanced options'
+              secondary_open: false
+            pager:
+              plugin_id: default
+              advanced:
+                is_secondary: false
+            filter:
+              title:
+                plugin_id: default
+                advanced:
+                  placeholder_text: ''
+                  collapsible: false
+                  is_secondary: false
+              field_vendor_name_value:
+                plugin_id: default
+                advanced:
+                  placeholder_text: ''
+                  collapsible: false
+                  is_secondary: false
+              moderation_state:
+                plugin_id: default
+                advanced:
+                  rewrite:
+                    filter_rewrite_values: ''
+                  collapsible: false
+                  is_secondary: false
+              field_shipping_received_date_value:
+                plugin_id: default
+                advanced:
+                  collapsible: false
+                  is_secondary: false
+              field_inbound_date_value:
+                plugin_id: default
+                advanced:
+                  collapsible: false
+                  is_secondary: false
+              field_completed_date_value:
+                plugin_id: default
+                advanced:
+                  collapsible: false
+                  is_secondary: false
       access:
         type: role
         options:
           role:
-            authenticated: authenticated
+            administrator: administrator
+            employee: employee
+            manager: manager
       cache:
         type: none
         options: {  }
@@ -710,9 +1045,478 @@ display:
           plugin_id: bundle
           value:
             purchase_order: purchase_order
+          group: 1
           expose:
             operator_limit_selection: false
             operator_list: {  }
+        field_shipping_date_value:
+          id: field_shipping_date_value
+          table: node__field_shipping_date
+          field: field_shipping_date_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: datetime
+          operator: between
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: date
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_shipping_date_value_op
+            label: 採購出貨日期
+            description: ''
+            use_operator: false
+            operator: field_shipping_date_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_shipping_date_value
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              employee: '0'
+              manager: '0'
+              sales: '0'
+              ceo: '0'
+              sale: '0'
+              purchase: '0'
+              inventory: '0'
+              billing: '0'
+              product: '0'
+              customer_vendor: '0'
+              web: '0'
+              document: '0'
+            min_placeholder: 'Ex. 2021-12-01'
+            max_placeholder: 'Ex. 2021-12-31'
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        field_shipping_received_date_value:
+          id: field_shipping_received_date_value
+          table: node__field_shipping_received_date
+          field: field_shipping_received_date_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: datetime
+          operator: between
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: date
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_shipping_received_date_value_op
+            label: 貨物簽收期間
+            description: ''
+            use_operator: false
+            operator: field_shipping_received_date_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_shipping_received_date_value
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              employee: '0'
+              manager: '0'
+              sales: '0'
+              ceo: '0'
+              sale: '0'
+              purchase: '0'
+              inventory: '0'
+              billing: '0'
+              product: '0'
+              customer_vendor: '0'
+              web: '0'
+              document: '0'
+            min_placeholder: 'Ex. 2021-12-01'
+            max_placeholder: 'Ex. 2021-12-31'
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        field_completed_date_value:
+          id: field_completed_date_value
+          table: node__field_completed_date
+          field: field_completed_date_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: datetime
+          operator: between
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: date
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_completed_date_value_op
+            label: 採購完成期間
+            description: ''
+            use_operator: false
+            operator: field_completed_date_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_completed_date_value
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              employee: '0'
+              manager: '0'
+              sales: '0'
+              ceo: '0'
+              sale: '0'
+              purchase: '0'
+              inventory: '0'
+              billing: '0'
+              product: '0'
+              customer_vendor: '0'
+              web: '0'
+              document: '0'
+            min_placeholder: 'Ex. 2021-12-01'
+            max_placeholder: 'Ex. 2021-12-31'
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        field_expected_receive_payment_value:
+          id: field_expected_receive_payment_value
+          table: node__field_expected_receive_payment
+          field: field_expected_receive_payment_value
+          relationship: field_bill_purchase
+          group_type: group
+          admin_label: ''
+          plugin_id: datetime
+          operator: between
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: date
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_expected_receive_payment_value_op
+            label: 結帳日期
+            description: ''
+            use_operator: false
+            operator: field_expected_receive_payment_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_expected_receive_payment_value
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              employee: '0'
+              manager: '0'
+              sales: '0'
+              ceo: '0'
+              sale: '0'
+              purchase: '0'
+              inventory: '0'
+              billing: '0'
+              product: '0'
+              customer_vendor: '0'
+              web: '0'
+              document: '0'
+            min_placeholder: 'Ex. 2021-12-01'
+            max_placeholder: 'Ex. 2021-12-31'
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        field_actual_received_payment_value:
+          id: field_actual_received_payment_value
+          table: node__field_actual_received_payment
+          field: field_actual_received_payment_value
+          relationship: field_bill_purchase
+          group_type: group
+          admin_label: ''
+          plugin_id: datetime
+          operator: between
+          value:
+            min: ''
+            max: ''
+            value: ''
+            type: date
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_actual_received_payment_value_op
+            label: 實際付款期間
+            description: ''
+            use_operator: false
+            operator: field_actual_received_payment_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_actual_received_payment_value
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              employee: '0'
+              manager: '0'
+              sales: '0'
+              ceo: '0'
+              sale: '0'
+              purchase: '0'
+              inventory: '0'
+              billing: '0'
+              product: '0'
+              customer_vendor: '0'
+              web: '0'
+              document: '0'
+            min_placeholder: 'Ex. 2022-01-01'
+            max_placeholder: 'Ex. 2022-01-25'
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        moderation_state:
+          id: moderation_state
+          table: node_field_data
+          field: moderation_state
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          plugin_id: moderation_state_filter
+          operator: in
+          value:
+            all: all
+            purchase_workflow-draft: purchase_workflow-draft
+            purchase_workflow-purchase_rate: purchase_workflow-purchase_rate
+            purchase_workflow-purchase_import: purchase_workflow-purchase_import
+            purchase_workflow-materials_arrived: purchase_workflow-materials_arrived
+            purchase_workflow-materials_inbound: purchase_workflow-materials_inbound
+            purchase_workflow-purchase_done: purchase_workflow-purchase_done
+          group: 1
+          exposed: true
+          expose:
+            operator_id: moderation_state_op
+            label: 採購狀態
+            description: ''
+            use_operator: true
+            operator: moderation_state_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: moderation_state
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              employee: '0'
+              manager: '0'
+              sales: '0'
+              ceo: '0'
+              sale: '0'
+              purchase: '0'
+              inventory: '0'
+              billing: '0'
+              product: '0'
+              customer_vendor: '0'
+              web: '0'
+              document: '0'
+            reduce: true
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        title:
+          id: title
+          table: node_field_data
+          field: title
+          relationship: none
+          group_type: group
+          admin_label: ''
+          entity_type: node
+          entity_field: title
+          plugin_id: string
+          operator: contains
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: title_op
+            label: 採購編號
+            description: ''
+            use_operator: false
+            operator: title_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: title
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              employee: '0'
+              manager: '0'
+              sales: '0'
+              ceo: '0'
+              sale: '0'
+              purchase: '0'
+              inventory: '0'
+              billing: '0'
+              product: '0'
+              customer_vendor: '0'
+              web: '0'
+              document: '0'
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+        field_vendor_name_value:
+          id: field_vendor_name_value
+          table: node__field_vendor_name
+          field: field_vendor_name_value
+          relationship: field_vendor_entity
+          group_type: group
+          admin_label: ''
+          plugin_id: string
+          operator: contains
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_vendor_name_value_op
+            label: 廠商名稱
+            description: ''
+            use_operator: false
+            operator: field_vendor_name_value_op
+            operator_limit_selection: false
+            operator_list: {  }
+            identifier: field_vendor_name_value
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              employee: '0'
+              manager: '0'
+              sales: '0'
+              ceo: '0'
+              sale: '0'
+              purchase: '0'
+              inventory: '0'
+              billing: '0'
+              product: '0'
+              customer_vendor: '0'
+              web: '0'
+              document: '0'
+            placeholder: ''
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
       style:
         type: table
         options:
@@ -824,7 +1628,27 @@ display:
           admin_label: 'field_vendor_entity: Content'
           plugin_id: standard
           required: true
-      header: {  }
+        field_bill_purchase:
+          id: field_bill_purchase
+          table: node__field_bill_purchase
+          field: field_bill_purchase
+          relationship: none
+          group_type: group
+          admin_label: 'field_bill_purchase: Content'
+          plugin_id: standard
+          required: false
+      group_by: true
+      header:
+        result:
+          id: result
+          table: views
+          field: result
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: result
+          empty: false
+          content: '<div align="right"><strong>Displaying @start - @end of @total</strong></div>'
       footer: {  }
       display_extenders: {  }
     cache_metadata:
@@ -832,16 +1656,22 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - url
         - url.query_args
         - 'user.node_grants:view'
         - user.roles
       tags:
-        - 'config:field.storage.node.field_date_actual_arrived'
-        - 'config:field.storage.node.field_date_actual_delivered'
+        - 'config:field.storage.node.field_actual_received_payment'
+        - 'config:field.storage.node.field_bill_purchase'
+        - 'config:field.storage.node.field_completed_date'
+        - 'config:field.storage.node.field_expected_receive_payment'
+        - 'config:field.storage.node.field_inbound_date'
         - 'config:field.storage.node.field_logistics'
-        - 'config:field.storage.node.field_purchase_status'
+        - 'config:field.storage.node.field_shipping_date'
         - 'config:field.storage.node.field_shipping_number'
+        - 'config:field.storage.node.field_shipping_received_date'
         - 'config:field.storage.node.field_vendor_name'
+        - 'config:workflow_list'
   page_1:
     id: page_1
     display_title: Page
@@ -855,13 +1685,19 @@ display:
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - url
         - url.query_args
         - 'user.node_grants:view'
         - user.roles
       tags:
-        - 'config:field.storage.node.field_date_actual_arrived'
-        - 'config:field.storage.node.field_date_actual_delivered'
+        - 'config:field.storage.node.field_actual_received_payment'
+        - 'config:field.storage.node.field_bill_purchase'
+        - 'config:field.storage.node.field_completed_date'
+        - 'config:field.storage.node.field_expected_receive_payment'
+        - 'config:field.storage.node.field_inbound_date'
         - 'config:field.storage.node.field_logistics'
-        - 'config:field.storage.node.field_purchase_status'
+        - 'config:field.storage.node.field_shipping_date'
         - 'config:field.storage.node.field_shipping_number'
+        - 'config:field.storage.node.field_shipping_received_date'
         - 'config:field.storage.node.field_vendor_name'
+        - 'config:workflow_list'
