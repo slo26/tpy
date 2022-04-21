@@ -141,12 +141,12 @@ class CustomToolbarController extends ControllerBase {
         $markup .= '<div class="description">建立付款對帳單</div>';
         $markup .= '</a></li>';
         $markup .= '<li>';
-        $markup .= '<a href="/admin/billing/purchase-billing-statement">';
+        $markup .= '<a href="/admin/purchase-write-off-view">';
         $markup .= '<span class="label">已完成應付對帳列表</span>';
         $markup .= '<div class="description">已完成應付對帳列表</div>';
         $markup .= '</a></li>';
         $markup .= '<li>';
-        $markup .= '<a href="/admin/billing/purchase-billing-statement">';
+        $markup .= '<a href="/admin/purchase-bill-list">';
         $markup .= '<span class="label">採購單帳單</span>';
         $markup .= '<div class="description">採購單帳單</div>';
         $markup .= '</a></li>';
@@ -569,6 +569,7 @@ class CustomToolbarController extends ControllerBase {
         );
     }
 }
+
 
 
 

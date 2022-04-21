@@ -30,7 +30,7 @@ class ShowBillStatementDialogForm extends FormBase {
     /**
      * {@inheritdoc}
      */
-    public function buildForm(array $form, FormStateInterface $form_state, $customer_nid = null, $begin_date = null , $end_date = null) {
+    public function buildForm(array $form, FormStateInterface $form_state, $customer_nid = NULL, $begin_date = NULL , $end_date = NULL) {
         $form['#title'] = t('客戶別應收帳款明細表');
         $config = \Drupal::config ( 'common_utils.settings' );
         //$tax_percentage = $config->get('sales_tax');
@@ -162,5 +162,6 @@ class ShowBillStatementDialogForm extends FormBase {
         return $table;
     }*/
 }
+
 
 

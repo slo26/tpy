@@ -15,6 +15,7 @@ dependencies:
     - field.field.node.product.field_gpm_for_vendor
     - field.field.node.product.field_product_category
     - field.field.node.product.field_product_category_inventory
+    - field.field.node.product.field_product_goods
     - field.field.node.product.field_product_image
     - field.field.node.product.field_product_name
     - field.field.node.product.field_retail_price
@@ -98,6 +99,7 @@ hidden:
   field_gpm_for_retailer: true
   field_gpm_for_vendor: true
   field_product_category_inventory: true
+  field_product_goods: true
   field_product_name: true
   field_retail_price: true
   field_unit: true

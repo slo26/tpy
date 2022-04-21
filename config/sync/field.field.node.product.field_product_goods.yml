@@ -1,0 +1,30 @@
+uuid: dcd61285-0841-482f-ab22-99f02eb07e58
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_product_goods
+    - node.type.goods
+    - node.type.product
+id: node.product.field_product_goods
+field_name: field_product_goods
+entity_type: node
+bundle: product
+label: 產品零件編號
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:node'
+  handler_settings:
+    target_bundles:
+      product: product
+      goods: goods
+    sort:
+      field: _none
+      direction: ASC
+    auto_create: false
+    auto_create_bundle: product
+field_type: entity_reference

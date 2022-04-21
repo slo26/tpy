@@ -55,6 +55,50 @@ function purchase_order_node_presave(Drupal\Core\Entity\EntityInterface $node) {
 			$node->set('field_inbound_date', date('Y-m-d', time()));
 		} else if ( $node->moderation_state->value == "purchase_done" ) {
 			$node->set('field_completed_date', date('Y-m-d', time()));
+			$field_materials = $node->get('field_material')->getValue();
+
+			for ($i=0; $i < count($field_materials); $i++) {
+				$purchase_item = \Drupal\taxonomy\Entity\Term::load($field_materials[$i]['target_id']);
+				$new_cost_price = $purchase_item->field_price->value;
+				$product_good_nid = $purchase_item->field_product_goods->target_id;
+				$product_good = \Drupal\node\Entity\Node::load($product_good_nid);
+				$original_cost_price = $product_good->field_cost_price->value;
+				if ( $original_cost_price != $new_cost_price) {
+					$product_good->set('field_cost_price', $new_cost_price);
+					$product_good->setRevisionCreationTime(REQUEST_TIME);
+					$product_good->set( 'revision_log', "新進採購, 更改成本價從$" . "$original_cost_price 調到 $" . $new_cost_price);
+					$product_good->save();
+					$nids = \Drupal::entityQuery("node")->condition('type', 'product')
+										->condition('field_product_goods', $product_good_nid)->execute();
+					foreach($nids as $nid) {
+						$master_product = \Drupal\node\Entity\Node::load($nid);
+						$parts_nids = $master_product->get('field_product_goods')->getValue();
+						$total_cost = 0;
+						for($j=0; $j < count($parts_nids); $j++) {
+							$parts_nid = $parts_nids[$j]['target_id'];
+							$part = \Drupal\node\Entity\Node::load($parts_nid);
+							$total_cost = $total_cost + $part->field_cost_price->value;
+						}
+						$original_cost_price = $master_product->field_cost_price->value;
+						$master_product->set('field_cost_price', $total_cost);
+						$master_product->setRevisionCreationTime(REQUEST_TIME);
+						$master_product->set( 'revision_log', "新進採購 " . $product_good->title->value . " 更改成本價從$" . "$original_cost_price 調到 $" . $total_cost);
+						$master_product->save();
+					}
+				}
+			}
+		}
+		if ( !$node->isNew() ) {
+			$node->set('revision_log', PURCHASE_MODERATION_STATE_LABEL[$node->moderation_state->value] . " 狀態儲存.");
+			if ( empty($node->field_material->target_id) ) {
+				$tids = \Drupal::entityQuery("taxonomy_term")->condition("vid", "purchase_items")
+									->condition('field_order_id', $node->id())
+									->execute();
+				foreach($tids as $tid) {
+					$purchase_item = \Drupal\taxonomy\Entity\Term::load($tid);
+					$node->field_material[] = $purchase_item;
+				}
+			}
 		}
 	}
 }
@@ -210,6 +254,7 @@ function purchase_order_form_alter(&$form, FormStateInterface &$form_state, $for
 			$form['vendor_title']['#default_value'] = $vendor->field_vendor_name->value;
 			$form['vendor_contact_window']['#default_value'] = $vendor->field_contact_person->value;
 			$form['vendor_cell']['#default_value'] = $vendor->field_mobile->value;
+			$form['field_vendor_entity']['#disabled'] = true;
 		}
 		/*-----------------送貨資訊---------------------*/
 		$form['delivery_info'] = array(
@@ -277,6 +322,7 @@ function purchase_order_form_alter(&$form, FormStateInterface &$form_state, $for
 		$form['billing_info']['actual_recevied_payment'] = array('#type' => 'markup',
 			'#markup' => '<div class="actual-recevied-payment"></div>',
 		);
+		$bill = null;
 		if ( !empty($node->field_bill_purchase->target_id) ) {
 			$bill = \Drupal\node\Entity\Node::load($node->field_bill_purchase->target_id);
 			
@@ -403,6 +449,10 @@ function purchase_order_form_alter(&$form, FormStateInterface &$form_state, $for
 			'#prefix' => '<div class="add-single-item-into-purchase-button">',
 			'#suffix' => '</div>',
         );
+
+		if ( $bill != null && !empty($bill->field_actual_received_payment->value) ) {
+			$form['create_single_item']['#disabled'] = true;
+		}
 
 		$form['historical_purcase_reocrd'] = array(
 				'#prefix' => '<div class="historical-purchase-order">',
@@ -698,6 +748,14 @@ function items_table_generate($order_id) {
 	$total_quantity = 0;
 	$sum = 0;
 	$total_cost = 0;
+	$is_closed = false;
+	$node = \Drupal\node\Entity\Node::load($order_id);
+	if ( !empty($node->field_bill_purchase->target_id) ) {
+		$bill = \Drupal\node\Entity\Node::load($node->field_bill_purchase->target_id);
+		if ( !empty($bill->field_actual_received_payment->value) ) {
+			$is_closed = true;
+		}
+	}
 
 	foreach($tids as $tid) {
 		$item = \Drupal\taxonomy\Entity\Term::load($tid);
@@ -710,7 +768,9 @@ function items_table_generate($order_id) {
             $name = $product_or_goods->field_product_name->value;
         }
 
-		$dropdown_button = '<div class="dropbutton-wrapper dropbutton-multiple">
+		$dropdown_button = "";
+		if ( !$is_closed ) {
+			$dropdown_button = '<div class="dropbutton-wrapper dropbutton-multiple">
 					<div class="dropbutton-widget">
 						<ul class="dropbutton">
 							<li class="edit dropbutton-action">
@@ -729,6 +789,7 @@ function items_table_generate($order_id) {
 						</ul>
 					</div>
 				</div>';
+		}
 		$table_body .= '<tr><td>' . $item->name->value . '</td><td>' . $product_or_goods->title->value . '</td><td>' . $name . '</td><td>' . $category . '</td><td>' . number_format($item->field_quantity->value) . '</td><td>' . number_format($item->field_price->value) . '</td><td>' . number_format($item->field_total_amount->value) . '</td><td>' . $dropdown_button . '</td></tr>';
 		$total_quantity = $total_quantity + $item->field_quantity->value;
 		$sum = $sum + $item->field_price->value;
@@ -865,5 +926,6 @@ function purchase_order_table_generator_in_view($node) {
 	
 	return $ajax_response;
 }*/
+
 
 

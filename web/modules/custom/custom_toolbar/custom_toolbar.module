@@ -28,6 +28,23 @@ function custom_toolbar_form_alter(&$form, FormStateInterface &$form_state, $for
         if ( !empty($bill->field_actual_received_payment->value) ) {
             $form['actions']['submit']['#disabled'] = true;
         }
+    } else if  ( $form_id == "node_purchase_order_delete_form" ) {
+        $node = $form_state->getFormObject()->getEntity();
+        $bill_nid = $node->field_bill_purchase->target_id;
+        if ( !empty($bill_nid) ) {
+            $bill = \Drupal\node\Entity\Node::load($bill_nid);
+            if ( !empty($bill->field_actual_received_payment->value) ) {
+                $form['actions']['submit']['#disabled'] = true;
+            }
+        }
+    } else if ( $form_id == "node_purchase_billing_write_off_delete_form" ) {
+        $form['actions']['submit']['#disabled'] = true;
+    } else if ( $form_id == "node_bill_4_purchase_delete_form" ) {
+        $bill = $form_state->getFormObject()->getEntity();
+        if ( !empty($bill->field_actual_received_payment->value) ) {
+            $form['actions']['submit']['#disabled'] = true;
+        }
     }
 }
+
 

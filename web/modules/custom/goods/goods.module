@@ -14,6 +14,21 @@ function goods_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
 				'event' => 'change',
         );
 
+        if ( !$node->isNew() ) {
+            $parent_products = array();
+            $product_nids = \Drupal::entityQuery("node")
+                                    ->condition('type', 'product')
+                                    ->condition('field_product_goods', $node->id())->execute();
+            foreach($product_nids as $product_nid) {
+                $product = \Drupal\node\Entity\Node::load($product_nid);
+                $parent_products[] = $product->title->value;
+
+            }
+            $form['parent_products']['#markup'] = '<div class="parent-products"><strong>主成品: </strong>' . implode(",", $parent_products) . '</div>';
+            $form['parent_products']['#weight'] = 1;
+            $form ['title']['#disabled'] = true;
+        }
+
         $form['title_message'] = array(
 			'#type' => 'markup',
 			'#markup' => '<div class="title-message"></div>',
@@ -52,4 +67,5 @@ function ajax_check_goods_unique_id(array $form, FormStateInterface $form_state)
     }
     return $unique_id;
 }*/
+
 

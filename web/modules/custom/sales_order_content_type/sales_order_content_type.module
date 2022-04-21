@@ -535,6 +535,7 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 			$form['customer_contact_window']['#default_value'] = $customer->field_contact_person->value;
 			$form['customer_cell']['#default_value'] = $customer->field_mobile->value;
 			$form['customer_payment_due']['#default_value'] = get_entity_storage_label($customer, 'field_payment_due', $customer->field_payment_due->value);
+			$form['field_customer_entity']['#disabled'] = true;
 		}
 		/*-----------------送貨資訊---------------------*/
 		$form['delivery_info'] = array(
@@ -1410,6 +1411,7 @@ function getSellOrderID($nid) {
 	$sale = \Drupal\node\Entity\Node::load($nid);
 	return $sale->title->value;
 }
+
 
 
 

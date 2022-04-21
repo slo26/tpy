@@ -5,6 +5,55 @@ use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax;
 
+function purchase_items_taxonomy_term_insert($term) {
+    if ($term->bundle() === "purchase_items") {
+        $purchase_form = \Drupal\node\Entity\Node::load($term->field_order_id->target_id);
+        if ( !empty($purchase_form->field_bill_purchase->target_id) ) {
+            $bill = \Drupal\node\Entity\Node::load($purchase_form->field_bill_purchase->target_id);
+            $bill->save();
+        }
+    }
+}
+
+function purchase_items_taxonomy_term_update($term) {
+    if ($term->bundle() === "purchase_items") {
+        $purchase_form = \Drupal\node\Entity\Node::load($term->field_order_id->target_id);
+        if ( !empty($purchase_form->field_bill_purchase->target_id) ) {
+            $bill = \Drupal\node\Entity\Node::load($purchase_form->field_bill_purchase->target_id);
+            $bill->save();
+        }
+    }
+}
+
+function purchase_items_taxonomy_term_delete($term) {
+    if ($term->bundle() === "purchase_items") {
+        if ( !empty($term->field_purchase_requisition_statu->value) ) {
+            pi_revert_inventory($term);
+        }
+        \Drupal::messenger()->addMessage($term->name->value . "成功刪除.", "status");
+
+        //remove from 銷售單
+        $purchase_nid = $term->field_order_id->target_id;
+        $purchase = \Drupal\node\Entity\Node::load($purchase_nid);
+        $purchase_vid = $purchase->vid->value;
+
+        $connection = \Drupal::database();
+        $connection->delete('node__field_material')
+                            ->condition("entity_id", $purchase_nid)
+                            ->condition("revision_id", $purchase_vid)
+                            ->condition("field_material_target_id", $term->id())
+                            ->execute();
+        $connection->delete('node_revision__field_material')
+                            ->condition("entity_id", $purchase_nid)
+                            ->condition("revision_id", $purchase_vid)
+                            ->condition("field_material_target_id", $term->id())
+                            ->execute();
+        \Drupal::service('cache.entity')->invalidateAll();
+        \Drupal::service('cache.data')->invalidateAll();
+        \Drupal::service('cache.render')->invalidateAll();
+    }
+}
+
 function purchase_items_taxonomy_term_presave($term) {
 	if ( $term->bundle() == "purchase_items" ) {
         $term->status->value = false;
@@ -112,6 +161,17 @@ function purchase_items_form_alter(&$form, FormStateInterface &$form_state, $for
 			'event' => 'change',
 		];
 
+        if ( !empty($term->field_order_id->target_id) ) {
+            $node = \Drupal\node\Entity\Node::load($term->field_order_id->target_id);
+            if ( !empty($node->field_bill_purchase->target_id) ) {
+                $bill = \Drupal\node\Entity\Node::load($node->field_bill_purchase->target_id);
+                if ( !empty($bill->field_actual_received_payment->value) ) {
+                    $form['actions']['submit']['#disabled'] = true;
+                    $form['actions']["delete"]['#attributes']['style'] = 'display: none;';
+                }
+            }
+        }
+
         $form['#validate'][] = 'purchase_items_form_validate';
     }
 }
@@ -168,6 +228,7 @@ function gen_purchase_item_id($order_id = null) {
         return str_replace($replace, "PI-", $order_id) . "-" . (count($total)+1);
     }
 }
+
 
 
 

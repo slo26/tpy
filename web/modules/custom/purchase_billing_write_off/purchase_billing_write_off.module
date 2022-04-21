@@ -124,7 +124,7 @@ function purchase_billing_write_off_form_alter(&$form, FormStateInterface &$form
         );
 
         $field_payable_balance = 0;
-        $field_deposit = 0;
+        //$field_deposit = 0;
         $purchase_entities = [];
         if ( $node->isNew() ) {
             $index = 1;
@@ -137,7 +137,7 @@ function purchase_billing_write_off_form_alter(&$form, FormStateInterface &$form
                 $bill = \Drupal\node\Entity\Node::load($bill_nid);
                 $purchase = \Drupal\node\Entity\Node::load($bill->field_order_id->target_id);
                 if ( $purchase->moderation_state->value != "purchase_done" ) {
-                    $field_deposit = $field_deposit + $bill->field_deposit->value;
+                    //$field_deposit = $field_deposit + $bill->field_deposit->value;
                     $purchase_entities[] = array('target_id' => $bill->field_order_id->target_id);
                     $field_payable_balance = $field_payable_balance + $bill->field_remain_unpaid_amount->value;
                     $form['purchase_list_in_table'][$index]['index'] = array(
@@ -198,11 +198,11 @@ function purchase_billing_write_off_form_alter(&$form, FormStateInterface &$form
                     $index++;
                 }
             };
-            $form['field_cash_amount']['widget'][0]['value']['#default_value'] = $field_deposit;
+            //$form['field_cash_amount']['widget'][0]['value']['#default_value'] = $field_deposit;
             $node->field_sale_purchase_entity = $purchase_entities;
             $form ['field_payable_balance']['widget'][0]['value']['#default_value'] = $field_payable_balance;
             
-            $paid = round($field_deposit);
+            /*$paid = round($field_deposit);
             if ( paid == 0 ) {
                 $form ['field_offset_amount']['widget'][0]['value']['#default_value'] = 0;
             } else {
@@ -215,7 +215,7 @@ function purchase_billing_write_off_form_alter(&$form, FormStateInterface &$form
                 } else {
                     $form ['field_offset_amount']['widget'][0]['value']['#default_value'] = 0;
                 }    
-            }
+            }*/
         } else {
             $purchase_entities = $node->field_sale_purchase_entity;
             $index = 1;
@@ -336,7 +336,7 @@ function ajax_purchase_calculate_prepaid_callback(array $form, FormStateInterfac
         $ajax_response->addCommand(new InvokeCommand('#edit-field-offset-amount-0-value', 'val', [$paid]));
 
         if ( $paid > $field_payable_balance ) {
-            $ajax_response->addCommand(new HtmlCommand('.write-off-message', '<font color="red">沖低帳款金額不應該大於應付餘額, 請做修正</font>'));
+            $ajax_response->addCommand(new HtmlCommand('.write-off-message', '<font color="red">你輸入的金額有誤, 沖低帳款金額將會大於應付餘額, 請做修正</font>'));
             $ajax_response->addCommand(new InvokeCommand('#edit-field-check-amount-0-value', 'val', ['']));
             $ajax_response->addCommand(new InvokeCommand('#edit-field-remittance-amount-0-value', 'val', [""]));
             $ajax_response->addCommand(new InvokeCommand('#edit-field-offset-amount-0-value', 'val', [""]));
@@ -409,5 +409,6 @@ function generate_purchase_billing_write_off_id($vendor_nid) {
 	}
 	return $billing_write_off_id;
 }
+
 
 

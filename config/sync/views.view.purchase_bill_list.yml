@@ -23,7 +23,7 @@ dependencies:
     - options
     - user
 id: purchase_bill_list
-label: 'purchase bill list'
+label: 採購帳單列表
 module: views
 description: ''
 tag: ''

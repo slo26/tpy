@@ -11,7 +11,7 @@ entity_type: node
 bundle: goods
 label: 零件／物品名稱
 description: ''
-required: false
+required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''

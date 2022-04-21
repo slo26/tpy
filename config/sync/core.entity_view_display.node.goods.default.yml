@@ -6,7 +6,6 @@ dependencies:
     - field.field.node.goods.field_cost_price
     - field.field.node.goods.field_goods_name
     - field.field.node.goods.field_long_comment
-    - field.field.node.goods.field_product_model
     - field.field.node.goods.field_unit
     - node.type.goods
   module:
@@ -41,14 +40,6 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 3
-    region: content
-  field_product_model:
-    type: entity_reference_label
-    label: above
-    settings:
-      link: true
-    third_party_settings: {  }
-    weight: 1
     region: content
   field_unit:
     type: string

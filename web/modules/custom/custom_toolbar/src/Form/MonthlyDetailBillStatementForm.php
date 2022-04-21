@@ -34,7 +34,7 @@ class MonthlyDetailBillStatementForm extends ConfigFormBase {
      /**
      * {@inheritdoc}
      */
-    public function buildForm(array $form, FormStateInterface $form_state, $customer_nid = null, $begin_date = null , $end_date = null) {
+    public function buildForm(array $form, FormStateInterface $form_state, $customer_nid = NULL, $begin_date = NULL , $end_date = NULL) {
         $customer = \Drupal\node\Entity\Node::load($customer_nid);
         $table_template = '<div id="monthly-detail-bill-statement-table-top-body">-BODY-</div>';
 
@@ -214,4 +214,5 @@ class MonthlyDetailBillStatementForm extends ConfigFormBase {
      */
     public function submitForm(array &$form, FormStateInterface $form_state) {}
 }
+
 

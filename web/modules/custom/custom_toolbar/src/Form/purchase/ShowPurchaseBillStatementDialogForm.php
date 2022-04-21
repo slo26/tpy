@@ -30,7 +30,7 @@ class ShowPurchaseBillStatementDialogForm extends FormBase {
     /**
      * {@inheritdoc}
      */
-    public function buildForm(array $form, FormStateInterface $form_state, $vendor_nid = null, $begin_date = null , $end_date = null) {
+    public function buildForm(array $form, FormStateInterface $form_state, $vendor_nid = NULL, $begin_date = NULL , $end_date = NULL) {
         $form['#title'] = t('廠商應付帳款明細表');
         $bill_nids = \Drupal::entityQuery("node")
                                 ->condition('type', 'bill_4_purchase')
@@ -99,6 +99,7 @@ class ShowPurchaseBillStatementDialogForm extends FormBase {
         return ['config.show_purchase_bill_statement_dialog_form'];
     }
 }
+
 
 
 

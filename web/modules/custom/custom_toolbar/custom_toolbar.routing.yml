@@ -82,8 +82,19 @@ custom_toolbar.show_detail_monthly_bill_statement:
   defaults:
     _form: 'Drupal\custom_toolbar\Form\MonthlyDetailBillStatementForm'
     _title: '月份應收帳款明細表'
+    customer_nid: ''
+    begin_date: ''
+    end_date: ''
   requirements:
     _role: 'authenticated'
+  options:
+    parameters:
+      customer_nid:
+        type: String
+      begin_date:
+        type: String
+      end_date:
+        type: String 
 
 custom_toolbar.purchase_billing_statementt:
   path: '/admin/billing/purchase-billing-statement'
@@ -104,9 +115,21 @@ custom_toolbar.show_detail_monthly_purchase_bill_statement:
   path: '/admin/bill/monthly-detail-purchase-bill-statementForm/{vendor_nid}/{begin_date}/{end_date}'
   defaults:
     _form: 'Drupal\custom_toolbar\Form\purchase\MonthlyDetailPurchaseBillStatementForm'
-    _title: '月份應付帳款明細表'
+    _title: '月份應付帳款明細表
+    vendor_nid: ''
+    begin_date: ''
+    end_date: '''
   requirements:
     _role: 'authenticated'
+  options:
+    parameters:
+      vendor_nid:
+        type: String
+      begin_date:
+        type: String
+      end_date:
+        type: String 
+
 
 
 

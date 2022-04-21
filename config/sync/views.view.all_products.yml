@@ -11,7 +11,6 @@ dependencies:
     - field.storage.node.field_product_category_inventory
     - field.storage.node.field_product_image
     - field.storage.node.field_product_name
-    - field.storage.node.field_retail_price
     - image.style.thumbnail
     - node.type.product
     - user.role.administrator
@@ -91,7 +90,7 @@ display:
           settings:
             image_link: ''
             image_style: thumbnail
-          group_column: ''
+          group_column: target_id
           group_columns: {  }
           group_rows: true
           delta_limit: 0
@@ -613,15 +612,15 @@ display:
           multi_type: separator
           separator: ', '
           field_api_classes: false
-        field_retail_price:
-          id: field_retail_price
-          table: node__field_retail_price
-          field: field_retail_price
+        field_product_goods:
+          id: field_product_goods
+          table: node__field_product_goods
+          field: field_product_goods
           relationship: none
-          group_type: group
+          group_type: count
           admin_label: ''
           plugin_id: field
-          label: 零售價錢
+          label: 組成產品零作數量
           exclude: false
           alter:
             alter_text: false
@@ -658,18 +657,15 @@ display:
           element_wrapper_type: ''
           element_wrapper_class: ''
           element_default_classes: true
-          empty: '0'
+          empty: ''
           hide_empty: false
           empty_zero: false
           hide_alter_empty: true
-          click_sort_column: value
-          type: number_decimal
+          click_sort_column: target_id
+          type: entity_reference_label
           settings:
-            thousand_separator: ''
-            decimal_separator: .
-            scale: 2
-            prefix_suffix: true
-          group_column: value
+            link: false
+          group_column: target_id
           group_columns: {  }
           group_rows: true
           delta_limit: 0
@@ -839,20 +835,20 @@ display:
         options: {  }
       empty: {  }
       sorts:
-        created:
-          id: created
+        changed:
+          id: changed
           table: node_field_data
-          field: created
+          field: changed
           relationship: none
           group_type: group
           admin_label: ''
           entity_type: node
-          entity_field: created
+          entity_field: changed
           plugin_id: date
           order: DESC
           expose:
             label: ''
-            field_identifier: created
+            field_identifier: ''
           exposed: false
           granularity: second
       arguments: {  }
@@ -1214,6 +1210,7 @@ display:
           replica: false
           query_tags: {  }
       relationships: {  }
+      group_by: true
       header:
         result:
           id: result
@@ -1245,7 +1242,6 @@ display:
         - 'config:field.storage.node.field_product_category_inventory'
         - 'config:field.storage.node.field_product_image'
         - 'config:field.storage.node.field_product_name'
-        - 'config:field.storage.node.field_retail_price'
   page_1:
     id: page_1
     display_title: Page
@@ -1272,4 +1268,3 @@ display:
         - 'config:field.storage.node.field_product_category_inventory'
         - 'config:field.storage.node.field_product_image'
         - 'config:field.storage.node.field_product_name'
-        - 'config:field.storage.node.field_retail_price'
