@@ -1,0 +1,18 @@
+uuid: 7af7b5da-1c64-4395-bdbb-83ec52ebe941
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.expense
+id: node.expense.title
+field_name: title
+entity_type: node
+bundle: expense
+label: 費用編號
+description: ''
+required: true
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

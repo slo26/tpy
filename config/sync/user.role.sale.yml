@@ -4,6 +4,6 @@ status: true
 dependencies: {  }
 id: sale
 label: 銷售
-weight: 7
+weight: -7
 is_admin: null
 permissions: {  }

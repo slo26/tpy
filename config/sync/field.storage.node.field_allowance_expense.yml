@@ -1,0 +1,48 @@
+uuid: 1eef9fbc-92c8-41fa-999b-bc7cd7904b2e
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_allowance_expense
+field_name: field_allowance_expense
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: phone
+      label: 電話費
+    -
+      value: water
+      label: 水費
+    -
+      value: power
+      label: 電費
+    -
+      value: gasoline
+      label: 加油費
+    -
+      value: mail
+      label: 郵務費
+    -
+      value: maintenance
+      label: 修理費
+    -
+      value: meal_allowance
+      label: 交際費
+    -
+      value: utility
+      label: 雜費
+    -
+      value: transportation
+      label: 交通費
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

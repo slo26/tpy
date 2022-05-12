@@ -4,6 +4,6 @@ status: true
 dependencies: {  }
 id: employee
 label: 員工
-weight: 3
+weight: 5
 is_admin: null
 permissions: {  }

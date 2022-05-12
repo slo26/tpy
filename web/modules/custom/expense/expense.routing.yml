@@ -1,0 +1,8 @@
+expense.deposite_allowance:
+  path: '/expense/deposite-allowance\'
+  defaults:
+    _controller: '\Drupal\expense\Controller\ExpenseController::DepositeAllowanceForm'
+  requirements:
+    _role: 'authenticated'
+  options:
+    _admin_route: TRUE

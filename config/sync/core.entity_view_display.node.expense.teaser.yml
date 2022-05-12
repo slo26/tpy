@@ -1,0 +1,26 @@
+uuid: 8d0ddf38-6fef-470f-9e06-e11c525986a3
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.expense.field_allowance_expense
+    - field.field.node.expense.field_detail_expense
+    - field.field.node.expense.field_expense_type
+    - node.type.expense
+  module:
+    - user
+id: node.expense.teaser
+targetEntityType: node
+bundle: expense
+mode: teaser
+content:
+  links:
+    settings: {  }
+    third_party_settings: {  }
+    weight: 100
+    region: content
+hidden:
+  field_allowance_expense: true
+  field_detail_expense: true
+  field_expense_type: true

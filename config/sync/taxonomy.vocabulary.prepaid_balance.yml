@@ -4,5 +4,5 @@ status: true
 dependencies: {  }
 name: 取用預收
 vid: prepaid_balance
-description: 取用預收和累入預收
+description: '銷售沖帳所以用, 取用預收和累入預收'
 weight: 0

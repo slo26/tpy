@@ -4,6 +4,6 @@ status: true
 dependencies: {  }
 id: customer_vendor
 label: 客戶/廠商
-weight: 12
+weight: -2
 is_admin: null
 permissions: {  }

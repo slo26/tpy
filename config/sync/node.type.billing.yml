@@ -10,7 +10,7 @@ third_party_settings:
     parent: ''
 name: 銷售帳單
 type: billing
-description: Billing
+description: 銷售帳單
 help: ''
 new_revision: true
 preview_mode: 1

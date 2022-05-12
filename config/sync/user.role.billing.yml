@@ -4,6 +4,6 @@ status: true
 dependencies: {  }
 id: billing
 label: 帳務
-weight: 10
+weight: -4
 is_admin: null
 permissions: {  }

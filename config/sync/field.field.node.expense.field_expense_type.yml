@@ -1,0 +1,21 @@
+uuid: b6826a77-8078-4c03-8c84-abae76c8be23
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_expense_type
+    - node.type.expense
+  module:
+    - options
+id: node.expense.field_expense_type
+field_name: field_expense_type
+entity_type: node
+bundle: expense
+label: 費用種類
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

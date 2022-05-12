@@ -1,0 +1,112 @@
+<?php
+
+use \Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Ajax\AjaxResponse;
+use Drupal\Core\Ajax\InvokeCommand;
+use Drupal\Core\Ajax\HtmlCommand;
+use Drupal\Core\Ajax\ReplaceCommand;
+use Drupal\Core\Ajax;
+use Drupal\Core\Url;
+use Drupal\Core\Ajax\OpenModalDialogCommand;
+use Drupal\Core\Form\FormBuilder;
+
+function expense_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
+	if ( $form_id === 'node_expense_form' || $form_id === 'node_expense_edit_form' ) {
+		$node = $form_state->getFormObject()->getEntity();
+		if ( $node->isNew() ) {
+			$form ['title']['widget'][0]['value']['#default_value'] = gen_expense_id();
+		}
+        $applicant = \Drupal\user\Entity\User::load($node->uid->target_id);
+        $form['applicant'] = array(
+                '#type' => 'markup',
+                '#markup' => '<div class="applicant"><strong>申請人: </strong>' . $applicant->field_full_name->value . '</div>',
+        );
+
+        $form['field_expense_type']['widget']['#ajax'] = [
+			'callback' => 'ajax_expense_type_changed',
+			'event' => 'change',
+		];
+
+        $form['open_add_expense_button'] = [
+            '#type' => 'link',
+            '#title' => t('新增費用'),
+            '#weight' => $form['field_expense_type']['#weight'],
+            '#attributes' => [
+                'class' => [
+                    'use-ajax',
+                    'button',
+                    'edit-expense-submit',
+                ],
+            ],
+            '#prefix' => '<div id="open-add-expense-modal-form">',
+		    '#suffix' => '</div>',
+        ];
+
+        $form['input_list'] = array(
+                '#weight' => $form['open_add_expense_modal_form']['#weight'] + 1,
+                '#prefix' => '<div class="input-list"></div>',
+        );
+
+        if ( !$node->isNew() ) {
+            $form['input_list']['#prefix'] = '<div class="input-list">' . list_all_expenses_table_generator($node->field_detail_expense->value) . '</div>';
+            if ( !empty($node->field_detail_expense->value) ) {
+                $form['field_expense_type']['#disabled'] = true;
+            }
+        }
+
+        $form ['title']['#disabled'] = true;
+        $form['#attached']['library'][] = 'core/drupal.dialog.ajax';
+        $form['#attached']['library'][] = 'expense/expense';
+	}
+}
+
+function ajax_expense_type_changed(array $form, FormStateInterface $form_state) {
+	$response = new AjaxResponse();
+    $expense_type = $form_state->getValue('field_expense_type')[0]['value'];
+
+    if ( $expense_type == "allowance" ) {
+        $url = Url::fromRoute('expense.deposite_allowance');
+        $form['open_add_expense_button']['#url'] = $url;
+        $response->addCommand(new ReplaceCommand('#open-add-expense-modal-form', $form['open_add_expense_button']));
+    } else if ( $expense_type == "cash_out_allowance" ) {
+        
+    } else {
+        //$response->addCommand(new AfterCommand('#edit-to-storage', 'attr', ['disabled', true]));
+    }
+
+	return $response;
+}
+
+function list_all_expenses_table_generator($field_detail_expense) {
+    $json_detail = json_decode($field_detail_expense, true);
+
+    $table = "";
+    if ( count($json_detail) == 0 ) {
+        $table = '<div id="input-list"></div>';
+        return $table;
+    }
+    $table = '<table>-BODY-</table>';
+    $table_head = "<thead><tr><td>排序</td><td>存入日期</td><td>存款人</td><td>儲存零用金</td><td></td></tr></thead>";
+    $table_body_begin = '<tbody>';
+    $table_body = '';
+    for ($i = 0; $i < count($json_detail); $i++) {
+        $action_button = '<button class="expense-delete" id="expense-delete-' . $i . '" value="' .$i . '"' . ' type="button" onClick="remove_expense_allowance(' . $i . ')">delete</button>';  
+        $table_body .= '<tr><td>' . ($i+1) . '</td><td>' . $json_detail[$i]['Transaction Date'] . '</td><td>' . $json_detail[$i]["Transaction Employee"] . '</td><td>' . $json_detail[$i]['Amount'] . '</td><td>' . $action_button . '</td></tr>';
+    }
+    $table_body_end = '</tbody>';
+
+    $table_body = $table_head . $table_body_begin . $table_body . $table_body_end;
+    $table = str_replace('-BODY-', $table_body, $table);
+    return $table;
+  }
+
+function gen_expense_id() {
+    $expense_id = "EXP-" . date("Ymd");
+
+    $query = \Drupal::entityQuery("node")
+								->condition('type', 'expense')
+								->execute();
+    $expense_id =  $expense_id . "-" . (count($query)+ 1);
+    
+	return $expense_id;
+}

@@ -4,5 +4,5 @@ status: true
 dependencies: {  }
 name: 倉儲交易紀錄
 vid: inventory_transaction
-description: 倉儲交易活動紀錄
+description: '倉儲使用, 倉儲交易活動紀錄'
 weight: 0

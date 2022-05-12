@@ -2,7 +2,7 @@ uuid: ee296823-dc45-44b9-ba4a-b24ab46bc879
 langcode: en
 status: true
 dependencies: {  }
-name: 'Purchase Items'
+name: 採購項目
 vid: purchase_items
-description: ''
+description: 採購單所使用
 weight: 0

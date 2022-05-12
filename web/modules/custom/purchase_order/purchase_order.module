@@ -129,6 +129,7 @@ function purchase_order_form_alter(&$form, FormStateInterface &$form_state, $for
 						'#open' => true,
         );
 		$form['title']['#group'] = 'purchase_info';
+		$form['title']['#disabled'] = true;
 		$form['field_purchase_status']['#group'] = 'purchase_info';
 
 		$form['field_created_date']['#group'] = 'purchase_info';
@@ -926,6 +927,7 @@ function purchase_order_table_generator_in_view($node) {
 	
 	return $ajax_response;
 }*/
+
 
 
 

@@ -1,0 +1,39 @@
+uuid: 2027b17b-d350-4b1d-ba55-26c5fa84cb10
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+    - options
+id: node.field_expense_type
+field_name: field_expense_type
+entity_type: node
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: wage
+      label: 薪資
+    -
+      value: allowance
+      label: 儲存零用金
+    -
+      value: cash_out_allowance
+      label: 現金支出
+    -
+      value: rental
+      label: 租金
+    -
+      value: logistic
+      label: 物流費
+    -
+      value: transportation
+      label: 交通費
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

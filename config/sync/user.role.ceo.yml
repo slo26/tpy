@@ -24,8 +24,8 @@ dependencies:
     - node
     - taxonomy
 id: ceo
-label: CEO
-weight: 6
+label: 執行長
+weight: 1
 is_admin: null
 permissions:
   - 'access taxonomy overview'

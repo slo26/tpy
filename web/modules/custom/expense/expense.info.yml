@@ -1,0 +1,6 @@
+name: expense
+type: module
+description: This module is to handle expense
+core_version_requirement: ^8 || ^9
+package: tpy
+

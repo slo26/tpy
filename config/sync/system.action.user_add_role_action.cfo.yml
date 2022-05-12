@@ -1,0 +1,14 @@
+uuid: 43f15f1b-66b2-49ef-97a8-89fe9448a306
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.cfo
+  module:
+    - user
+id: user_add_role_action.cfo
+label: 'Add the cfo role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: cfo

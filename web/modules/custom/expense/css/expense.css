@@ -1,0 +1,5 @@
+#edit-field-expense-type, .edit-expense-submit {
+    margin-right: 0.5em;
+    overflow: auto;
+    display: inline-block;
+}

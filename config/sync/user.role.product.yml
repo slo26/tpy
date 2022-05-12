@@ -4,6 +4,6 @@ status: true
 dependencies: {  }
 id: product
 label: 產品
-weight: 11
+weight: -3
 is_admin: null
 permissions: {  }

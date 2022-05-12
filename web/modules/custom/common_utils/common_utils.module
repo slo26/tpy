@@ -1,5 +1,7 @@
 <?php
 use \Drupal\field\Entity\FieldConfig;
+use \Drupal\Core\Session;
+use \Drupal\Core\Session\SessionManager;
 
 /**
  * Implements hook_page_preprocess_html().

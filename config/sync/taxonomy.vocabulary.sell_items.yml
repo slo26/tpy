@@ -2,7 +2,7 @@ uuid: 7646628a-88a5-46af-8542-c593d0825efb
 langcode: en
 status: true
 dependencies: {  }
-name: 'Sell Items'
+name: 銷售項目
 vid: sell_items
-description: ''
+description: 銷售單所使用
 weight: 0

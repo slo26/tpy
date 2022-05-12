@@ -1,0 +1,21 @@
+uuid: 1f106ed0-3c2f-41cb-85b2-c652b4b2e468
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_allowance_expense
+    - node.type.expense
+  module:
+    - options
+id: node.expense.field_allowance_expense
+field_name: field_allowance_expense
+entity_type: node
+bundle: expense
+label: 零用金消費種類
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: list_string

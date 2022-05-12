@@ -31,7 +31,13 @@
                     update_taxonomy(len);
                 });
             });
-        }
+            $('#add-expense-modal-submit-buttom').on("click", function(e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                add_expense_allowance();
+                $('.ui-dialog-titlebar-close').click();
+            });
+        }   
     };
 
 })(jQuery, Drupal);
@@ -121,5 +127,73 @@ function outbound_inbound_warehouse_table_generate(object) {
     }
     jQuery('#warehouse-inbound-outbound-table').html(table);
 }
+
+function add_expense_allowance() {
+    var detail = jQuery('#edit-field-detail-expense-0-value').val();
+    let jsonData = [];
+    if ( detail != "" ) {
+        jsonData = JSON.parse(detail);
+    }
+
+    var deposite_date = jQuery('#add-expense-modal-deposite-date').val();
+    var deposite_employee = jQuery('#edit-deposite-employee').val();
+    var new_allowance = jQuery('#add-expense-new-allowance').val();
+
+    let object = new Object;
+    object['Transaction Date'] = deposite_date;
+    object['Transaction Employee'] = deposite_employee;
+    object['Amount'] = new_allowance;
+    jsonData.push(object);
+    jQuery('#edit-field-detail-expense-0-value').val(JSON.stringify(jsonData));
+    jQuery('#edit-field-expense-type').attr('disabled', true);
+
+    expense_for_allowance_table_generator(jsonData);
+}
+
+function remove_expense_allowance(del) {
+    let object = [];
+    jsonData = JSON.parse(jQuery('#edit-field-detail-expense-0-value').val());
+    for (var i = 0; i < jsonData.length; i++) {
+        if ( del != i ) {
+            object.push(jsonData[i]);
+        }
+    }
+    
+    if ( object.length == 0 ) {
+        jQuery('#edit-field-detail-expense-0-value').val("");
+        jQuery('#edit-field-expense-type').attr('disabled', false);
+    } else {
+        jQuery('#edit-field-detail-expense-0-value').val(JSON.stringify(object));
+        jQuery('#edit-field-expense-type').attr('disabled', true);
+    }
+
+    expense_for_allowance_table_generator(object);
+}
+
+function expense_for_allowance_table_generator(object) {
+    var table = "";
+    if ( object.length == 0 ) {
+        table = '<div id="list-all-expense-table"></div>';
+    } else {
+        table = '<table>-BODY-</table>';
+        var table_head = "<thead><tr><td>排序</td><td>存入日期</td><td>存款人</td><td>儲存零用金</td><td></td></tr></thead>";
+        var table_body_begin = "<tbody>";
+        var table_body = '';
+        for (var i = 0; i < object.length; i++) {
+            var action_button = '<button class="expense-delete" id="expense-delete-' + i + '" value="'  + i + '"' + ' type="button" onClick="remove_expense_allowance(' + i + ')">delete</button>';
+            if ( i == 0 ) {
+                table_body = '<tr><td>' + (i+1) + '</td><td>' + object[i]['Transaction Date'] + '</td><td>' + object[i]['Transaction Employee'] + '</td><td>' + object[i]['Amount'] + '</td><td>' + action_button + '</td></tr>';
+            } else {
+                table_body = table_body + '<tr><td>' + (i+1) + '</td><td>' + object[i]['Transaction Date'] + '</td><td>' + object[i]['Transaction Employee'] + '</td><td>' + object[i]['Amount'] + '</td><td>' + action_button + '</td></tr>';
+            }
+        }
+        table_body_end = '</tbody>';
+        table_body = table_head + table_body_begin + table_body + table_body_end;
+        table = table.replace('-BODY-', table_body);
+    }
+    jQuery('.input-list').html(table);
+}
+
+
 
 

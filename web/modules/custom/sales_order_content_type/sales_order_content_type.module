@@ -289,6 +289,7 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 						'#open' => true,
         );
 		$form['title']['#group'] = 'order_info';
+		$form['title']['#disabled'] = true;
 		
 		if ( $node->moderation_state->value == "return" || $node->moderation_state->value == "return_completed" ) {
 			$original_sales = \Drupal\node\Entity\Node::load($node->field_original_sales_order_id->target_id);
@@ -1411,6 +1412,7 @@ function getSellOrderID($nid) {
 	$sale = \Drupal\node\Entity\Node::load($nid);
 	return $sale->title->value;
 }
+
 
 
 

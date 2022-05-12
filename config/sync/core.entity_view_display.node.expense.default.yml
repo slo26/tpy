@@ -1,0 +1,40 @@
+uuid: 65041245-86cf-4a8b-962c-4a8d5567939f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.expense.field_allowance_expense
+    - field.field.node.expense.field_detail_expense
+    - field.field.node.expense.field_expense_type
+    - node.type.expense
+  module:
+    - options
+    - user
+id: node.expense.default
+targetEntityType: node
+bundle: expense
+mode: default
+content:
+  field_allowance_expense:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 5
+    region: content
+  field_detail_expense:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 4
+    region: content
+  field_expense_type:
+    type: list_default
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 3
+    region: content
+hidden:
+  links: true

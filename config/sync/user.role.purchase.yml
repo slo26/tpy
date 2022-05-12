@@ -4,6 +4,6 @@ status: true
 dependencies: {  }
 id: purchase
 label: 採購
-weight: 8
+weight: -6
 is_admin: null
 permissions: {  }

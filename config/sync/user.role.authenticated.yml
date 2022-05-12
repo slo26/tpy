@@ -5,7 +5,6 @@ dependencies:
   config:
     - filter.format.comment
     - filter.format.full_html
-    - node.type.article
     - node.type.bill_4_purchase
     - node.type.billing
     - node.type.billing_write_off
@@ -45,7 +44,7 @@ _core:
   default_config_hash: btW6TFHajhy7Eo6YUvdFiPh4TcPggo8GBXYctjV6zag
 id: authenticated
 label: 'Authenticated user'
-weight: 1
+weight: -9
 is_admin: false
 permissions:
   - 'access comments'
@@ -56,7 +55,6 @@ permissions:
   - 'access workbench'
   - 'administer search'
   - 'administer views'
-  - 'create article content'
   - 'create billing content'
   - 'create billing_write_off content'
   - 'create customer content'

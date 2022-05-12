@@ -1,0 +1,9 @@
+uuid: 2d91f495-caea-4c32-a5f4-0ed8c0f348bf
+langcode: en
+status: true
+dependencies: {  }
+id: accountant
+label: 會計師
+weight: 3
+is_admin: null
+permissions: {  }

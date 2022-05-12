@@ -4,6 +4,6 @@ status: true
 dependencies: {  }
 id: document
 label: 文件
-weight: 14
+weight: 0
 is_admin: null
 permissions: {  }

@@ -1,0 +1,5 @@
+expense:
+  version: VERSION
+  css:
+    theme:
+      css/expense.css: {}

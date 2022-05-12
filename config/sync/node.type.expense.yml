@@ -1,4 +1,4 @@
-uuid: 466e0791-1ce9-413e-9073-959de5da1680
+uuid: 3edb03e2-e532-4a11-97e1-89e4bb0f55f9
 langcode: en
 status: true
 dependencies:
@@ -8,9 +8,9 @@ third_party_settings:
   menu_ui:
     available_menus: {  }
     parent: ''
-name: 應收帳款沖銷
-type: billing_write_off
-description: 應收帳款沖銷
+name: 費用
+type: expense
+description: ''
 help: ''
 new_revision: false
 preview_mode: 1

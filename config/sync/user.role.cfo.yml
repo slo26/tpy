@@ -1,9 +1,9 @@
-uuid: c8153cbb-60fc-4c38-8491-3e22cbf2d8aa
+uuid: 9457541e-f4ef-4a06-9a5f-6c8ac0b257f1
 langcode: en
 status: true
 dependencies: {  }
-id: sales
-label: 業務
-weight: 6
+id: cfo
+label: 財務長
+weight: 2
 is_admin: null
 permissions: {  }

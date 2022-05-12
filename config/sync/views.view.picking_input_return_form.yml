@@ -15,7 +15,7 @@ dependencies:
     - options
     - user
 id: picking_input_return_form
-label: 'picking input return form'
+label: 提領單/轉倉單/進貨單/退倉單列表
 module: views
 description: ''
 tag: ''
