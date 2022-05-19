@@ -18,6 +18,7 @@ class QuickNodeCloneController extends ControllerBase {
             $clone_node->set('field_delivery', $node->field_delivery->value);
             $clone_node->set('field_created_date', date('Y-m-d', time()));
             $clone_node->set('field_comments_for_print', $node->field_comments_for_print->value);
+            $clone_node->set('field_long_comment', $node->field_long_comment->value);
             $clone_node->set('field_receiver', $node->field_receiver->value);
             $clone_node->set('field_logistics', $node->field_logistics->value);
             $clone_node->set('field_shipping_address', $node->field_shipping_address->value);
@@ -61,3 +62,4 @@ class QuickNodeCloneController extends ControllerBase {
         }
     }
 }
+

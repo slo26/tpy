@@ -1,0 +1,19 @@
+uuid: 7e5926d5-68f0-4304-b0f0-fc236b2d438c
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_long_comment
+    - node.type.sales_order
+id: node.sales_order.field_long_comment
+field_name: field_long_comment
+entity_type: node
+bundle: sales_order
+label: 額外給客戶備註
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string_long

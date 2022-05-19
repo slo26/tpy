@@ -238,3 +238,17 @@ div.js-form-item-moderation-state-0-state label:after {
     display: block;
 }
 
+
+#purchase-item-status-selection {
+    display: inline-block;
+    margin-right: 4px;
+}
+
+.update-status-to-all-sell-items-button,
+.to-sell-item-list {
+    margin-right: 0.5em;
+    overflow: auto;
+    display: contents;
+}
+
+

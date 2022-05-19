@@ -2,7 +2,15 @@ custom_toolbar.import_sell_inventory:
   path: '/admin/custom-toolbar/import-sell-inventory'
   defaults:
     _controller: '\Drupal\custom_toolbar\Controller\CustomToolbarController::import_sell_inventory'
-    _title: '進銷存'
+    _title: '進銷'
+  requirements:
+    _role: 'authenticated'
+
+custom_toolbar.storage_inventory:
+  path: '/admin/custom-toolbar/inventory'
+  defaults:
+    _controller: '\Drupal\custom_toolbar\Controller\CustomToolbarController::inventory_storage'
+    _title: '倉庫/倉儲選單'
   requirements:
     _role: 'authenticated'
 
@@ -129,6 +137,7 @@ custom_toolbar.show_detail_monthly_purchase_bill_statement:
         type: String
       end_date:
         type: String 
+
 
 
 

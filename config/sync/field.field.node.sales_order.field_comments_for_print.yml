@@ -11,7 +11,7 @@ id: node.sales_order.field_comments_for_print
 field_name: field_comments_for_print
 entity_type: node
 bundle: sales_order
-label: 列印備註選項
+label: 固定列印備註選項
 description: ''
 required: false
 translatable: false

@@ -5,6 +5,9 @@ use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax;
 
+/**
+ * @ignore
+ */
 function billing_purchase_node_presave(Drupal\Core\Entity\EntityInterface $node) {
     if ( $node->type->target_id == "bill_4_purchase" ) {
         if ( empty($node->title->value) ) {
@@ -34,6 +37,9 @@ function billing_purchase_node_presave(Drupal\Core\Entity\EntityInterface $node)
     }
 }
 
+/**
+ * @ignore
+ */
 function billing_purchase_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
     if ( $form_id == "node_bill_4_purchase_form" || $form_id == "node_bill_4_purchase_edit_form" ) {
         $node = $form_state->getFormObject()->getEntity();
@@ -66,6 +72,9 @@ function billing_purchase_form_alter(&$form, FormStateInterface &$form_state, $f
     }
 }
 
+/**
+ * @ignore
+ */
 function ajax_calculate_remain_to_pay_amount_purchase(array $form, FormStateInterface $form_state) {
 	$ajax_response = new AjaxResponse();
     $field_total_amount_with_tax = $form_state->getValue('field_total_amount_with_tax')[0]['value'];
@@ -78,6 +87,13 @@ function ajax_calculate_remain_to_pay_amount_purchase(array $form, FormStateInte
 	return $ajax_response;
 }
 
+/**
+ * delete a purchase bill.
+ *
+ * @param Node $node node entity
+ * @return void
+ *
+ */
 function billing_purchase_node_delete(Drupal\Core\Entity\EntityInterface $node) {
     if ($node->bundle() == "bill_4_purchase") {
         \Drupal::messenger()->addMessage($node->title->value . "成功刪除.", "status");
@@ -103,6 +119,12 @@ function billing_purchase_node_delete(Drupal\Core\Entity\EntityInterface $node) 
     }
 }
 
+/**
+ * generate purcahse bill unique id.
+ *
+ * @return void
+ *
+ */
 function generate_unique_id_for_bill_purchase() {
     $query = \Drupal::entityQuery("node")->condition('type', 'bill_4_purchase')->execute();
     $index = count($query);
@@ -120,6 +142,14 @@ function generate_unique_id_for_bill_purchase() {
     return $unique_id;
 } 
 
+/**
+ * calculate for total remaining to pay.
+ *
+ * @param float $field_total_amount_with_tax - amount with tax
+ * @param float $write_off_amount - amount has been written off
+ * @return float - amount after tax
+ *
+ */
 function calculate_remain_to_pay_amount_purchase($field_total_amount_with_tax, $deposit, $write_off_amount) {
     $remain = round($field_total_amount_with_tax) - round($deposit) - round($write_off_amount);
     if ( empty($remain) ) {
@@ -127,6 +157,7 @@ function calculate_remain_to_pay_amount_purchase($field_total_amount_with_tax, $
     }
     return $remain;
 }
+
 
 
 

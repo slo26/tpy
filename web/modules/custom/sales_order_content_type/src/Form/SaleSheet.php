@@ -113,12 +113,11 @@ class SaleSheet extends ConfigFormBase {
                 $table_footer = $table_start . $table_body . $table_end;
             }
 
+            $comment = "";
             if ( !empty($sale->field_comments_for_print->value) ) {
                 $comment = \Drupal::config ('common_utils.comment_selection_for_print')->get($sale->field_comments_for_print->value);
-                $comment = '<div id="sales-oder-table-comment"><pre>' . $comment . '</pre></div>';
-            } else {
-                $comment = "";
             }
+            $comment = '<div id="sales-oder-table-comment"><pre>' . $comment . '</pre><pre>' . $sale->field_long_comment->value . '</pre></div>';
             
             $result = $table_head . $table_list . $table_footer . $comment;
         } else {
@@ -142,6 +141,7 @@ class SaleSheet extends ConfigFormBase {
      */
     public function submitForm(array &$form, FormStateInterface $form_state) {}
 }
+
 
 
 

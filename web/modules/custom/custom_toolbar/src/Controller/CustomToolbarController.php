@@ -420,7 +420,7 @@ class CustomToolbarController extends ControllerBase {
         $markup .= '</a></li>';
         $markup .= '</ul></div></div>';
 
-        $markup .= '<div class="panel">';
+        /*$markup .= '<div class="panel">';
         $markup .= '<h3 class="panel__title">倉儲</h3>';
         $markup .= '<div class="panel__content">';
         $markup .= '<ul class="admin-list">';
@@ -459,7 +459,7 @@ class CustomToolbarController extends ControllerBase {
         $markup .= '<span class="label">倉庫列表</span>';
         $markup .= '<div class="description">倉庫列表</div>';
         $markup .= '</a></li>';
-        $markup .= '</ul></div></div>';
+        $markup .= '</ul></div></div>';*/
 
         $markup .= '</div>';
 
@@ -568,7 +568,72 @@ class CustomToolbarController extends ControllerBase {
             '#markup' => $markup,
         );
     }
+
+    public function inventory_storage() {
+        $markup = '<div id="block-seven-content" class="block block-system block-system-main-block">';
+        $markup .= '<div class="clearfix">';
+
+        $markup .= '<div class="layout-column layout-column--half">';
+        $markup .= '<div class="panel">';
+        $markup .= '<h3 class="panel__title">倉儲</h3>';
+        $markup .= '<div class="panel__content">';
+        $markup .= '<ul class="admin-list">';
+        $markup .= '<li>';
+        $markup .= '<a href="/node/add/stock_up">';
+        $markup .= '<span class="label">新增商品庫存</span>';
+        $markup .= '<div class="description">新增商品庫存</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/all-stock-up">';
+        $markup .= '<span class="label">商品庫存列表</span>';
+        $markup .= '<div class="description">商品庫存列表</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/node/add/ourbound_inbound_warehouse">';
+        $markup .= '<span class="label">提貨/入庫/轉貨單</span>';
+        $markup .= '<div class="description">領料/領貨, 入庫, 庫存轉倉庫, 退貨入庫</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/picking-input-return-form">';
+        $markup .= '<span class="label">提貨/入庫/轉貨單列表</span>';
+        $markup .= '<div class="description">提貨/入庫/轉貨單列表</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/inventory-transaction-list">';
+        $markup .= '<span class="label">倉儲活動交易紀錄</span>';
+        $markup .= '<div class="description">倉儲活動交易紀錄</div>';
+        $markup .= '</a></li>';
+        $markup .= '</ul></div></div>';
+
+        $markup .= '</div>';
+
+        $markup .= '<div class="layout-column layout-column--half">';
+
+        $markup .= '<div class="panel">';
+        $markup .= '<h3 class="panel__title">倉庫</h3>';
+        $markup .= '<div class="panel__content">';
+        $markup .= '<ul class="admin-list">';
+        $markup .= '<li>';
+        $markup .= '<a href="/node/add/storage">';
+        $markup .= '<span class="label">新增倉庫</span>';
+        $markup .= '<div class="description">新增倉庫</div>';
+        $markup .= '</a></li>';
+        $markup .= '<li>';
+        $markup .= '<a href="/admin/all-storages">';
+        $markup .= '<span class="label">倉庫列表</span>';
+        $markup .= '<div class="description">倉庫列表</div>';
+        $markup .= '</a></li>';
+        $markup .= '</ul></div></div>';
+
+        $markup .= '</div></div>';
+
+        return array(
+            '#type' => 'markup',
+            '#markup' => $markup,
+        );
+    }
 }
+
 
 
 

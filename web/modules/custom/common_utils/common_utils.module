@@ -5,12 +5,21 @@ use \Drupal\Core\Session\SessionManager;
 
 /**
  * Implements hook_page_preprocess_html().
+ * @ignore
  */
 function common_utils_preprocess_html(&$variables) {
     //Add JS and CSS library
     $variables['#attached']['library'][] = 'common_utils/common_utils';
 }
 
+/**
+ * To get storage setting from Text List field type.
+ *
+ * @param string $field_name node field name
+ * @param string $content_type - content type machine name
+ * @return array|null - storage setting in array
+ *
+ */
 function getFieldStorageSettingsAllowedValues($field_name, $content_type) {
     try {   
         $settings = FieldConfig::load('node.'.$content_type.'.'.$field_name)->getFieldStorageDefinition()->getSettings();
@@ -20,6 +29,15 @@ function getFieldStorageSettingsAllowedValues($field_name, $content_type) {
     }
 }
 
+/**
+ * get key by providing label from Text List field type.
+ *
+ * @param entity $entity - entity object
+ * @param string $field_name - entity field machine name
+ * @param string $value - label
+ * @return string|null - key
+ *
+ */
 function get_entity_storage_key($entity, $field_name, $value) {
     if ( $entity->$field_name != null ) {
         $allowed_values = $entity->$field_name->getSetting('allowed_values');
@@ -32,6 +50,15 @@ function get_entity_storage_key($entity, $field_name, $value) {
     return null;
 }
 
+/**
+ * get label by providing key from Text List field type.
+ *
+ * @param entity $entity - entity object
+ * @param string $field_name - entity field machine name
+ * @param string $value - label
+ * @return string|null - label
+ *
+ */
 function get_entity_storage_label($entity, $field_name, $value) {
     if ( $entity->$field_name != null ) {
         $allowed_values = $entity->$field_name->getSetting('allowed_values');
@@ -44,6 +71,13 @@ function get_entity_storage_label($entity, $field_name, $value) {
     return null;
 }
 
+/**
+ * get goods or product name by providing nid.
+ *
+ * @param int $goods_nid - node id
+ * @return string - good name or product name
+ *
+ */
 function get_goods_name_by_nid($goods_nid) {
     $goods = \Drupal\node\Entity\Node::load($goods_nid);
     if ( $goods->bundle() == "goods" ) {
@@ -53,11 +87,25 @@ function get_goods_name_by_nid($goods_nid) {
     }
 }
 
+/**
+ * get product name by providing nid.
+ *
+ * @param int $product_nid - node id
+ * @return string - product name
+ *
+ */
 function get_product_name_by_nid($product_nid) {
     $product = \Drupal\node\Entity\Node::load($product_nid);
     return $product->field_product_name->value;
 }
 
+/**
+ * get storage name by providing nid.
+ *
+ * @param int $storage_nid - node id
+ * @return string - storage name
+ *
+ */
 function get_storage_name_by_nid($storage_nid) {
     $storage = \Drupal\node\Entity\Node::load($storage_nid);
     if ( empty($storage->field_storage_name->value) ) {
@@ -66,16 +114,37 @@ function get_storage_name_by_nid($storage_nid) {
     return $storage->field_storage_name->value;
 }
 
+/**
+ * get sell order name by providing nid.
+ *
+ * @param int $order_nid - node id
+ * @return string - sell order name
+ *
+ */
 function get_sell_order_number_by_nid($order_nid) {
     $order = \Drupal\node\Entity\Node::load($order_nid);
     return $order->title->value;
 }
 
+/**
+ * get purchase order name by providing nid.
+ *
+ * @param int $order_nid - node id
+ * @return string - purchase order name
+ *
+ */
 function get_purchase_order_number_by_nid($order_nid) {
     $order = \Drupal\node\Entity\Node::load($order_nid);
     return $order->title->value;
 }
 
+/**
+ * get storage name by storage id (倉庫編號).
+ *
+ * @param string $storage_id - storage id
+ * @return string - storage name
+ *
+ */
 function get_storage_name($storage_id) {
     $connection = \Drupal::database();
     $storage_nids = \Drupal::entityQuery("node")
@@ -93,6 +162,13 @@ function get_storage_name($storage_id) {
     }
 }
 
+/**
+ * find product where storage at by product nid.
+ *
+ * @param int $product_nid - product nid
+ * @return array - storage nids where has product
+ *
+ */
 function find_product_nid_where_storage_at($product_nid) {
     $storage_nids = array();
     
@@ -107,6 +183,12 @@ function find_product_nid_where_storage_at($product_nid) {
     return $storage_nids;
 }
 
+/**
+ * get host name.
+ *
+ * @return void
+ *
+ */
 function get_hostname() {
     $config = \Drupal::config ( 'common_utils.settings' );
     $hostname = $config->get('hostname');
@@ -114,6 +196,13 @@ function get_hostname() {
     return $hostname;
 }
 
+/**
+ * get product or goods name by providing nid.
+ *
+ * @param int $nid - nid
+ * @return string - product name or goods name
+ *
+ */
 function get_product_or_goods_name_by_nid($nid) {
     $node = \Drupal\node\Entity\Node::load($nid);
     if ( $node != null && $node->getType() == "goods" ) {
@@ -125,11 +214,24 @@ function get_product_or_goods_name_by_nid($nid) {
     return "";
 }
 
+/**
+ * get product or goods model by providing nid.
+ *
+ * @param int $nid - nid
+ * @return string - product name or goods model
+ *
+ */
 function get_product_or_goods_model_by_nid($nid) {
     $node = \Drupal\node\Entity\Node::load($nid);
     return $node->title->value;
 }
 
+/**
+ * check the current user has permission to read gross profit margin.
+ *
+ * @return bool - true or false
+ *
+ */
 function view_gross_profit_margin() {
     $config = \Drupal::config ( 'common_utils.settings' );
     $auth = explode(",", $config->get('view_gross_profit_margin_info'));
@@ -145,12 +247,33 @@ function view_gross_profit_margin() {
     return false;
 }
 
+/**
+ * get 商業營業稅.
+ *
+ * @return void
+ *
+ */
 function get_business_tax() {
     $config = \Drupal::config ( 'common_utils.settings' );
     $business_tax = $config->get('sales_tax');
     return $business_tax;
 }
 
+/**
+ * create warehouse activiity in the transaction log.
+ *
+ * @param int $item_nid - product nid or goods nid
+ * @param int $from_storage_nid - from storage nid
+ * @param int $to_storage_nid - to storage nid
+ * @param string $trans_type - transaction type
+ * @param int $quantity - transaction quantity
+ * @param int $before_trans - before transaction quantity
+ * @param int $after_trans - after transaction quantity
+ * @param string $source - transaction soruce
+ * @param string $trans_time - transaction time
+ * @return void
+ *
+ */
 function create_warehouse_transaction_log($item_nid, $from_storage_nid, $to_storage_nid, $trans_type, $quantity, $before_trans, $after_trans, $source, $trans_time) {
     $transaction = \Drupal\taxonomy\Entity\Term::create(['vid' => 'inventory_transaction']);
     if ( empty($trans_time) ) {
@@ -174,6 +297,7 @@ function create_warehouse_transaction_log($item_nid, $from_storage_nid, $to_stor
     $transaction->set('field_after_transaction', $after_trans);
     $transaction->save();
 }
+
 
 
 

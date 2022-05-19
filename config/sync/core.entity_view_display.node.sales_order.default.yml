@@ -11,6 +11,7 @@ dependencies:
     - field.field.node.sales_order.field_customer_entity
     - field.field.node.sales_order.field_delivery
     - field.field.node.sales_order.field_logistics
+    - field.field.node.sales_order.field_long_comment
     - field.field.node.sales_order.field_original_sales_order_id
     - field.field.node.sales_order.field_receiver
     - field.field.node.sales_order.field_return_completed
@@ -92,6 +93,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     weight: 7
+    region: content
+  field_long_comment:
+    type: basic_string
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    weight: 19
     region: content
   field_original_sales_order_id:
     type: entity_reference_label

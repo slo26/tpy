@@ -370,10 +370,15 @@ function purchase_order_form_alter(&$form, FormStateInterface &$form_state, $for
 		$form['list_merchandise'] = [
 			'#type' => 'entity_autocomplete',
 			'#target_type' => 'node',
-			'#title' => '產品/零件/物品編號',
-			'#selection_settings' => array(
-				'target_bundles' =>array('product', 'goods'),
-			),
+			'#selection_handler' => 'views',
+			'#title' => t('產品/零件/物品編號'),
+			'#selection_settings' => [
+				'view' => [
+					'view_name' => 'product_and_goods_entities_for_view',
+					'display_name' => 'entity_reference_1',
+					'arguments' => []
+				], 
+			],
 			'#ajax' => [
 				'callback' => 'ajax_merchandise_category',
 				'event' => 'autocompleteclose change',
@@ -927,6 +932,7 @@ function purchase_order_table_generator_in_view($node) {
 	
 	return $ajax_response;
 }*/
+
 
 
 

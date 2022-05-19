@@ -11,6 +11,7 @@ dependencies:
     - field.field.node.sales_order.field_customer_entity
     - field.field.node.sales_order.field_delivery
     - field.field.node.sales_order.field_logistics
+    - field.field.node.sales_order.field_long_comment
     - field.field.node.sales_order.field_original_sales_order_id
     - field.field.node.sales_order.field_receiver
     - field.field.node.sales_order.field_return_completed
@@ -33,7 +34,7 @@ mode: default
 content:
   field_appraise_date:
     type: datetime_default
-    weight: 10
+    weight: 11
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -45,13 +46,13 @@ content:
     third_party_settings: {  }
   field_completed_date:
     type: datetime_default
-    weight: 12
+    weight: 13
     region: content
     settings: {  }
     third_party_settings: {  }
   field_created_date:
     type: datetime_default
-    weight: 9
+    weight: 10
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -77,6 +78,14 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
+  field_long_comment:
+    type: string_textarea
+    weight: 8
+    region: content
+    settings:
+      rows: 5
+      placeholder: ''
+    third_party_settings: {  }
   field_receiver:
     type: string_textfield
     weight: 2
@@ -87,19 +96,19 @@ content:
     third_party_settings: {  }
   field_return_completed:
     type: datetime_default
-    weight: 14
+    weight: 15
     region: content
     settings: {  }
     third_party_settings: {  }
   field_return_date:
     type: datetime_default
-    weight: 13
+    weight: 14
     region: content
     settings: {  }
     third_party_settings: {  }
   field_rich_comment:
     type: text_textarea
-    weight: 8
+    weight: 9
     region: content
     settings:
       rows: 5
@@ -115,7 +124,7 @@ content:
     third_party_settings: {  }
   field_shipping_date:
     type: datetime_default
-    weight: 11
+    weight: 12
     region: content
     settings: {  }
     third_party_settings: {  }
@@ -129,7 +138,7 @@ content:
     third_party_settings: {  }
   moderation_state:
     type: moderation_state_default
-    weight: 15
+    weight: 16
     region: content
     settings: {  }
     third_party_settings: {  }

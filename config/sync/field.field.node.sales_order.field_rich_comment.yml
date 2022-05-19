@@ -16,7 +16,7 @@ id: node.sales_order.field_rich_comment
 field_name: field_rich_comment
 entity_type: node
 bundle: sales_order
-label: 銷售單備註
+label: 內部使用備註
 description: ''
 required: false
 translatable: false

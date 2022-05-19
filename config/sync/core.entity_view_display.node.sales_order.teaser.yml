@@ -12,6 +12,7 @@ dependencies:
     - field.field.node.sales_order.field_customer_entity
     - field.field.node.sales_order.field_delivery
     - field.field.node.sales_order.field_logistics
+    - field.field.node.sales_order.field_long_comment
     - field.field.node.sales_order.field_original_sales_order_id
     - field.field.node.sales_order.field_receiver
     - field.field.node.sales_order.field_return_completed
@@ -48,6 +49,7 @@ hidden:
   field_customer_entity: true
   field_delivery: true
   field_logistics: true
+  field_long_comment: true
   field_original_sales_order_id: true
   field_receiver: true
   field_return_completed: true

@@ -5,6 +5,9 @@ use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax;
 
+/**
+ * @ignore
+ */
 function billing_node_presave(Drupal\Core\Entity\EntityInterface $node) {
     if ( $node->type->target_id == "billing" ) {
         if ( empty($node->title->value) ) {
@@ -43,6 +46,9 @@ function billing_node_presave(Drupal\Core\Entity\EntityInterface $node) {
     }
 }
 
+/**
+ * @ignore
+ */
 function billing_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
     if ( $form_id == "node_billing_form" || $form_id == "node_billing_edit_form" ) {
         $node = $form_state->getFormObject()->getEntity();
@@ -97,6 +103,9 @@ function billing_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
     }
 }
 
+/**
+ * @ignore
+ */
 function ajax_calculate_remain_to_pay_amount(array $form, FormStateInterface $form_state) {
 	$ajax_response = new AjaxResponse();
     $total_amount_without_tax = $form_state->getValue('field_total_amount_without_tax')[0]['value'];
@@ -113,6 +122,13 @@ function ajax_calculate_remain_to_pay_amount(array $form, FormStateInterface $fo
 	return $ajax_response;
 }
 
+/**
+ * delete a bill.
+ *
+ * @param Node $node node entity
+ * @return void
+ *
+ */
 function billing_node_delete(Drupal\Core\Entity\EntityInterface $node) {
     if ($node->bundle() == "billing") {
         \Drupal::messenger()->addMessage($node->title->value . "成功刪除.", "status");
@@ -138,6 +154,12 @@ function billing_node_delete(Drupal\Core\Entity\EntityInterface $node) {
     }
 }
 
+/**
+ * generate bill unique id.
+ *
+ * @return void
+ *
+ */
 function generate_unique_id_for_bill() {
     $query = \Drupal::entityQuery("node")->condition('type', 'billing')->execute();
     $index = count($query);
@@ -155,11 +177,30 @@ function generate_unique_id_for_bill() {
     return $unique_id;
 } 
 
+/**
+ * calculate for tax.
+ *
+ * @param float $total_amount_without_tax - amount with no tax
+ * @param int $tax_rate - business tax rate
+ * @return float - amount after tax
+ *
+ */
 function calculate_for_tax($total_amount_without_tax, $tax_rate) {
     $tax = $tax_rate / 100;
     return $total_amount_without_tax * $tax;
 }
 
+/**
+ * calculate for total remaining to pay.
+ *
+ * @param float $total_amount_without_tax - amount with no tax
+ * @param float $tax - tax amount
+ * @param float $deposit - deposite
+ * @param float $discount - discount
+ * @param float $write_off_amount - amount has been written off
+ * @return float - amount after tax
+ *
+ */
 function calculate_remain_to_pay_amount($total_amount_without_tax, $tax, $deposit, $discount, $write_off_amount) {
     $remain = round($total_amount_without_tax) + round($tax) - round($deposit) - round($discount) - round($write_off_amount);
     if ( empty($remain) ) {
@@ -167,4 +208,5 @@ function calculate_remain_to_pay_amount($total_amount_without_tax, $tax, $deposi
     }
     return $remain;
 }
+
 

@@ -4,6 +4,9 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\CssCommand;
 
+/**
+ * @ignore
+ */
 function billing_write_off_node_presave(Drupal\Core\Entity\EntityInterface $node) {
     if ( $node->type->target_id == "billing_write_off" ) {
         $query = \Drupal::entityQuery("node");
@@ -19,6 +22,9 @@ function billing_write_off_node_presave(Drupal\Core\Entity\EntityInterface $node
     }
 }
 
+/**
+ * @ignore
+ */
 function billing_write_off_node_insert(Drupal\Core\Entity\EntityInterface $node) {
     if ( $node->type->target_id == "billing_write_off" ) {
         if ( $node->field_accumulated_advance->value > 0 ) {
@@ -59,6 +65,9 @@ function billing_write_off_node_insert(Drupal\Core\Entity\EntityInterface $node)
     }
 }*/
 
+/**
+ * @ignore
+ */
 function billing_write_off_node_delete(Drupal\Core\Entity\EntityInterface $node) {
     if ( $node->type->target_id == "billing_write_off" ) {
         $field_sale_purchase_entities = $node->field_sale_purchase_entity;
@@ -84,6 +93,9 @@ function billing_write_off_node_delete(Drupal\Core\Entity\EntityInterface $node)
     }
 }
 
+/**
+ * @ignore
+ */
 function billing_write_off_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
     if ( $form_id === 'node_billing_write_off_form' || $form_id == 'node_billing_write_off_edit_form' ) {
         $node = $form_state->getFormObject()->getEntity();
@@ -388,6 +400,9 @@ function billing_write_off_form_alter(&$form, FormStateInterface &$form_state, $
     }
 }
 
+/**
+ * @ignore
+ */
 function _mySubmit(array &$form, FormStateInterface $form_state) {
     $node = $form_state->getFormObject()->getEntity();
     $begin_date = $node->field_begin_date->value;
@@ -412,6 +427,9 @@ function _mySubmit(array &$form, FormStateInterface $form_state) {
     }
 }
 
+/**
+ * @ignore
+ */
 function ajax_calculate_prepaid_callback(array $form, FormStateInterface $form_state) {
     $ajax_response = new AjaxResponse();
     $field_receivable_balance = $form_state->getValue('field_receivable_balance')[0]['value'];
@@ -441,6 +459,9 @@ function ajax_calculate_prepaid_callback(array $form, FormStateInterface $form_s
 	return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_auto_hedgen_callback(array $form, FormStateInterface $form_state){
     $ajax_response = new AjaxResponse();
     $node = $form_state->getFormObject()->getEntity();
@@ -462,6 +483,9 @@ function ajax_auto_hedgen_callback(array $form, FormStateInterface $form_state){
     return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_undo_hedgen_callback(array $form, FormStateInterface $form_state){
     $ajax_response = new AjaxResponse();
     $node = $form_state->getFormObject()->getEntity();
@@ -480,6 +504,9 @@ function ajax_undo_hedgen_callback(array $form, FormStateInterface $form_state){
     return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_calculate_total_discount_callback(array $form, FormStateInterface $form_state) {
     $ajax_response = new AjaxResponse();
     $node = $form_state->getFormObject()->getEntity();
@@ -522,6 +549,12 @@ function ajax_calculate_total_discount_callback(array $form, FormStateInterface 
     return $ajax_response;
 }
 
+/**
+ * generate sales bill write off unique id.
+ *
+ * @return void
+ *
+ */
 function generate_billing_write_off_id($customer_nid) {
 	$billing_write_off_id = "W-$customer_nid-" . date("Ym");
 	while (true) {
@@ -546,4 +579,5 @@ function generate_billing_write_off_id($customer_nid) {
 	}
 	return $billing_write_off_id;
 }
+
 

@@ -19,10 +19,13 @@ settings:
       label: 自取
     -
       value: delivery
-      label: 送貨
+      label: 公司貨車
     -
       value: mail_paid
       label: 物流代收款
+    -
+      value: storage
+      label: 轉寄庫
   allowed_values_function: ''
 module: options
 locked: false
