@@ -7,6 +7,7 @@ use Drupal\Core\Url;
 
 /**
  * Implements hook_entity_operation().
+ * @ignore
  */
 /*function sell_items_entity_operation(\Drupal\Core\Entity\EntityInterface $entity) {
     $operations = [];
@@ -23,17 +24,32 @@ use Drupal\Core\Url;
 
 /**
  * Implements hook_page_preprocess_html().
+ * @ignore
  */
 function sell_items_preprocess_html(&$variables) {
     //Add JS and CSS library
     $variables['#attached']['library'][] = 'sell_items/sell_items';
 }
 
+/**
+ * @ignore
+ */
 function sell_items_taxonomy_term_presave($term) {
 	if ( $term->bundle() == "sell_items" ) {
         $term->status->value = false; 
         if ( empty($term->field_order_id->target_id) ) {
             $term->set('name', gen_sell_item_id());
+        }
+
+        $client_warehouse = $term->field_client_warehouse->value;
+        if ( ($term->field_requisition_status->value == "transferred") && !empty($client_warehouse) && 
+                (get_storage_nid_by_title($client_warehouse) == -1) ) {
+            $sale_form = \Drupal\node\Entity\Node::load($term->field_order_id->target_id);
+            $customer = \Drupal\node\Entity\Node::load($sale_form->field_customer_entity->target_id);
+            $warehouse = \Drupal\node\Entity\Node::create(['type' => 'storage',]);
+            $warehouse->set('title', $client_warehouse);
+            $warehouse->set('field_storage_name', $customer->field_customer_title->value);
+            $warehouse->save();
         }
 
         $original_term = $term->original;
@@ -54,6 +70,9 @@ function sell_items_taxonomy_term_presave($term) {
 	}
 }
 
+/**
+ * @ignore
+ */
 function sell_items_taxonomy_term_insert($term) {
     if ($term->bundle() === "sell_items") {
         $sell_form = \Drupal\node\Entity\Node::load($term->field_order_id->target_id);
@@ -64,6 +83,9 @@ function sell_items_taxonomy_term_insert($term) {
     }
 }
 
+/**
+ * @ignore
+ */
 function sell_items_taxonomy_term_update($term) {
     if ($term->bundle() === "sell_items") {
         $sell_form = \Drupal\node\Entity\Node::load($term->field_order_id->target_id);
@@ -74,6 +96,9 @@ function sell_items_taxonomy_term_update($term) {
     }
 }
 
+/**
+ * @ignore
+ */
 function sell_items_taxonomy_term_delete($term) {
     if ($term->bundle() === "sell_items") {
         if ( !empty($term->field_requisition_status->value) ) {
@@ -103,10 +128,16 @@ function sell_items_taxonomy_term_delete($term) {
     }
 }
 
+/**
+ * @ignore
+ */
 function sell_items_menu_local_tasks_alter(&$data, $route_name) {
     unset($data['tabs'][0]["entity.taxonomy_term.delete_form"]);
 }
 
+/**
+ * @ignore
+ */
 function sell_items_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
     if ($form_id === 'taxonomy_term_sell_items_form' ) {
         $term = $form_state->getFormObject()->getEntity();
@@ -167,7 +198,7 @@ function sell_items_form_alter(&$form, FormStateInterface &$form_state, $form_id
         }
 
         $form ['field_gross_profit_margin']['#access'] = view_gross_profit_margin();
-        $form['#validate'][] = 'sell_items_form_validate';
+        //$form['#validate'][] = 'sell_items_form_validate';
     } else if ( $form_id === 'taxonomy_term_sell_items_delete_form' ) {
         $term = $form_state->getFormObject()->getEntity();
         if ( !empty($term->field_order_id->target_id) ) {
@@ -182,17 +213,38 @@ function sell_items_form_alter(&$form, FormStateInterface &$form_state, $form_id
     }
 }
 
+/**
+ * @ignore
+ */
 function sell_items_form_validate($form, &$form_state) {
-    if ( $form_state->getValue('field_requisition_status')[0]['value'] == "transferred" && empty($form_state->getValue('field_temporary_storage')) ) {
+    //if ( $form_state->getValue('field_requisition_status')[0]['value'] == "transferred" && empty($form_state->getValue('field_temporary_storage')) ) {
+    if ( $form_state->getValue('field_requisition_status')[0]['value'] == "transferred" && empty($form_state->getValue('field_client_warehouse')[0]['value']) ) {
         $form_state->setError($form , t('無法儲存, 寄存倉庫沒選.'));
     }
 }
 
+/**
+ * @ignore
+ */
 function ajax_requisition_status_changed(array $form, FormStateInterface $form_state) {
     $ajax_response = new AjaxResponse();
+    $customer_title = "";
+    if ( $form_state->getValue('field_requisition_status')[0]['value'] == "transferred" ) {
+        $term = $form_state->getFormObject()->getEntity();
+        $order = \Drupal\node\Entity\Node::load($term->field_order_id->target_id);
+        $customer = \Drupal\node\Entity\Node::load($order->field_customer_entity->target_id);
+        $customer_title = $customer->title->value;
+        $ajax_response->addCommand(new InvokeCommand('#edit-field-client-warehouse-0-value', 'val', [$customer_title]));
+    } else {
+        $ajax_response->addCommand(new InvokeCommand('#edit-field-client-warehouse-0-value', 'val', [$customer_title]));
+    }
+    
     return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_sell_items_calculate_price(array $form, FormStateInterface $form_state) {
 	$ajax_response = new AjaxResponse();
 	$quantity = (int)$form_state->getValue('field_quantity')[0]['value'];
@@ -212,6 +264,9 @@ function ajax_sell_items_calculate_price(array $form, FormStateInterface $form_s
 	return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_order_id_was_input(array $form, FormStateInterface $form_state) {
         $ajax_response = new AjaxResponse();
         $order_id = $form_state->getValue('field_order_id')[0]['target_id'];
@@ -222,6 +277,9 @@ function ajax_order_id_was_input(array $form, FormStateInterface $form_state) {
         return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_sell_items_product_loading(array $form, FormStateInterface $form_state) {
         $ajax_response = new AjaxResponse();
         $product_id = $form_state->getValue('field_product_id')[0]['target_id'];
@@ -233,6 +291,12 @@ function ajax_sell_items_product_loading(array $form, FormStateInterface $form_s
         return $ajax_response;
 }
 
+/**
+ * generate unique id for sell item form.
+ * 
+ * @param int $order_id - sale order unique id
+ * @return string - uniqud id for sell item form
+ */
 function gen_sell_item_id($order_id = null) {
     $total = \Drupal::entityQuery("taxonomy_term")
                     ->condition("vid", "sell_items")
@@ -245,6 +309,12 @@ function gen_sell_item_id($order_id = null) {
     }
 }
 
+/**
+ * revert the inventory for sell item.
+ *
+ * @param term $original - taxonomy term sell item
+ * @return void
+ */
 function revert_inventory($original) {
     $inventory_nids = \Drupal::entityQuery("node")
                                         ->condition('type', 'stock_up')
@@ -275,7 +345,8 @@ function revert_inventory($original) {
         $inventory_nids = \Drupal::entityQuery("node")
                                         ->condition('type', 'stock_up')
                                         ->condition('field_product_goods', $original->field_product_id->target_id)
-                                        ->condition('field_storage_id', $original->field_temporary_storage->target_id)
+                                        //->condition('field_storage_id', $original->field_temporary_storage->target_id)
+                                        ->condition('field_storage_id', get_storage_nid_by_title($original->field_client_warehouse->value))
                                         ->execute();
         foreach($inventory_nids as $inventory_nid) {
             $temp_inventory = \Drupal\node\Entity\Node::load($inventory_nid);
@@ -284,13 +355,20 @@ function revert_inventory($original) {
             $temp_inventory->set('field_stock', $after_quantity);
             $temp_inventory->save();
             create_warehouse_transaction_log($original->field_product_id->target_id, $original->field_storage->target_id, "", "transfer", $original->field_quantity->value, $before_quantity, $after_quantity, get_sell_order_number_by_nid($original->field_order_id->target_id), "");
-            $message = get_product_name_by_nid($original->field_product_id->target_id) . " 寄存在 " . get_storage_name_by_nid($original->field_temporary_storage->target_id) . "退回原倉庫, 剩餘數量 " . $after_quantity; 
+            //$message = get_product_name_by_nid($original->field_product_id->target_id) . " 寄存在 " . get_storage_name_by_nid($original->field_temporary_storage->target_id) . "退回原倉庫, 剩餘數量 " . $after_quantity; 
+            $message = get_product_name_by_nid($original->field_product_id->target_id) . " 寄存在 " . $original->field_client_warehouse->value . "退回原倉庫, 剩餘數量 " . $after_quantity; 
             \Drupal::messenger()->addMessage($message);
             break;
         }
     }
 }
 
+/**
+ * update the inventory for sell item.
+ *
+ * @param term $term - taxonomy term sell item
+ * @return void
+ */
 function update_inventory($term) {
     $inventory_nids = \Drupal::entityQuery("node")
                                         ->condition('type', 'stock_up')
@@ -320,15 +398,18 @@ function update_inventory($term) {
                     $inventory_nids = \Drupal::entityQuery("node")
                                             ->condition('type', 'stock_up')
                                             ->condition('field_product_goods', $term->field_product_id->target_id)
-                                            ->condition('field_storage_id', $term->field_temporary_storage->target_id)
+                                            //->condition('field_storage_id', $term->field_temporary_storage->target_id)
+                                            ->condition('field_storage_id', get_storage_nid_by_title($term->field_client_warehouse->value))
                                             ->execute();
                     if ( count( $inventory_nids) == 0 ) {
                         $inventory = \Drupal\node\Entity\Node::create(['type' => "stock_up",]);
-                        $inventory->set('field_storage_id', $term->field_temporary_storage->target_id);
+                        //$inventory->set('field_storage_id', $term->field_temporary_storage->target_id);
+                        $inventory->set('field_storage_id', get_storage_nid_by_title($term->field_client_warehouse->value));
                         $inventory->set('field_product_goods', $term->field_product_id->target_id);
                         $inventory->set('field_stock', 0);
                         $inventory->save();
-                        $message = get_product_name_by_nid($term->field_product_id->target_id) . " 不存在寄存倉庫. 以在寄存倉庫 " . get_storage_name_by_nid($term->field_temporary_storage->target_id) . " 建立此物品."; 
+                        //$message = get_product_name_by_nid($term->field_product_id->target_id) . " 不存在寄存倉庫. 以在寄存倉庫 " . get_storage_name_by_nid($term->field_temporary_storage->target_id) . " 建立此物品."; 
+                        $message = get_product_name_by_nid($term->field_product_id->target_id) . " 不存在寄存倉庫. 以在寄存倉庫 " .$term->field_client_warehouse->value . " 建立此物品."; 
                         \Drupal::messenger()->addMessage($message);
                         $inventory_nids[] = $inventory->id();
                     }
@@ -338,9 +419,11 @@ function update_inventory($term) {
                         $after_quantity =  $before_quantity + $term->field_quantity->value;
                         $temp_inventory->set('field_stock', $after_quantity);
                         $temp_inventory->save();
-                        $message = get_product_name_by_nid($term->field_product_id->target_id) . " 寄存在 " . get_storage_name_by_nid($term->field_temporary_storage->target_id) . " 的庫存數量 " . $after_quantity; 
+                        //$message = get_product_name_by_nid($term->field_product_id->target_id) . " 寄存在 " . get_storage_name_by_nid($term->field_temporary_storage->target_id) . " 的庫存數量 " . $after_quantity; 
+                        $message = get_product_name_by_nid($term->field_product_id->target_id) . " 寄存在 " . $term->field_client_warehouse->value . " 的庫存數量 " . $after_quantity; 
                         \Drupal::messenger()->addMessage($message);
-                        create_warehouse_transaction_log($term->field_product_id->target_id, "", $term->field_temporary_storage->target_id, "transfer", $term->field_quantity->value, $before_quantity, $after_quantity, get_sell_order_number_by_nid($term->field_order_id->target_id), "");
+                        //create_warehouse_transaction_log($term->field_product_id->target_id, "", $term->field_temporary_storage->target_id, "transfer", $term->field_quantity->value, $before_quantity, $after_quantity, get_sell_order_number_by_nid($term->field_order_id->target_id), "");
+                        create_warehouse_transaction_log($term->field_product_id->target_id, "", get_storage_nid_by_title($term->field_client_warehouse->value), "transfer", $term->field_quantity->value, $before_quantity, $after_quantity, get_sell_order_number_by_nid($term->field_order_id->target_id), "");
                         break;
                     }
                 } else {
@@ -357,6 +440,14 @@ function update_inventory($term) {
     } 
 }
 
+/**
+ * calculte the gross profit margin for sell item.
+ *
+ * @param float $price - sale price
+ * @param float $discount - discount
+ * @param float $cost - 成本價
+ * @return float - gross profit margin
+ */
 function calculate_gross_profit_margin_for_each_sell($price, $discount, $cost) {
     return ($price * ( 1 - ($discount/100)) - $cost) / ( $price * (1- ($discount/100)));
 }

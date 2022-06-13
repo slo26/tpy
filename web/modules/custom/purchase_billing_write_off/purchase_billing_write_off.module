@@ -5,6 +5,9 @@ use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\CssCommand;
 use Drupal\Core\Ajax\HtmlCommand;
 
+/**
+ * @ignore
+ */
 function purchase_billing_write_off_node_presave(Drupal\Core\Entity\EntityInterface $node) {
     if ( $node->type->target_id == "purchase_billing_write_off" ) {
         $query = \Drupal::entityQuery("node");
@@ -20,12 +23,21 @@ function purchase_billing_write_off_node_presave(Drupal\Core\Entity\EntityInterf
     }
 }
 
+/**
+ * @ignore
+ */
 function purchase_billing_write_off_node_insert(Drupal\Core\Entity\EntityInterface $node) {
 }
 
+/**
+ * @ignore
+ */
 function purchase_billing_write_off_node_update(Drupal\Core\Entity\EntityInterface $node) {
 }
 
+/**
+ * @ignore
+ */
 function purchase_billing_write_off_node_delete(Drupal\Core\Entity\EntityInterface $node) {
     if ( $node->type->target_id == "purchase_billing_write_off" ) {
         $field_sale_purchase_entities = $node->field_sale_purchase_entity;
@@ -39,6 +51,9 @@ function purchase_billing_write_off_node_delete(Drupal\Core\Entity\EntityInterfa
     }
 }
 
+/**
+ * @ignore
+ */
 function purchase_billing_write_off_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
     if ( $form_id === 'node_purchase_billing_write_off_form' || $form_id == 'node_purchase_billing_write_off_edit_form' ) {
         $node = $form_state->getFormObject()->getEntity();
@@ -302,6 +317,9 @@ function purchase_billing_write_off_form_alter(&$form, FormStateInterface &$form
     }
 }
 
+/**
+ * @ignore
+ */
 function _purchaseSubmit(array &$form, FormStateInterface $form_state) {
     $node = $form_state->getFormObject()->getEntity();
     $begin_date = $node->field_begin_date->value;
@@ -324,6 +342,9 @@ function _purchaseSubmit(array &$form, FormStateInterface $form_state) {
     }
 }
 
+/**
+ * @ignore
+ */
 function ajax_purchase_calculate_prepaid_callback(array $form, FormStateInterface $form_state) {
     $ajax_response = new AjaxResponse();
     $field_payable_balance = $form_state->getValue('field_payable_balance')[0]['value'];
@@ -348,6 +369,9 @@ function ajax_purchase_calculate_prepaid_callback(array $form, FormStateInterfac
 	return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_auto_hedgen_callback_for_purhcase(array $form, FormStateInterface $form_state){
     $ajax_response = new AjaxResponse();
     $node = $form_state->getFormObject()->getEntity();
@@ -367,6 +391,9 @@ function ajax_auto_hedgen_callback_for_purhcase(array $form, FormStateInterface 
     return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_undo_hedgen_callback_for_purhcase(array $form, FormStateInterface $form_state){
     $ajax_response = new AjaxResponse();
     $node = $form_state->getFormObject()->getEntity();
@@ -385,6 +412,9 @@ function ajax_undo_hedgen_callback_for_purhcase(array $form, FormStateInterface 
     return $ajax_response;
 }
 
+/**
+ * 產生採購帳單沖帳 unique ID
+ */
 function generate_purchase_billing_write_off_id($vendor_nid) {
 	$billing_write_off_id = "WP-$vendor_nid-" . date("Ym");
 	while (true) {
@@ -409,6 +439,7 @@ function generate_purchase_billing_write_off_id($vendor_nid) {
 	}
 	return $billing_write_off_id;
 }
+
 
 
 

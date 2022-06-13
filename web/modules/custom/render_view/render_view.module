@@ -2,9 +2,15 @@
 use Drupal\file\Entity\File;
 use Drupal\field\Entity\FieldConfig;
 
+/**
+ * @ignore
+ */
 function render_view_node_presave(Drupal\Core\Entity\EntityInterface $node){
 }
 
+/**
+ * @ignore
+ */
 function render_view_entity_view_mode_alter(&$view_mode, Drupal\Core\Entity\EntityInterface $entity, $context) {
 	//begin
 	//this if condiition is to change view mode to teaser display if the current user is anonymous when loading product page"
@@ -18,6 +24,9 @@ function render_view_entity_view_mode_alter(&$view_mode, Drupal\Core\Entity\Enti
 	//end
 }
 
+/**
+ * @ignore
+ */
 function render_view_node_load($nodes) {
 	$body = "";
 	foreach ($nodes as $nid=>$page) {
@@ -93,4 +102,5 @@ function render_view_node_load($nodes) {
 	//\Drupal::messenger()->addMessage(ge($node->id());
 	//\Drupal::messenger()->addMessage($view_mode);
 }
+
 

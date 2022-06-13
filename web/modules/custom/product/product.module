@@ -10,6 +10,9 @@ use Drupal\webform\Plugin\WebformHandlerBase;
 use Drupal\webform\webformSubmissionInterface;
 use Drupal\webform\Entity\WebformSubmission;
 
+/**
+ * @ignore
+ */
 function product_node_presave(Drupal\Core\Entity\EntityInterface $node) {
     if ( $node->type->target_id == "product" ) {
         $dealer_price = $node->field_dealer_price->value;
@@ -26,6 +29,9 @@ function product_node_presave(Drupal\Core\Entity\EntityInterface $node) {
     }
 }
 
+/**
+ * @ignore
+ */
 function product_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
     if ( $form_id == "node_product_form" || $form_id == "node_product_edit_form" ) {
         $node = $form_state->getFormObject()->getEntity();
@@ -42,7 +48,12 @@ function product_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
         $form['title_message'] = array(
 			'#type' => 'markup',
 			'#markup' => '<div class="title-message"></div>',
-            '#weight' => 2,
+            '#weight' => 3,
+        );
+
+        $form['field_product_name']['widget'][0]['value']['#ajax'] = array(
+            'callback' => 'ajax_product_field_length_check',
+			'event' => 'change',
         );
 
         $form['field_cost_price']['widget'][0]['value']['#ajax'] = array(
@@ -99,6 +110,9 @@ function product_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
     }
 }
 
+/**
+ * @ignore
+ */
 function ajax_calculate_gpm(array $form, FormStateInterface $form_state) {
 	$ajax_response = new AjaxResponse();
     $dealer_price = $form_state->getValue('field_dealer_price')[0]['value'];
@@ -113,6 +127,9 @@ function ajax_calculate_gpm(array $form, FormStateInterface $form_state) {
 	return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_calculate_gpm_for_retailer(array $form, FormStateInterface $form_state) {
     $ajax_response = new AjaxResponse();
     $retail_price = $form_state->getValue('field_retail_price')[0]['value'];
@@ -124,6 +141,9 @@ function ajax_calculate_gpm_for_retailer(array $form, FormStateInterface $form_s
     return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_calculate_gpm_for_dealer(array $form, FormStateInterface $form_state) {
     $ajax_response = new AjaxResponse();
     $dealer_price = $form_state->getValue('field_dealer_price')[0]['value'];
@@ -135,6 +155,9 @@ function ajax_calculate_gpm_for_dealer(array $form, FormStateInterface $form_sta
     return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_calculate_gpm_for_construction(array $form, FormStateInterface $form_state) {
     $ajax_response = new AjaxResponse();
     $construction_price = $form_state->getValue('field_construction_price')[0]['value'];
@@ -146,6 +169,12 @@ function ajax_calculate_gpm_for_construction(array $form, FormStateInterface $fo
     return $ajax_response;
 }
 
+/**
+ * Calculate Product gross profit margin.
+ * 
+ * @param float $price - Product sale price
+ * @return float - gross profit margin
+ */
 function calculate_gpm_for_product($price, $cost) {
     if ( $price == 0 ) {
         return 0;
@@ -154,20 +183,45 @@ function calculate_gpm_for_product($price, $cost) {
     return round($gpm, 2) * 100;
 }
 
+/**
+ * @ignore
+ */
 function ajax_check_unique_id(array $form, FormStateInterface $form_state) {
 	$ajax_response = new AjaxResponse();
 	$title = $form_state->getValue('title')[0]['value'];
     
     $ajax_response->addCommand(new HtmlCommand('.title-message', ''));
-    $query = \Drupal::entityQuery("node")->condition('type', 'product')->condition('title', trim($title))->execute();
-    if ( count($query) > 0 ) {
-        $ajax_response->addCommand(new HtmlCommand('.title-message', '<font color="red">產品編號重複, 請重新命名</font>'));
+    if ( strlen($title) > 20 ) {
+        $ajax_response->addCommand(new HtmlCommand('.title-message', '<font color="red">產品編號不得超過20個英文字母長度.</font>'));
         $ajax_response->addCommand(new InvokeCommand('#edit-title-0-value', 'val', [""]));
+    } else {
+        $query = \Drupal::entityQuery("node")->condition('type', 'product')->condition('title', trim($title))->execute();
+        if ( count($query) > 0 ) {
+            $ajax_response->addCommand(new HtmlCommand('.title-message', '<font color="red">產品編號重複, 請重新命名</font>'));
+            $ajax_response->addCommand(new InvokeCommand('#edit-title-0-value', 'val', [""]));
+        }
     }
-    
+
 	return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
+function ajax_product_field_length_check(array $form, FormStateInterface $form_state) {
+    $ajax_response = new AjaxResponse();
+    $field_product_name = $form_state->getValue('field_product_name')[0]['value'];
+    $ajax_response->addCommand(new HtmlCommand('.title-message', ''));
+    if ( strlen($field_product_name) > 40 ) {
+        $ajax_response->addCommand(new HtmlCommand('.title-message', '<font color="red">產品名稱不得超過40個英文字母長度.</font>'));
+        $ajax_response->addCommand(new InvokeCommand('#edit-field-product-name-0-value', 'val', [""]));
+    }
+    return $ajax_response;
+}
+
+/**
+ * @ignore
+ */
 function _ProductSubmit(array &$form, FormStateInterface $form_state) {
     $node  = $form_state->getFormObject()->getEntity();
     
@@ -188,4 +242,5 @@ function _ProductSubmit(array &$form, FormStateInterface $form_state) {
         }
     }
 }
+
 

@@ -6,6 +6,9 @@ use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\CssCommand;
 use \Drupal\node\Entity\Node;
 
+/**
+ * @ignore
+ */
 function ourbound_inbound_warehouse_node_presave(Drupal\Core\Entity\EntityInterface $node) {
     if ( $node->type->target_id == "ourbound_inbound_warehouse" ) {
         $field_taxonomy = $node->field_taxonomy->value;
@@ -182,6 +185,9 @@ function ourbound_inbound_warehouse_node_presave(Drupal\Core\Entity\EntityInterf
     }
 }
 
+/**
+ * @ignore
+ */
 function ourbound_inbound_warehouse_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
     if ( $form_id === 'node_ourbound_inbound_warehouse_form' || $form_id == 'node_ourbound_inbound_warehouse_edit_form' ) {
         $node = $form_state->getFormObject()->getEntity();
@@ -323,6 +329,12 @@ function ourbound_inbound_warehouse_form_alter(&$form, FormStateInterface &$form
     }
 }
 
+/**
+ * 產生倉儲出入倉表格.
+ *
+ * @param string $field_taxonomy - table in JSON
+ * @return void
+ */
 function outbound_inbound_warehouse_table_generate($field_taxonomy) {
     $json_taxonomy = json_decode($field_taxonomy, true);
     $table = "";
@@ -347,6 +359,9 @@ function outbound_inbound_warehouse_table_generate($field_taxonomy) {
 	return $table;
 }
 
+/**
+ * @ignore
+ */
 function ajax_create_single_item_callback(array $form, FormStateInterface $form_state) {
     $ajax_response = new AjaxResponse();
     $field_taxonomy = $form_state->getValue('field_taxonomy')[0]['value'];
@@ -393,6 +408,9 @@ function ajax_create_single_item_callback(array $form, FormStateInterface $form_
     return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_product_goods_loading(array $form, FormStateInterface $form_state) {
     $ajax_response = new AjaxResponse();
     $product_nid = $form_state->getValue('product_goods');
@@ -406,6 +424,9 @@ function ajax_product_goods_loading(array $form, FormStateInterface $form_state)
     return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_form_type_changed(array $form, FormStateInterface $form_state) {
 	$ajax_response = new AjaxResponse();
     $ajax_response->addCommand(new InvokeCommand('#edit-quantity', 'val', ['']));
@@ -440,6 +461,9 @@ function ajax_form_type_changed(array $form, FormStateInterface $form_state) {
 	return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_from_storage_changed(array $form, FormStateInterface $form_state) {
 	$ajax_response = new AjaxResponse();
     $ajax_response->addCommand(new HtmlCommand('.message', ''));
@@ -467,6 +491,9 @@ function ajax_from_storage_changed(array $form, FormStateInterface $form_state) 
 	return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_to_storage_changed(array $form, FormStateInterface $form_state) {
 	$ajax_response = new AjaxResponse();
     $ajax_response->addCommand(new HtmlCommand('.message', ''));
@@ -491,6 +518,11 @@ function ajax_to_storage_changed(array $form, FormStateInterface $form_state) {
 	return $ajax_response;
 }
 
+/**
+ * 產生提貨/入庫/轉貨單的unique ID.
+ *
+ * @return string - unique ID
+ */
 function gen_warehouse_transaction_id() {
     $transaction_id = "WT-" . date("Ymd");
 	while (true) {
@@ -515,3 +547,4 @@ function gen_warehouse_transaction_id() {
 	}
 	return $transaction_id;
 }
+

@@ -11,6 +11,9 @@ use Drupal\Core\Ajax\ReplaceCommand;
 use \Drupal\node\Entity\Node;
 use \Drupal\Core\Routing\TrustedRedirectResponse;
 
+/**
+ * Moderation State for Sale Order
+ */
 const MODERATION_STATE_LABEL = array(
         'draft' => '草稿',
         'rate' => '銷售估價',
@@ -22,6 +25,9 @@ const MODERATION_STATE_LABEL = array(
         'return_completed' => '銷退完成'
 );
 
+/**
+ * @ignore
+ */
 function sales_order_content_type_form_views_exposed_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
         if ( $form['#id'] == 'views-exposed-form-all-sell-orders-page-1' ) {
 			$form['create_content'] = [
@@ -36,6 +42,9 @@ function sales_order_content_type_form_views_exposed_form_alter(array &$form, Fo
         }
     }
 
+/**
+ * @ignore
+ */
 function sales_order_content_type_preprocess_node(&$variables) {
 	$variables['company'] = \Drupal::config('common_utils.settings')->get('company');
 	$variables['company_address'] = \Drupal::config('common_utils.settings')->get('company_address');
@@ -49,6 +58,9 @@ function sales_order_content_type_preprocess_node(&$variables) {
 	}
 }
 
+/**
+ * @ignore
+ */
 function sales_order_content_type_menu_local_tasks_alter(&$data, $route_name) {
 	$route_match = \Drupal::routeMatch();
 	if ($route_match->getRouteName() == 'entity.node.canonical') {
@@ -60,7 +72,14 @@ function sales_order_content_type_menu_local_tasks_alter(&$data, $route_name) {
 	}
 }
 
+/**
+ * Generating sale items table for render view.
+ * 
+ * @param Node $node - Sale order Node
+ * @return string - sale item table in html
+ */
 function sales_order_table_generator_in_view($node) {
+	$comment = "";
 	$customer_nid = $node->field_customer_entity->target_id;
 	$customer = \Drupal\node\Entity\Node::load($customer_nid);
 	$type = typeOfShipment($node);
@@ -75,6 +94,7 @@ function sales_order_table_generator_in_view($node) {
 			$status = "草稿";
 		} else if ( $node->moderation_state->value == 'rate' ) {
 			$status = "報價單";
+			$comment = \Drupal::config ('common_utils.comment_selection_for_print')->get('comment1');
 		} else if ( $node->moderation_state->value == 'stocking' ) {
 			$status = "備貨單";
 		} else if ( ($node->moderation_state->value == 'shipment') || ($node->moderation_state->value == 'done') ) {
@@ -85,13 +105,14 @@ function sales_order_table_generator_in_view($node) {
 			}  else if ( $type == 3 ) {
 				$status = "銷貨轉寄庫單";
 			}
+			$comment = \Drupal::config ('common_utils.comment_selection_for_print')->get('comment2');
 		} else if ( $node->moderation_state->value == 'drop' ) {
 			$status = "銷售不成立";
 		} else if ( $node->moderation_state->value == 'return' || $node->moderation_state->value == 'return_completed' ) {
 			$status = "銷售退貨單";
 		}
 		$table_body .= '<tr id="sales-oder-table-header-status"><td colspan="4" align="center"><strong><u>' . $status .'</u></strong></td></tr>';
-		$table_body .= '<tr id="sales-oder-table-header-sell-info"><td colspan="3" align="left">報價日期: ' . date('Y/m/d') .'</td><td align="left" width="200px">有效日期: </td></tr>';	
+		$table_body .= '<tr id="sales-oder-table-header-sell-info"><td colspan="3" align="left">報價日期: ' . centuryToRepublicEra(date('Y/m/d'), "/", "/") .'</td><td align="left" width="200px">有效日期: </td></tr>';	
 		$table_body .= '<tr id="sales-oder-table-header-sell-info"><td colspan="3" align="left">客戶名稱: <a href="/node/' . $customer_nid .'/edit" target="blank">' . $customer->field_customer_title->value . '</a></td><td align="left" width="200px">報價憑證: ' . $node->title->value . '</td></tr>'; 
 		$table_body .= '<tr id="sales-oder-table-header-sell-info"><td colspan="3" align="left">公司地址: ' . $customer->field_address->value . '</td><td align="left" width="200px">聯絡人: ' . $customer->field_contact_person->value . '</td></tr>'; 
 		if ( !empty($node->field_shipping_address->value) ) {
@@ -165,7 +186,6 @@ function sales_order_table_generator_in_view($node) {
 		}
 	}
 
-	$comment = "";
 	if ( !empty($node->field_comments_for_print->value) ) {
 		$comment = \Drupal::config ('common_utils.comment_selection_for_print')->get($node->field_comments_for_print->value);
 	}
@@ -175,6 +195,9 @@ function sales_order_table_generator_in_view($node) {
 	return $table_head . $table_list . $table_footer . $comment;
 }
 
+/**
+ * @ignore
+ */
 function sales_order_content_type_node_presave(Drupal\Core\Entity\EntityInterface $node) {
 	if ( $node->type->target_id == "sales_order" ) {
 		if ( $node->moderation_state->value == "rate" ) {
@@ -264,12 +287,16 @@ function sales_order_content_type_node_presave(Drupal\Core\Entity\EntityInterfac
 
 /**
  * Implements hook_page_preprocess_html().
+ * @ignore
  */
 function sales_order_content_type_preprocess_html(&$variables) {
     //Add JS and CSS library
     $variables['#attached']['library'][] = 'sales_order_content_type/sales_order_content_type';
 }
 
+/**
+ * @ignore
+ */
 function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
 	if ( $form_id === 'node_sales_order_form' || $form_id == 'node_sales_order_edit_form' ) {
 		$node = $form_state->getFormObject()->getEntity();
@@ -864,6 +891,9 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 	}
 }
 
+/**
+ * @ignore
+ */
 function ajax_update_status_to_all_sell_items(array $form, FormStateInterface $form_state) {
 	$ajax_response = new AjaxResponse();
 	$entity = $form_state->getFormObject()->getEntity();
@@ -901,7 +931,8 @@ function ajax_update_status_to_all_sell_items(array $form, FormStateInterface $f
 			$sell_item = \Drupal\taxonomy\Entity\Term::load($sell_items_tid);
 			if ( $sell_item->field_quantity->value != 0 ) {
 				$sell_item->set('field_requisition_status', $purchase_item_status);
-				$sell_item->field_temporary_storage->target_id = $storage_nid;
+				//$sell_item->field_temporary_storage->target_id = $storage_nid;
+				$sell_item->field_client_warehouse->value = $customer_title;
 				$sell_item->save();	
 			}
 		}
@@ -925,6 +956,9 @@ function ajax_update_status_to_all_sell_items(array $form, FormStateInterface $f
 	return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_return_process(array $form, FormStateInterface $form_state) {
 	$ajax_response = new AjaxResponse();
 	$node = $form_state->getFormObject()->getEntity();
@@ -952,7 +986,8 @@ function ajax_return_process(array $form, FormStateInterface $form_state) {
 		$return_item->field_order_id->target_id = $return_node_nid;
 		$return_item->set('field_product_id', $sell_item->field_product_id->target_id);
 		$return_item->set('field_storage', $sell_item->field_storage->target_id);
-		$return_item->set('field_temporary_storage', $sell_item->field_temporary_storage->target_id);
+		//$return_item->set('field_temporary_storage', $sell_item->field_temporary_storage->target_id);
+		$return_item->set('field_client_warehouse', $sell_item->field_client_warehouse->value);
 
 		$return_item->set('field_quantity', $sell_item->field_quantity->value);
 		$return_item->set('field_price', $sell_item->field_price->value);
@@ -972,6 +1007,9 @@ function ajax_return_process(array $form, FormStateInterface $form_state) {
 	return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_load_print_comment(array $form, FormStateInterface $form_state) {
 	$ajax_response = new AjaxResponse();
 	$comment_key = $form_state->getValue('field_comments_for_print')[0]['value'];
@@ -985,7 +1023,9 @@ function ajax_load_print_comment(array $form, FormStateInterface $form_state) {
 	return $ajax_response;
 }
 
-
+/**
+ * @ignore
+ */
 function ajax_order_status_changed_validation(array $form, FormStateInterface $form_state) {
 	$ajax_response = new AjaxResponse();
 	$node = $form_state->getFormObject()->getEntity();
@@ -1081,6 +1121,9 @@ function ajax_order_status_changed_validation(array $form, FormStateInterface $f
 	return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_customer_info_loading(array $form, FormStateInterface $form_state) {
         $ajax_response = new AjaxResponse();
         $customr_nid = $form_state->getValue('field_customer_entity')[0]['target_id'];
@@ -1096,12 +1139,16 @@ function ajax_customer_info_loading(array $form, FormStateInterface $form_state)
         return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_product_loading(array $form, FormStateInterface $form_state) {
         $ajax_response = new AjaxResponse();
 		$product_nid = $form_state->getValue('list_product');
 		$stock_up_nids = \Drupal::entityQuery("node")
                     					->condition('type', 'stock_up')
 										->condition('field_product_goods', $product_nid)
+										->condition('field_storage_id', getStorageNidBasedonType('tpy_main_warehouse'), 'IN')
                     					->execute();
 		$product = \Drupal\node\Entity\Node::load($product_nid);
 		$storage_list = array('_none' => '- None -');
@@ -1135,6 +1182,9 @@ function ajax_product_loading(array $form, FormStateInterface $form_state) {
         return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_quantity_base_on_select(array $form, FormStateInterface $form_state) {
 	$ajax_response = new AjaxResponse();
 	$storage_id = $form_state->getValue('storage');
@@ -1155,6 +1205,9 @@ function ajax_quantity_base_on_select(array $form, FormStateInterface $form_stat
 	return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_calculate_price(array $form, FormStateInterface $form_state) {
 	$ajax_response = new AjaxResponse();
 	$quantity = (int)$form_state->getValue('quantity');
@@ -1166,8 +1219,8 @@ function ajax_calculate_price(array $form, FormStateInterface $form_state) {
 	$cost = $product->field_cost_price->value;
 
 	$gpm = round(caculate_gpm_for_item_sell($price, $discount, $cost), 2);
-
-	$total_amount = 0;
+	
+	$tota_amount = 0;
 	if ( empty($discount) || $discount <= 0 ) {
 		$tota_amount = $quantity*$price;
 	} else {
@@ -1176,6 +1229,9 @@ function ajax_calculate_price(array $form, FormStateInterface $form_state) {
 		$tota_amount = $discount_price*$quantity;
 	}
 
+	if ( $tota_amount == 0 ) {
+		$gpm = 0;
+	}
 	$ajax_response->addCommand(new InvokeCommand('#edit-total-amount', 'val', [$tota_amount]));
 	$ajax_response->addCommand(new InvokeCommand('#edit-gross-profit-margin', 'val', [$gpm]));
 
@@ -1183,8 +1239,9 @@ function ajax_calculate_price(array $form, FormStateInterface $form_state) {
 }
 
 /**
-   * AJAX callback handler that displays any errors or a success message.
-   */
+  * AJAX callback handler that displays any errors or a success message.
+  * @ignore 
+  */
 function create_single_item_callback(array $form, FormStateInterface $form_state) {
 	$response = new AjaxResponse();
 	$status = "";
@@ -1205,6 +1262,8 @@ function create_single_item_callback(array $form, FormStateInterface $form_state
 			$product = \Drupal\node\Entity\Node::load($form_state->getValue('list_product'));
 			$item->set('field_product_id', $form_state->getValue('list_product'));
 			$item->set('field_storage', $form_state->getValue('storage'));
+			$cost = $product->field_cost_price->value;
+			$price = (double)$form_state->getValue('price');
 			$gpm = 0;
 			if ( empty($form_state->getValue('quantity')) || $form_state->getValue('quantity') == 0 ) {
 				$item->set('field_quantity', 0);
@@ -1214,8 +1273,6 @@ function create_single_item_callback(array $form, FormStateInterface $form_state
 					$gpm = round(caculate_gpm_for_item_sell($price, $discount, $cost), 2);
 				}
 			}
-			$cost = $product->field_cost_price->value;
-			$price = (double)$form_state->getValue('price');
 			$item->set('field_price', $price);
 			$discount = (double)$form_state->getValue('discount');
 			$item->set('field_discount', $discount);
@@ -1277,6 +1334,12 @@ function create_single_item_callback(array $form, FormStateInterface $form_state
     return $response;
 }
 
+/**
+ * generating sale item table in edit form.
+ * 
+ * @param int $order_id - sale order nid
+ * @return string - sale item table in html
+ */
 function purchase_items_table_generate($order_id) {
 	$tids = \Drupal::entityQuery("taxonomy_term")->condition("vid", "sell_items")
 				->condition('field_order_id', $order_id)
@@ -1289,9 +1352,9 @@ function purchase_items_table_generate($order_id) {
 
 	$table = '<div id="sell-item-table"><table>-BODY-</table></div>';
 	if ( view_gross_profit_margin() ) {
-		$table_head = "<thead><tr><td>產品訂單編號</td><td>產品型號</td><td>產品名稱</td><td>倉庫</td><td>數量</td><td>單價</td><td>折扣(%)</td><td>毛利率(%)</td><td>金額</td><td>狀態</td></tr></thead>";
+		$table_head = "<thead><tr><td>索引</td><td>產品型號</td><td>產品名稱</td><td>倉庫</td><td>數量</td><td>單價</td><td>折扣(%)</td><td>毛利率(%)</td><td>金額</td><td>狀態</td></tr></thead>";
 	} else {
-		$table_head = "<thead><tr><td>產品訂單編號</td><td>產品型號</td><td>產品名稱</td><td>倉庫</td><td>數量</td><td>單價</td><td>折扣(%)</td><td></td><td>金額</td><td>狀態</td></tr></thead>";
+		$table_head = "<thead><tr><td>索引</td><td>產品型號</td><td>產品名稱</td><td>倉庫</td><td>數量</td><td>單價</td><td>折扣(%)</td><td></td><td>金額</td><td>狀態</td></tr></thead>";
 	}
 	
 	$table_body_begin = '<tbody>';
@@ -1308,7 +1371,9 @@ function purchase_items_table_generate($order_id) {
 		}
 	}
 	
+	$index = 0;
 	foreach($tids as $tid) {
+		$index++;
 		$item = \Drupal\taxonomy\Entity\Term::load($tid);
 		//if ( $item->field_quantity->value != 0 ) {
 			$product = \Drupal\node\Entity\Node::load($item->field_product_id->target_id);
@@ -1335,12 +1400,15 @@ function purchase_items_table_generate($order_id) {
 						</div>
 					</div>';
 			}
-			$item_title = '<a href="/taxonomy/term/' . $tid . '/edit?destination=/node/' . $order_id . '/edit" hreflang="en">' . $item->name->value . '</a>';
-			$statue = get_entity_storage_label($item, 'field_requisition_status', $item->field_requisition_status->value);
+			$index_column = '<a href="/taxonomy/term/' . $tid . '/edit?destination=/node/' . $order_id . '/edit" hreflang="en">' . $index . '</a>';
+			//$item_title = '<a href="/taxonomy/term/' . $tid . '/edit?destination=/node/' . $order_id . '/edit" hreflang="en">' . $item->name->value . '</a>';
+			$status = get_entity_storage_label($item, 'field_requisition_status', $item->field_requisition_status->value);
 			if ( view_gross_profit_margin() ) {
-				$table_body .= '<tr><td>' . $item_title . '</td><td>' . $product->title->value . '</td><td>' . $product->field_product_name->value . '</td><td>' . $storage->field_storage_name->value . '</td><td>' . number_format($item->field_quantity->value) . '</td><td>' . $item->field_price->value . '</td><td>' . $item->field_discount->value . '</td><td>' . $item->field_gross_profit_margin->value . '</td><td>' . $item->field_total_amount->value . '</td><td>' . $statue . '</td></tr>';
+				//$table_body .= '<tr><td>' . $item_title . '</td><td>' . $product->title->value . '</td><td>' . $product->field_product_name->value . '</td><td>' . $storage->field_storage_name->value . '</td><td>' . number_format($item->field_quantity->value) . '</td><td>' . $item->field_price->value . '</td><td>' . $item->field_discount->value . '</td><td>' . $item->field_gross_profit_margin->value . '</td><td>' . $item->field_total_amount->value . '</td><td>' . $status . '</td></tr>';
+				$table_body .= '<tr><td>' . $index_column . '</td><td>' . $product->title->value . '</td><td>' . $product->field_product_name->value . '</td><td>' . $storage->field_storage_name->value . '</td><td>' . number_format($item->field_quantity->value) . '</td><td>' . $item->field_price->value . '</td><td>' . $item->field_discount->value . '</td><td>' . $item->field_gross_profit_margin->value . '</td><td>' . $item->field_total_amount->value . '</td><td>' . $status . '</td></tr>';
 			} else {
-				$table_body .= '<tr><td>' . $item_title . '</td><td>' . $product->title->value . '</td><td>' . $product->field_product_name->value . '</td><td>' . $storage->field_storage_name->value . '</td><td>' . number_format($item->field_quantity->value) . '</td><td>' . $item->field_price->value . '</td><td>' . $item->field_discount->value . '</td><td></td><td>' . $item->field_total_amount->value . '</td><td>' . $statue . '</td></tr>';
+				//$table_body .= '<tr><td>' . $item_title . '</td><td>' . $product->title->value . '</td><td>' . $product->field_product_name->value . '</td><td>' . $storage->field_storage_name->value . '</td><td>' . number_format($item->field_quantity->value) . '</td><td>' . $item->field_price->value . '</td><td>' . $item->field_discount->value . '</td><td></td><td>' . $item->field_total_amount->value . '</td><td>' . $status . '</td></tr>';
+				$table_body .= '<tr><td>' . $index_column . '</td><td>' . $product->title->value . '</td><td>' . $product->field_product_name->value . '</td><td>' . $storage->field_storage_name->value . '</td><td>' . number_format($item->field_quantity->value) . '</td><td>' . $item->field_price->value . '</td><td>' . $item->field_discount->value . '</td><td></td><td>' . $item->field_total_amount->value . '</td><td>' . $status . '</td></tr>';
 			}
 			$total_quantity = $total_quantity + $item->field_quantity->value;
 			$sum = $sum + $item->field_price->value;
@@ -1356,6 +1424,9 @@ function purchase_items_table_generate($order_id) {
 	return $table;
 }
 
+/**
+ * @ignore
+ */
 function generate_bill_callback(array $form, FormStateInterface $form_state) {
 	$response = new AjaxResponse();
 	$entity = $form_state->getFormObject()->getEntity();
@@ -1446,6 +1517,12 @@ function generate_bill_callback(array $form, FormStateInterface $form_state) {
     return $response;
 }*/
 
+/**
+ * Generating 出貨單.
+ *
+ * @param Node $node - sale order
+ * @return string 出貨單in html 
+ */
 function shipping($node) {
 	$table_start = '<table id="sales-oder-table-list"><tbody>';
 	$table_body = '<tr><th width="50px">欄號</th><th>產品型號</th><th>產品名稱</th><th width="70px">數量</th><th width="95px">出貨狀態</th><th width="105px">出貨倉庫</th></tr>';//<th width="115px">寄貨倉庫</th></tr>';
@@ -1476,6 +1553,9 @@ function shipping($node) {
 	return $table_list;
 }
 
+/**
+ * @ignore
+ */
 function typeOfShipment($node) {
 	$type = 0;
 	$tids = \Drupal::entityQuery("taxonomy_term")->condition("vid", "sell_items")
@@ -1492,6 +1572,12 @@ function typeOfShipment($node) {
 	return $type;
 }
 
+/**
+ * get number of sale items in sale order
+ *
+ * @param int $nid - sale order nid
+ * @return int - number of sale items
+ */
 function num_of_sell_items($nid) {
 	$sell_items_tids = \Drupal::entityQuery("taxonomy_term")
 									->condition('vid', 'sell_items')
@@ -1499,6 +1585,11 @@ function num_of_sell_items($nid) {
 	return count($sell_items_tids);
 }
 
+/**
+ * Generage unique id for sale order form id
+ *
+ * @return void
+ */
 function generate_sale_id() {
 	$sales_order_id = "SO-" . date("Ymd");
 	while (true) {
@@ -1524,10 +1615,28 @@ function generate_sale_id() {
 	return $sales_order_id;
 }
 
+/**
+ * 計算gross profit margin for sell item
+ *
+ * @param float $price - sell item price
+ * @param float $discount - sell item discount
+ * @param float $cost 成本價
+ *
+ * @return float - gross profit margin for sell item
+ */
 function caculate_gpm_for_item_sell($price, $discount, $cost) {
+	if ( $price == 0 || $cost == 0 ) {
+		return 0;
+	}
 	return ($price * (1-($discount/100)) - $cost) / ( $price * (1-($discount/100))) * 100;
 }
 
+/**
+ * get sale order form unique id
+ *
+ * @param int $nid - sale order nid
+ * @return string - sale order unique id
+ */
 function getSellOrderID($nid) {
 	$sale = \Drupal\node\Entity\Node::load($nid);
 	return $sale->title->value;

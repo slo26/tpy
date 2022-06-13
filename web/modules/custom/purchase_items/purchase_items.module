@@ -5,6 +5,9 @@ use Drupal\Core\Ajax\InvokeCommand;
 use Drupal\Core\Ajax\HtmlCommand;
 use Drupal\Core\Ajax;
 
+/**
+ * @ignore
+ */
 function purchase_items_taxonomy_term_insert($term) {
     if ($term->bundle() === "purchase_items") {
         $purchase_form = \Drupal\node\Entity\Node::load($term->field_order_id->target_id);
@@ -15,6 +18,9 @@ function purchase_items_taxonomy_term_insert($term) {
     }
 }
 
+/**
+ * @ignore
+ */
 function purchase_items_taxonomy_term_update($term) {
     if ($term->bundle() === "purchase_items") {
         $purchase_form = \Drupal\node\Entity\Node::load($term->field_order_id->target_id);
@@ -25,6 +31,9 @@ function purchase_items_taxonomy_term_update($term) {
     }
 }
 
+/**
+ * @ignore
+ */
 function purchase_items_taxonomy_term_delete($term) {
     if ($term->bundle() === "purchase_items") {
         if ( !empty($term->field_purchase_requisition_statu->value) ) {
@@ -54,6 +63,9 @@ function purchase_items_taxonomy_term_delete($term) {
     }
 }
 
+/**
+ * @ignore
+ */
 function purchase_items_taxonomy_term_presave($term) {
 	if ( $term->bundle() == "purchase_items" ) {
         $term->status->value = false;
@@ -74,6 +86,11 @@ function purchase_items_taxonomy_term_presave($term) {
     }
 }
 
+/**
+ * purchase item revert from inventory.
+ * 
+ * @param term $original - entity taxonomy term
+ */
 function pi_revert_inventory($original) {
     $inventory_nids = \Drupal::entityQuery("node")->condition('type', 'stock_up')
                             ->condition('field_product_goods', $original->field_product_goods->target_id)
@@ -91,6 +108,11 @@ function pi_revert_inventory($original) {
     }
 }
 
+/**
+ * purchase item update on inventory.
+ * 
+ * @param term $term - entity taxonomy term
+ */
 function pi_update_inventory($term) {
     $stock_up_nids = \Drupal::entityQuery("node")->condition('type', 'stock_up')
                             ->condition('field_product_goods', $term->field_product_goods->target_id)
@@ -125,6 +147,9 @@ function pi_update_inventory($term) {
     }
 }
 
+/**
+ * @ignore
+ */
 function purchase_items_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
     if ( $form_id == "taxonomy_term_purchase_items_form" ) {
         $term = $form_state->getFormObject()->getEntity();
@@ -176,6 +201,9 @@ function purchase_items_form_alter(&$form, FormStateInterface &$form_state, $for
     }
 }
 
+/**
+ * @ignore
+ */
 function ajax_purchase_items_calculate_price(array $form, FormStateInterface $form_state) {
 	$ajax_response = new AjaxResponse();
 	$quantity = (int)$form_state->getValue('field_quantity')[0]['value'];
@@ -211,12 +239,21 @@ function ajax_purchase_items_calculate_price(array $form, FormStateInterface $fo
     return $ajax_response;
 }*/
 
+/**
+ * @ignore
+ */
 function purchase_items_form_validate($form, &$form_state) {
     if ( $form_state->getValue('field_purchase_requisition_statu')[0]['value'] == "put" && empty($form_state->getValue('field_storage')) ) {
         $form_state->setError($form , t('無法儲存, 存入倉庫沒選.'));
     }
 }
 
+/**
+ * generate purchase item unique id.
+ * 
+ * @param int @order_id - purcahse order id
+ * @return string - unique id
+ */
 function gen_purchase_item_id($order_id = null) {
     $total = \Drupal::entityQuery("taxonomy_term")
                     ->condition("vid", "purchase_items")
@@ -228,6 +265,7 @@ function gen_purchase_item_id($order_id = null) {
         return str_replace($replace, "PI-", $order_id) . "-" . (count($total)+1);
     }
 }
+
 
 
 

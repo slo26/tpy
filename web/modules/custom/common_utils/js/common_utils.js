@@ -10,6 +10,7 @@
             showGenerateReturnButtom();
             validSellType();
             validateField_warehouse_form_type();
+            convertSelectOptionTextToChinese();
         }
     }
 
@@ -60,10 +61,12 @@ function showGenerateReturnButtom() {
 
 function validateField_requisition_status() {
     if ( jQuery('#edit-field-requisition-status').find("option:selected").val() == "transferred" ) {
-        jQuery('#edit-field-temporary-storage-wrapper').css('display', 'block');
+        //jQuery('#edit-field-temporary-storage-wrapper').css('display', 'block');
+        jQuery('#edit-field-client-warehouse-wrapper').css('display', 'block');
     } else {
-        jQuery('#edit-field-temporary-storage-wrapper').css('display', 'none');
-        jQuery('#edit-field-temporary-storage').val('_none');
+        //jQuery('#edit-field-temporary-storage-wrapper').css('display', 'none');
+        jQuery('#edit-field-client-warehouse-wrapper').css('display', 'none');
+        //jQuery('#edit-field-temporary-storage').val('_none');
     }
 }
 
@@ -194,6 +197,13 @@ function expense_for_allowance_table_generator(object) {
     jQuery('.input-list').html(table);
 }
 
+function convertSelectOptionTextToChinese() {
+    jQuery("select").find("option:contains(\"Is less than\")").text('小於');
+    jQuery("select").find("option:contains(\"Is not equal to\")").text('不等於');
+    jQuery("select").find("option:contains(\"Is equal to\")").text('等於');
+    jQuery("select").find("option:contains(\"Is greater than\")").text('大於');
+    jQuery("select").find("option:contains(\"Contains\")").text('包含');
+}
 
 
 

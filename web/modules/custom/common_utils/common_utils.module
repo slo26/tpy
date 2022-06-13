@@ -115,6 +115,24 @@ function get_storage_name_by_nid($storage_nid) {
 }
 
 /**
+ * get storage nid by providing storage title.
+ *
+ * @param string $storage_title - node title
+ * @return string - storage nid
+ *
+ */
+function get_storage_nid_by_title($storage_title) {
+    $storage_nids = \Drupal::entityQuery("node")->condition('type', 'storage')->condition('title', $storage_title)->execute();
+    if ( empty($storage_nids) ) {
+        return -1;
+    } else {
+        foreach($storage_nids as $storage_nid) {
+            return $storage_nid;
+        }
+    }
+}
+
+/**
  * get sell order name by providing nid.
  *
  * @param int $order_nid - node id
@@ -297,6 +315,25 @@ function create_warehouse_transaction_log($item_nid, $from_storage_nid, $to_stor
     $transaction->set('field_after_transaction', $after_trans);
     $transaction->save();
 }
+
+/**
+ * Convert century year to the year is used by R.O.Convert
+ *
+ * @para string $century_date - year/month/day in century year
+ * @para string $separator_to_parse - separator to parse in century year
+ * @para string $separator_to_print - separator to print in Republic Era
+ * @return string - date in Republic Era
+ */
+ function centuryToRepublicEra($century_date, $separator_to_parse, $separator_to_print) {
+     $date_arr = explode($separator_to_parse, $century_date);
+     $year = $date_arr[0];
+     return ($year - 1911) . $separator_to_print . $date_arr[1] . $separator_to_print . $date_arr[2];
+ }
+
+ function getStorageNidBasedonType($type) {
+     $storages = \Drupal::entityQuery("node")->condition('type', 'storage')->condition('field_type_of_storage', $type)->execute();
+     return $storages;
+ }
 
 
 

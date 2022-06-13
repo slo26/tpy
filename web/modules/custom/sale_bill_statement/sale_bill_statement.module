@@ -1,6 +1,9 @@
 <?php
 use \Drupal\Core\Form\FormStateInterface;
 
+/**
+ * @ignore
+ */
 function sale_bill_statement_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
     if ($form_id === 'taxonomy_term_sale_bill_statement_form' ) {
         $form ['name']['widget'][0]['value']['#disabled'] = true;
@@ -14,3 +17,4 @@ function sale_bill_statement_form_alter(&$form, FormStateInterface &$form_state,
         $form ['field_sell_item_entity']['#disabled'] = true;
     }
 }
+

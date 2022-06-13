@@ -123,7 +123,7 @@ function ajax_calculate_remain_to_pay_amount(array $form, FormStateInterface $fo
 }
 
 /**
- * delete a bill.
+ * delete a sale bill.
  *
  * @param Node $node node entity
  * @return void
@@ -155,7 +155,7 @@ function billing_node_delete(Drupal\Core\Entity\EntityInterface $node) {
 }
 
 /**
- * generate bill unique id.
+ * generate sale bill unique id.
  *
  * @return void
  *
@@ -178,7 +178,7 @@ function generate_unique_id_for_bill() {
 } 
 
 /**
- * calculate for tax.
+ * calculate amount after tax for sale bill.
  *
  * @param float $total_amount_without_tax - amount with no tax
  * @param int $tax_rate - business tax rate
@@ -191,7 +191,7 @@ function calculate_for_tax($total_amount_without_tax, $tax_rate) {
 }
 
 /**
- * calculate for total remaining to pay.
+ * calculate total remaining to pay for sale bill.
  *
  * @param float $total_amount_without_tax - amount with no tax
  * @param float $tax - tax amount

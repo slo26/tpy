@@ -8,6 +8,9 @@ use Drupal\Core\Ajax;
 use Drupal\Core\Ajax\OpenModalDialogCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 
+/**
+ * @ignore
+ */
 function vendor_content_type_node_presave(Drupal\Core\Entity\EntityInterface $node) {
 	if ( $node->type->target_id == "vendor" ) {
 	}
@@ -15,13 +18,16 @@ function vendor_content_type_node_presave(Drupal\Core\Entity\EntityInterface $no
 
 /**
  * Implements hook_page_preprocess_html().
+ * @ignore
  */
 function vendor_content_type_preprocess_html(&$variables) {
     //Add JS and CSS library
     $variables['#attached']['library'][] = 'vendor_content_type/vendor_content_type';
 }
 
-
+/**
+ * @ignore
+ */
 function vendor_content_type_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
 	if ( $form_id === 'node_vendor_form' || $form_id == 'node_vendor_edit_form' ) {
 		/*-----------------廠商基本資訊---------------------*/
@@ -87,4 +93,5 @@ function vendor_content_type_form_alter(&$form, FormStateInterface &$form_state,
         $form['field_bank_account']['#group'] = 'payment_info';
 	}
 }
+
 

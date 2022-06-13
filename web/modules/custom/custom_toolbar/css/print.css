@@ -7,3 +7,17 @@
     size: auto;
     margin:0;
 }
+
+@media print {
+    html {
+        height: auto;
+        font-size: 12pt;
+    }
+    #sales-oder-table-comment,
+    #monthly-detail-bill-statement-comment,
+    #monthly-detail-purchase-bill-statement-comment {
+        position: fixed;
+        bottom: 0;
+    }
+}
+

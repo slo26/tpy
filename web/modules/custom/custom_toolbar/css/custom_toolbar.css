@@ -100,4 +100,14 @@
 	text-align: center;
 }
 
+#monthly-detail-bill-statement-comment pre, 
+#monthly-detail-purchase-bill-statement-comment pre {
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	margin: 0;
+	border: 0px;
+}
+
+
 

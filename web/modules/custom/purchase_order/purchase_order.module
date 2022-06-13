@@ -17,6 +17,9 @@ const PURCHASE_MODERATION_STATE_LABEL = array(
         'purchase_done' => '採購已完成',
 );
 
+/**
+ * @ignore
+ */
 function purchase_order_preprocess_node(&$variables) {
 	$variables['company'] = \Drupal::config('common_utils.settings')->get('company');
 	$variables['company_address'] = \Drupal::config('common_utils.settings')->get('company_address');
@@ -30,6 +33,9 @@ function purchase_order_preprocess_node(&$variables) {
 	}
 }
 
+/**
+ * @ignore
+ */
 function purchase_order_node_presave(Drupal\Core\Entity\EntityInterface $node) {
 	if ( $node->type->target_id == "purchase_order" ) {
 		if ( $node->moderation_state->value == "purchase_rate" ) {
@@ -105,12 +111,16 @@ function purchase_order_node_presave(Drupal\Core\Entity\EntityInterface $node) {
 
 /**
  * Implements hook_page_preprocess_html().
+ * @ignore
  */
 function purchase_order_preprocess_html(&$variables) {
     //Add JS and CSS library
     $variables['#attached']['library'][] = 'purchase_order/purchase_order';
 }
 
+/**
+ * @ignore
+ */
 function purchase_order_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
 	if ( $form_id === 'node_purchase_order_form' || $form_id == 'node_purchase_order_edit_form' ) {
 		$node = $form_state->getFormObject()->getEntity();
@@ -527,6 +537,9 @@ function purchase_order_form_alter(&$form, FormStateInterface &$form_state, $for
 	}
 }
 
+/**
+ * @ignore
+ */
 function generate_purchase_bill_callback(array $form, FormStateInterface $form_state) {
 	$response = new AjaxResponse();
 	$entity = $form_state->getFormObject()->getEntity();
@@ -570,6 +583,9 @@ function generate_purchase_bill_callback(array $form, FormStateInterface $form_s
 	return $response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_purchase_order_status_changed_validation(array $form, FormStateInterface $form_state) {
 	$ajax_response = new AjaxResponse();
 	$node = $form_state->getFormObject()->getEntity();
@@ -616,6 +632,9 @@ function ajax_purchase_order_status_changed_validation(array $form, FormStateInt
 	return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_vendor_info_loading(array $form, FormStateInterface $form_state) {
         $ajax_response = new AjaxResponse();
         $vendor_nid = $form_state->getValue('field_vendor_entity')[0]['target_id'];
@@ -626,6 +645,9 @@ function ajax_vendor_info_loading(array $form, FormStateInterface $form_state) {
         return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_merchandise_category(array $form, FormStateInterface $form_state) {
     $ajax_response = new AjaxResponse();
     $node_nid = $form_state->getValue('list_merchandise');
@@ -658,6 +680,9 @@ function ajax_merchandise_category(array $form, FormStateInterface $form_state) 
 	return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function ajax_purchase_order_calculate_price(array $form, FormStateInterface $form_state) {
     $ajax_response = new AjaxResponse();
     $quantity = $form_state->getValue('quantity');
@@ -672,6 +697,9 @@ function ajax_purchase_order_calculate_price(array $form, FormStateInterface $fo
     return $ajax_response;
 }
 
+/**
+ * @ignore
+ */
 function add_purchase_item_callback(array $form, FormStateInterface $form_state) {
     $response = new AjaxResponse();
 	$status = "";
@@ -737,6 +765,12 @@ function add_purchase_item_callback(array $form, FormStateInterface $form_state)
     return $response;
 }
 
+/**
+ * generate purchase item table in purchase order form. 
+ * 
+ * @param int $order_id - 採購單 nid
+ * @return string - html table
+ */
 function items_table_generate($order_id) {
 	$tids = \Drupal::entityQuery("taxonomy_term")->condition("vid", "purchase_items")
 				->condition('field_order_id', $order_id)
@@ -748,7 +782,7 @@ function items_table_generate($order_id) {
 	}
 
 	$table = '<div id="purchase-item-table"><table>-BODY-</table></div>';
-	$table_head = "<thead><tr><td>採購項目編號</td><td>產品/零件/物品編號</td><td>產品/零件/物品名稱</td><td>採購類別</td><td>數量</td><td>單價</td><td>金額</td><td></td></tr></thead>";
+	$table_head = "<thead><tr><td>索引</td><td>產品/零件/物品編號</td><td>產品/零件/物品名稱</td><td>採購類別</td><td>數量</td><td>單價</td><td>金額</td><td></td></tr></thead>";
 	$table_body_begin = '<tbody>';
 	$table_body = '';
 	$total_quantity = 0;
@@ -763,7 +797,9 @@ function items_table_generate($order_id) {
 		}
 	}
 
+	$index = 0;
 	foreach($tids as $tid) {
+		$index++;
 		$item = \Drupal\taxonomy\Entity\Term::load($tid);
 		$product_or_goods = \Drupal\node\Entity\Node::load($item->field_product_goods->target_id);
         if ( $product_or_goods->bundle() == "goods" ) {
@@ -796,7 +832,7 @@ function items_table_generate($order_id) {
 					</div>
 				</div>';
 		}
-		$table_body .= '<tr><td>' . $item->name->value . '</td><td>' . $product_or_goods->title->value . '</td><td>' . $name . '</td><td>' . $category . '</td><td>' . number_format($item->field_quantity->value) . '</td><td>' . number_format($item->field_price->value) . '</td><td>' . number_format($item->field_total_amount->value) . '</td><td>' . $dropdown_button . '</td></tr>';
+		$table_body .= '<tr><td>' . $index . '</td><td>' . $product_or_goods->title->value . '</td><td>' . $name . '</td><td>' . $category . '</td><td>' . number_format($item->field_quantity->value) . '</td><td>' . number_format($item->field_price->value) . '</td><td>' . number_format($item->field_total_amount->value) . '</td><td>' . $dropdown_button . '</td></tr>';
 		$total_quantity = $total_quantity + $item->field_quantity->value;
 		$sum = $sum + $item->field_price->value;
 		$total_cost = $total_cost + $item->field_total_amount->value;
@@ -810,6 +846,12 @@ function items_table_generate($order_id) {
 	return $table;
 }
 
+/**
+ * get number of purchase items in purchase order. 
+ *
+ * @param int $nid - purchase order nid
+ * @return int - number of purchase items
+ */
 function num_of_purchase_items($nid) {
 	$purchase_items_tids = \Drupal::entityQuery("taxonomy_term")
 									->condition('vid', 'purchase_items')
@@ -817,6 +859,12 @@ function num_of_purchase_items($nid) {
 	return count($purchase_items_tids);
 }
 
+/**
+ * generate purchase item table in render view. 
+ *
+ * @param Node $node - purchase order
+ * @return string - purhcase item table in html 
+ */
 function purchase_order_table_generator_in_view($node) {
 	$vendor_nid = $node->field_vendor_entity->target_id;
 	$vendor = \Drupal\node\Entity\Node::load($vendor_nid);
@@ -834,7 +882,7 @@ function purchase_order_table_generator_in_view($node) {
 		}
 		
 		$table_body .= '<tr id="purchase-oder-table-header-status"><td colspan="4" align="center"><strong><u>' . $status .'</u></strong></td></tr>';
-		$table_body .= '<tr id="purchase-oder-table-header-sell-info"><td colspan="3" align="left">報價日期: ' . date('Y/m/d') .'</td><td align="left" width="200px">有效日期: </td></tr>';	
+		$table_body .= '<tr id="purchase-oder-table-header-sell-info"><td colspan="3" align="left">報價日期: ' . centuryToRepublicEra(date('Y/m/d'), "/", "/") .'</td><td align="left" width="200px">有效日期: </td></tr>';	
 		$table_body .= '<tr id="purchase-oder-table-header-sell-info"><td colspan="3" align="left">廠商名稱: <a href="/node/' . $vendor_nid .'/edit" target="blank">' . $vendor->field_vendor_name->value . '</a></td><td align="left" width="200px">報價憑證: ' . $node->title->value . '</td></tr>'; 
 		$table_body .= '<tr id="purchase-oder-table-header-sell-info"><td colspan="3" align="left">公司地址: ' . $vendor->field_address->value . '</td><td align="left" width="200px">聯絡人: ' . $vendor->field_contact_person->value . '</td></tr>'; 
 		if ( !empty($node->field_shipping_address->value) ) {
