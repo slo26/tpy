@@ -300,6 +300,9 @@ function sales_order_content_type_preprocess_html(&$variables) {
 function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_state, $form_id) {
 	if ( $form_id === 'node_sales_order_form' || $form_id == 'node_sales_order_edit_form' ) {
 		$node = $form_state->getFormObject()->getEntity();
+		if ( $node->moderation_state->value == "done" ) {
+			$form['actions']['submit']['#disabled'] = true;
+		}
 		/*-----------------訂單資訊---------------------*/
 		$form['order_info'] = array(
 						'#group' => 'advanced',
@@ -887,6 +890,7 @@ function sales_order_content_type_form_alter(&$form, FormStateInterface &$form_s
 				'event' => 'click',
 			],
         );
+
 		//$form['#attached']['library'][] = 'sales_order_content_type/sales_order_content_type';
 	}
 }

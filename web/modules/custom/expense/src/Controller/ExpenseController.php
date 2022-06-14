@@ -11,6 +11,8 @@ use Drupal\Core\Form\FormBuilder;
 
 /**
  * ModalFormExampleController class.
+ *
+ * @internal
  */
 class ExpenseController extends ControllerBase
 {

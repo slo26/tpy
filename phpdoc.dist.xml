@@ -6,19 +6,27 @@
         xsi:noNamespaceSchemaLocation="https://docs.phpdoc.org/latest/phpdoc.xsd"
 >
     <paths>
-	    <output>web/docs/api</output>
-	    <cache>web/docs/cache</cache>
+            <output>web/docs/api</output>
+            <cache>web/docs/cache</cache>
     </paths>
-    <version number="3.0.0">
+    <version number="latest">
         <api>
-            <source dsn=".">
-	        <path>/projects/drup/base/tpy/web/modules/custom</path>
-	    </source>
-	    <extensions>
-		<extension>php</extension>
-		<extension>module</extension>
+            <source dsn="/projects/drup/base/tpy/web">
+                <path>modules/custom</path>
+            </source>
+            <extensions>
+                <extension>php</extension>
+                <extension>module</extension>
             </extensions>
+            <ignore hidden="true" symlinks="true">
+                <path>modules/custom/billing_write_off/src/Controller/**/*</path>
+                <path>modules/custom/ckeditor_moverow/**/*</path>
+                <path>modules/custom/common_utils/src/Form/**/*</path>
+                <path>modules/custom/custom_toolbar/**/*</path>
+                <path>modules/custom/**/*/src/Form/**/*</path>
+                <path>modules/custom/**/*/src/Controller/**/*</path>
+            </ignore>
         </api>
     </version>
-    
+
 </phpdocumentor>

@@ -4,7 +4,6 @@ use \Drupal\Core\Session;
 use \Drupal\Core\Session\SessionManager;
 
 /**
- * Implements hook_page_preprocess_html().
  * @ignore
  */
 function common_utils_preprocess_html(&$variables) {
